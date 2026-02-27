@@ -1,0 +1,14 @@
+/* ModuleDetail.css */
+
+.video-player-wrapper {
+    position: relative;
+    width: 100%;
+    /* Let the aspect-video utility handle the height automatically to maintain 16:9 ratio */
+}
+
+/* Ensure ReactPlayer fills the container properly * /
+.video-player-wrapper > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

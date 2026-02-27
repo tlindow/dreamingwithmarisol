@@ -1,0 +1,97 @@
+.modules-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+}
+
+@media (min-width: 768px) {
+    .modules-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.module-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--color-border);
+}
+
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.module-card:hover .play-button {
+    transform: scale(1.1);
+    background-color: var(--color-accent-hover);
+}
+
+.module-thumbnail {
+    position: relative;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.module-thumbnail.bg-primary {
+    background-color: #d8d4c5;
+    /* slightly darker primary for contrast */
+}
+
+.module-thumbnail.bg-secondary {
+    background-color: var(--color-secondary);
+}
+
+.module-thumbnail.bg-accent {
+    background-color: var(--color-accent);
+}
+
+.play-button {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: var(--color-primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: var(--shadow-md);
+    padding-left: 4px;
+    /* optical alignment for play triangle */
+}
+
+.module-duration {
+    position: absolute;
+    bottom: var(--spacing-sm);
+    right: var(--spacing-sm);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.module-content {
+    padding: var(--spacing-lg);
+}
+
+.module-title {
+    font-size: 1.25rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.module-description {
+    color: var(--color-text-main);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+}
