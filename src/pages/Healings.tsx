@@ -8,7 +8,7 @@ const Healings = () => {
             <section className="section bg-primary-light text-center">
                 <div className="container">
                     <h1 className="page-title">In-Person Healings</h1>
-                    <p className="page-subtitle">Los Angeles, CA &bull; San Fernando Valley</p>
+                    <p className="page-subtitle">San Diego, CA</p>
                 </div>
             </section>
 
