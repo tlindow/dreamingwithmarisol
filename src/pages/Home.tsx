@@ -1,19 +1,26 @@
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+// @ts-ignore
+import ReactPlayer from 'react-player';
 import { client, urlFor } from '../sanityClient';
 import './Home.css';
 
+const Player = ReactPlayer as React.ComponentType<{ url: string; width: string; height: string; controls: boolean; className?: string }>;
+
 const Home = () => {
     const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+    const [homeVideoUrl, setHomeVideoUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                // Fetch the first siteSettings document (usually there is only one)
                 const settings = await client.fetch(`*[_type == "siteSettings"][0]`);
                 if (settings?.heroImage) {
                     setHeroImageUrl(urlFor(settings.heroImage).url());
+                }
+                if (settings?.homeVideoUrl) {
+                    setHomeVideoUrl(settings.homeVideoUrl);
                 }
             } catch (error) {
                 console.error("Error fetching site settings from Sanity:", error);
@@ -51,6 +58,27 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Video Section */}
+            {homeVideoUrl && (
+                <section className="section home-video-section">
+                    <div className="container">
+                        <div className="section-header center">
+                            <h2>Meet Marisól</h2>
+                            <p>Learn more about the healing journey and ancestral wisdom.</p>
+                        </div>
+                        <div className="home-video-wrapper">
+                            <Player
+                                url={homeVideoUrl}
+                                width="100%"
+                                height="100%"
+                                controls={true}
+                                className="home-video-player"
+                            />
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* Offerings Preview Section */}
             <section className="section bg-primary-light">
