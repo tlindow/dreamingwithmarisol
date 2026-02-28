@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Instagram } from 'lucide-react';
 import { useState } from 'react';
+import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import './Navbar.css';
 
 const navLinks = [
@@ -17,14 +18,21 @@ const navLinks = [
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
+    const { settings } = useSiteSettings();
 
     const toggleMenu = () => setIsOpen(!isOpen);
+    
+    const brandEmoji = settings?.emojis?.brandEmoji || "";
+    const siteTitle = settings?.title || "Dreaming with Marisól";
 
     return (
         <nav className="navbar">
             <div className="navbar-container">
                 <div className="navbar-brand">
-                    <Link to="/" className="brand-logo">Dreaming with Marisól</Link>
+                    <Link to="/" className="brand-logo">
+                        {brandEmoji && <span className="brand-emoji">{brandEmoji}</span>}
+                        {siteTitle}
+                    </Link>
                 </div>
 
                 {/* Desktop Navigation */}

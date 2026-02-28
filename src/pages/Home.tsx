@@ -2,9 +2,11 @@ import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { client, urlFor } from '../sanityClient';
+import { useSiteSettings } from '../contexts/SiteSettingsContext';
 import './Home.css';
 
 const Home = () => {
+    const { settings } = useSiteSettings();
     const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
 
     useEffect(() => {
@@ -23,14 +25,22 @@ const Home = () => {
         fetchSettings();
     }, []);
 
+    // Get CMS-managed text content with fallbacks
+    const heroTitle = settings?.textContent?.heroTitle || "Hola, I'm Marisól";
+    const heroSubtitle = settings?.textContent?.heroSubtitle || "Mesoamerican Cleansing Rituals & Spiritual Healing";
+    const heroEmoji = settings?.emojis?.heroEmoji || "";
+
     return (
         <div className="page-wrapper animate-fade-in">
             {/* Hero Section */}
             <section className="hero-section">
                 <div className="container hero-container">
                     <div className="hero-content">
-                        <h1 className="hero-title">Hola, I'm Marisól</h1>
-                        <p className="hero-subtitle">Mesoamerican Cleansing Rituals & Spiritual Healing</p>
+                        <h1 className="hero-title">
+                            {heroEmoji && <span className="hero-emoji">{heroEmoji}</span>}
+                            {heroTitle}
+                        </h1>
+                        <p className="hero-subtitle">{heroSubtitle}</p>
                         <div className="hero-actions">
                             <Link to="/healings">
                                 <Button size="lg" variant="primary">Book a Session</Button>

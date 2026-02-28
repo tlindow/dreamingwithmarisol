@@ -10,33 +10,36 @@ import Pricing from './pages/Pricing';
 import LearningHub from './pages/LearningHub';
 import ModuleDetail from './pages/ModuleDetail';
 import Store from './pages/Store';
+import { SiteSettingsProvider } from './contexts/SiteSettingsContext';
 
 import { VisualEditing } from '@sanity/visual-editing/react';
 
 function App() {
   return (
-    <Router>
-      <div className="app-layout">
-        <Navbar />
-        <VisualEditing portal />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/healings" element={<Healings />} />
-            <Route path="/values" element={<Values />} />
-            <Route path="/learning" element={<LearningHub />} />
-            <Route path="/learning/:id" element={<ModuleDetail />} />
-            <Route path="/store" element={<Store />} />
-            <Route path="/online-healings" element={<OnlineHealings />} />
-            <Route path="/pricing" element={<Pricing />} />
-            {/* Fallback for unbuilt pages */}
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <SiteSettingsProvider>
+      <Router>
+        <div className="app-layout">
+          <Navbar />
+          <VisualEditing portal />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/healings" element={<Healings />} />
+              <Route path="/values" element={<Values />} />
+              <Route path="/learning" element={<LearningHub />} />
+              <Route path="/learning/:id" element={<ModuleDetail />} />
+              <Route path="/store" element={<Store />} />
+              <Route path="/online-healings" element={<OnlineHealings />} />
+              <Route path="/pricing" element={<Pricing />} />
+              {/* Fallback for unbuilt pages */}
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </SiteSettingsProvider>
   );
 }
 

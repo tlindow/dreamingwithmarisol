@@ -21,6 +21,14 @@
     font-size: 1.25rem;
     font-weight: 500;
     letter-spacing: -0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.brand-emoji {
+    font-size: 1.5rem;
+    line-height: 1;
 }
 
 .navbar-links {
