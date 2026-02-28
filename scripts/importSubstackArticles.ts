@@ -1,18 +1,23 @@
 import Parser from 'rss-parser';
 import { createClient } from '@sanity/client';
 import dotenv from 'dotenv';
+import { existsSync } from 'fs';
+import { resolve } from 'path';
 
-// Load environment variables if .env exists
-dotenv.config();
+// Load environment variables from .env file only if it exists (for local development)
+// Cloud environment variables are already available via process.env
+// Suppress dotenv messages when .env doesn't exist
+const envPath = resolve(process.cwd(), '.env');
+if (existsSync(envPath)) {
+    dotenv.config({ path: envPath });
+} else {
+    // Suppress dotenv's default message about missing .env file
+    // Cloud environment variables should be available via process.env
+    process.env.DOTENV_CONFIG_DEBUG = 'false';
+}
 
-// Initialize Sanity client
-const client = createClient({
-    projectId: 't8kqnnav',
-    dataset: 'production',
-    useCdn: false,
-    apiVersion: '2025-02-24',
-    token: process.env.SANITY_API_TOKEN, // Set in Cursor Cloud environment variables or .env file
-});
+// Initialize Sanity client (token will be set in main function)
+let client: ReturnType<typeof createClient>;
 
 // Initialize RSS parser
 const parser = new Parser();
@@ -95,18 +100,38 @@ async function importArticleToSanity(article: SubstackArticle): Promise<void> {
 }
 
 async function main() {
-    if (!process.env.SANITY_API_TOKEN) {
+    // Debug: Check if environment variable is available
+    const token = process.env.SANITY_API_TOKEN;
+    
+    if (!token) {
         console.error('ERROR: SANITY_API_TOKEN environment variable is required.');
+        console.error('\nDebugging info:');
+        console.error(`  - Current working directory: ${process.cwd()}`);
+        console.error(`  - .env file exists: ${existsSync(resolve(process.cwd(), '.env'))}`);
+        console.error(`  - Environment variables available: ${Object.keys(process.env).filter(k => k.includes('SANITY')).join(', ') || 'none'}`);
         console.error('\nFor Cursor Cloud:');
         console.error('  1. Go to your Cursor Cloud project settings');
         console.error('  2. Navigate to Environment Variables');
         console.error('  3. Add SANITY_API_TOKEN with your token value');
+        console.error('  4. Make sure the variable name is exactly: SANITY_API_TOKEN (case-sensitive)');
+        console.error('  5. You may need to restart your terminal/cloud environment after adding the variable');
         console.error('\nFor local development:');
         console.error('  Create a .env file in the root directory with:');
         console.error('  SANITY_API_TOKEN=your_token_here');
         console.error('\nGet your token from: https://www.sanity.io/manage');
         process.exit(1);
     }
+    
+    console.log(`✓ Found SANITY_API_TOKEN (length: ${token.length} characters)`);
+    
+    // Initialize Sanity client with the token
+    client = createClient({
+        projectId: 't8kqnnav',
+        dataset: 'production',
+        useCdn: false,
+        apiVersion: '2025-02-24',
+        token: token,
+    });
 
     try {
         const articles = await fetchSubstackArticles();
