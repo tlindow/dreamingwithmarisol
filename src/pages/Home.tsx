@@ -4,19 +4,38 @@ import { useEffect, useState } from 'react';
 import { client, urlFor } from '../sanityClient';
 import './Home.css';
 
+interface HeroImage {
+    alt?: string;
+    asset: { _ref: string };
+}
+
 const Home = () => {
     const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+    const [heroImageAlt, setHeroImageAlt] = useState('Marisól');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                // Fetch the first siteSettings document (usually there is only one)
-                const settings = await client.fetch(`*[_type == "siteSettings"][0]`);
+                const settings = await client.fetch<{ heroImage?: HeroImage } | null>(
+                    `*[_type == "siteSettings"][0]{ heroImage }`,
+                );
                 if (settings?.heroImage) {
-                    setHeroImageUrl(urlFor(settings.heroImage).url());
+                    setHeroImageUrl(
+                        urlFor(settings.heroImage)
+                            .width(1000)
+                            .quality(80)
+                            .auto('format')
+                            .url(),
+                    );
+                    if (settings.heroImage.alt) {
+                        setHeroImageAlt(settings.heroImage.alt);
+                    }
                 }
             } catch (error) {
-                console.error("Error fetching site settings from Sanity:", error);
+                console.error('Error fetching site settings from Sanity:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -41,8 +60,10 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="hero-image-wrapper">
-                        {heroImageUrl ? (
-                            <img src={heroImageUrl} alt="Marisól" className="hero-image" />
+                        {isLoading ? (
+                            <div className="image-placeholder loading-shimmer" />
+                        ) : heroImageUrl ? (
+                            <img src={heroImageUrl} alt={heroImageAlt} className="hero-image" />
                         ) : (
                             <div className="image-placeholder">
                                 <span className="placeholder-text">Upload Hero Image in Sanity</span>

@@ -103,3 +103,19 @@ button {
 .animate-fade-in {
   animation: fadeIn 0.8s ease forwards;
 }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(74, 93, 35, 0.06) 25%,
+    rgba(74, 93, 35, 0.12) 50%,
+    rgba(74, 93, 35, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}

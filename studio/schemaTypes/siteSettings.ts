@@ -16,8 +16,16 @@ export default defineType({
             title: 'Home Page Hero Image',
             type: 'image',
             options: {
-                hotspot: true, // Allows user to select what part of image to crop
+                hotspot: true,
             },
+            fields: [
+                defineField({
+                    name: 'alt',
+                    title: 'Alt Text',
+                    type: 'string',
+                    description: 'Describe the image for accessibility and SEO',
+                }),
+            ],
         }),
         defineField({
             name: 'portraitImage',
@@ -26,6 +34,14 @@ export default defineType({
             options: {
                 hotspot: true,
             },
+            fields: [
+                defineField({
+                    name: 'alt',
+                    title: 'Alt Text',
+                    type: 'string',
+                    description: 'Describe the image for accessibility and SEO',
+                }),
+            ],
         }),
     ],
 })

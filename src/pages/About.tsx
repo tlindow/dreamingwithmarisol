@@ -2,18 +2,38 @@ import { useEffect, useState } from 'react';
 import { client, urlFor } from '../sanityClient';
 import './About.css';
 
+interface PortraitImage {
+    alt?: string;
+    asset: { _ref: string };
+}
+
 const About = () => {
     const [portraitImageUrl, setPortraitImageUrl] = useState<string | null>(null);
+    const [portraitImageAlt, setPortraitImageAlt] = useState('Marisól');
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const settings = await client.fetch(`*[_type == "siteSettings"][0]`);
+                const settings = await client.fetch<{ portraitImage?: PortraitImage } | null>(
+                    `*[_type == "siteSettings"][0]{ portraitImage }`,
+                );
                 if (settings?.portraitImage) {
-                    setPortraitImageUrl(urlFor(settings.portraitImage).url());
+                    setPortraitImageUrl(
+                        urlFor(settings.portraitImage)
+                            .width(800)
+                            .quality(80)
+                            .auto('format')
+                            .url(),
+                    );
+                    if (settings.portraitImage.alt) {
+                        setPortraitImageAlt(settings.portraitImage.alt);
+                    }
                 }
             } catch (error) {
-                console.error("Error fetching site settings from Sanity:", error);
+                console.error('Error fetching site settings from Sanity:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
 
@@ -50,8 +70,10 @@ const About = () => {
                     </div>
 
                     <div className="about-image-wrapper">
-                        {portraitImageUrl ? (
-                            <img src={portraitImageUrl} alt="Marisól" className="about-image" />
+                        {isLoading ? (
+                            <div className="image-placeholder loading-shimmer" />
+                        ) : portraitImageUrl ? (
+                            <img src={portraitImageUrl} alt={portraitImageAlt} className="about-image" />
                         ) : (
                             <div className="image-placeholder">
                                 <span className="placeholder-text">Upload Portrait Image in Sanity</span>
