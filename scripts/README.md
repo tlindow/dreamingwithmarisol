@@ -11,11 +11,30 @@ This script imports articles from the Substack RSS feed into Sanity CMS.
    - Navigate to API → Tokens
    - Create a new token with Editor permissions
 
-2. **Environment Variables**: Create a `.env` file in the root directory:
+2. **Environment Variables Setup**:
 
+   ### For Cursor Cloud:
+   
+   Set the environment variable in your Cursor Cloud project settings:
+   
+   1. Go to your Cursor Cloud project dashboard
+   2. Navigate to **Settings** → **Environment Variables**
+   3. Click **Add Variable**
+   4. Name: `SANITY_API_TOKEN`
+   5. Value: Your Sanity API token
+   6. Save the variable
+   
+   The script will automatically use this variable when running in the cloud environment.
+
+   ### For Local Development:
+   
+   Create a `.env` file in the root directory:
+   
    ```
    SANITY_API_TOKEN=your_token_here
    ```
+   
+   Note: The `.env` file is gitignored and won't be committed to the repository.
 
 ## Usage
 
