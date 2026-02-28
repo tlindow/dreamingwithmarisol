@@ -27,5 +27,11 @@ export default defineType({
                 hotspot: true,
             },
         }),
+        defineField({
+            name: 'homeVideoUrl',
+            title: 'Home Page Video URL',
+            type: 'url',
+            description: 'YouTube, Vimeo, or direct video URL. Shown between the hero and offerings sections.',
+        }),
     ],
 })
