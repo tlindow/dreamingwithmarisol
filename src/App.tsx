@@ -10,6 +10,8 @@ import Pricing from './pages/Pricing';
 import LearningHub from './pages/LearningHub';
 import ModuleDetail from './pages/ModuleDetail';
 import Store from './pages/Store';
+import Articles from './pages/Articles';
+import ArticleDetail from './pages/ArticleDetail';
 
 import { VisualEditing } from '@sanity/visual-editing/react';
 
@@ -30,6 +32,8 @@ function App() {
             <Route path="/store" element={<Store />} />
             <Route path="/online-healings" element={<OnlineHealings />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/articles" element={<Articles />} />
+            <Route path="/articles/:slug" element={<ArticleDetail />} />
             {/* Fallback for unbuilt pages */}
             <Route path="*" element={<Home />} />
           </Routes>

@@ -6,6 +6,7 @@ import './Navbar.css';
 const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
+    { name: 'Articles', path: '/articles' },
     { name: 'Learning', path: '/learning' },
     { name: 'Store', path: '/store' },
     { name: 'Values', path: '/values' },

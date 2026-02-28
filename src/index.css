@@ -2,6 +2,7 @@
   /* Earthy Color Palette */
   --color-primary: #e6e2d3; /* Soft off-white background */
   --color-primary-light: #f4f3ef; /* Lighter off-white */
+  --color-primary-dark: #3d4a1d; /* Darker olive green for headings */
   --color-secondary: #4a5d23; /* Deep olive green */
   --color-accent: #f2aa4c; /* Mustard yellow/gold */
   --color-accent-hover: #e0993a;
