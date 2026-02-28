@@ -27,5 +27,14 @@ export default defineType({
                 hotspot: true,
             },
         }),
+        defineField({
+            name: 'featuredVideo',
+            title: 'Home Page Featured Video',
+            type: 'file',
+            description: 'Upload a video file to display on the home page',
+            options: {
+                accept: 'video/*',
+            },
+        }),
     ],
 })

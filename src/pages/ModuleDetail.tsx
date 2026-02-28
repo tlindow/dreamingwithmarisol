@@ -21,7 +21,8 @@ interface VideoModule {
     title: string;
     duration: string;
     description: string;
-    videoUrl: string;
+    videoUrl?: string;
+    videoFileUrl?: string;
     thumbnailColor: string;
     products?: Product[];
 }
@@ -45,6 +46,7 @@ const ModuleDetail = () => {
                         duration,
                         description,
                         videoUrl,
+                        "videoFileUrl": videoFile.asset->url,
                         thumbnailColor,
                         "products": products[]->{
                             _id,
@@ -103,9 +105,9 @@ const ModuleDetail = () => {
             <section className="section py-12">
                 <div className="container max-w-5xl">
                     <div className="video-player-wrapper aspect-video bg-black rounded-xl overflow-hidden shadow-lg mb-8">
-                        {moduleFile.videoUrl ? (
+                        {moduleFile.videoFileUrl || moduleFile.videoUrl ? (
                             <Player
-                                url={moduleFile.videoUrl}
+                                url={moduleFile.videoFileUrl || moduleFile.videoUrl}
                                 width="100%"
                                 height="100%"
                                 controls={true}

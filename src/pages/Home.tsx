@@ -1,19 +1,33 @@
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { client, urlFor } from '../sanityClient';
+import { client, urlFor, urlForFile } from '../sanityClient';
+// @ts-ignore
+import ReactPlayer from 'react-player';
 import './Home.css';
+
+// Bypass strict TypeScript JSX Element typing for the external ReactPlayer module
+const Player = ReactPlayer as any;
 
 const Home = () => {
     const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+    const [featuredVideoUrl, setFeaturedVideoUrl] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchSettings = async () => {
             try {
                 // Fetch the first siteSettings document (usually there is only one)
-                const settings = await client.fetch(`*[_type == "siteSettings"][0]`);
+                const settings = await client.fetch(`
+                    *[_type == "siteSettings"][0] {
+                        heroImage,
+                        "featuredVideoUrl": featuredVideo.asset->url
+                    }
+                `);
                 if (settings?.heroImage) {
                     setHeroImageUrl(urlFor(settings.heroImage).url());
+                }
+                if (settings?.featuredVideoUrl) {
+                    setFeaturedVideoUrl(settings.featuredVideoUrl);
                 }
             } catch (error) {
                 console.error("Error fetching site settings from Sanity:", error);
@@ -41,11 +55,22 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="hero-image-wrapper">
-                        {heroImageUrl ? (
+                        {featuredVideoUrl ? (
+                            <div className="hero-video-wrapper">
+                                <Player
+                                    url={featuredVideoUrl}
+                                    width="100%"
+                                    height="100%"
+                                    controls={true}
+                                    playing={false}
+                                    className="hero-video"
+                                />
+                            </div>
+                        ) : heroImageUrl ? (
                             <img src={heroImageUrl} alt="Marisól" className="hero-image" />
                         ) : (
                             <div className="image-placeholder">
-                                <span className="placeholder-text">Upload Hero Image in Sanity</span>
+                                <span className="placeholder-text">Upload Hero Image or Video in Sanity</span>
                             </div>
                         )}
                     </div>

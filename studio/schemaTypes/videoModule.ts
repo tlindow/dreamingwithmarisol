@@ -24,10 +24,19 @@ export default defineType({
             validation: (Rule) => Rule.required(),
         }),
         defineField({
+            name: 'videoFile',
+            title: 'Video File',
+            type: 'file',
+            description: 'Upload a video file (MP4, WebM, etc.)',
+            options: {
+                accept: 'video/*',
+            },
+        }),
+        defineField({
             name: 'videoUrl',
-            title: 'Video URL',
+            title: 'Video URL (Alternative)',
             type: 'url',
-            description: 'Link to YouTube, Vimeo, or external hosted video',
+            description: 'Link to YouTube, Vimeo, or external hosted video (use if not uploading a file)',
         }),
         defineField({
             name: 'thumbnailColor',

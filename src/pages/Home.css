@@ -66,6 +66,17 @@
     background-color: var(--color-primary-light);
 }
 
+.hero-video-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.hero-video {
+    width: 100%;
+    height: 100%;
+}
+
 @media (min-width: 768px) {
     .hero-image-wrapper {
         max-width: 500px;

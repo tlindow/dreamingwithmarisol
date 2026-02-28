@@ -18,3 +18,16 @@ const builder = imageUrlBuilder(client);
 export const urlFor = (source: any) => {
     return builder.image(source);
 };
+
+// Helper to get file URL from Sanity file asset
+export const urlForFile = (fileAsset: any): string | null => {
+    if (!fileAsset?.asset?._ref) return null;
+    // Sanity file URLs follow this pattern: https://cdn.sanity.io/files/{projectId}/{dataset}/{path}
+    // The asset reference contains the path information
+    const ref = fileAsset.asset._ref;
+    // Extract the file path from the reference (format: file-{hash}-{extension})
+    const match = ref.match(/file-([^-]+)-([^.]+)/);
+    if (!match) return null;
+    const [, hash, extension] = match;
+    return `https://cdn.sanity.io/files/t8kqnnav/production/${hash}.${extension}`;
+};
