@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
-// @ts-ignore
 import ReactPlayer from 'react-player';
+import type { SanityImageSource } from '@sanity/image-url';
 import { client, urlFor } from '../sanityClient';
 import { Button } from '../components/Button';
 import './ModuleDetail.css';
@@ -13,7 +13,7 @@ interface Product {
     description: string;
     price: number;
     storeUrl: string;
-    image: any;
+    image: SanityImageSource;
 }
 
 interface VideoModule {
@@ -26,8 +26,7 @@ interface VideoModule {
     products?: Product[];
 }
 
-// Bypass strict TypeScript JSX Element typing for the external ReactPlayer module
-const Player = ReactPlayer as any;
+const Player = ReactPlayer as React.ComponentType<Record<string, unknown>>;
 
 const ModuleDetail = () => {
     const { id } = useParams<{ id: string }>();

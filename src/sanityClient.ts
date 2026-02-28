@@ -1,20 +1,21 @@
 import { createClient } from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import imageUrlBuilder, { type SanityImageSource } from '@sanity/image-url';
+
+const isDev = import.meta.env.DEV;
 
 export const client = createClient({
-    projectId: 't8kqnnav', // replace with your actual Sanity projectId
+    projectId: 't8kqnnav',
     dataset: 'production',
-    useCdn: true, // set to `false` to bypass the edge cache
-    apiVersion: '2025-02-24', // use current date (YYYY-MM-DD) to target the latest API version
+    useCdn: !isDev,
+    apiVersion: '2025-02-24',
     stega: {
-        enabled: true,
+        enabled: isDev,
         studioUrl: 'http://localhost:3333',
     },
 });
 
 const builder = imageUrlBuilder(client);
 
-// Helper to generate image URLs from Sanity image assets
-export const urlFor = (source: any) => {
+export const urlFor = (source: SanityImageSource) => {
     return builder.image(source);
 };
