@@ -21,6 +21,9 @@ const Home = () => {
                 }
                 if (settings?.homeVideoUrl) {
                     setHomeVideoUrl(settings.homeVideoUrl);
+                } else if (import.meta.env.DEV) {
+                    // Fallback for local testing when no URL configured in Sanity
+                    setHomeVideoUrl('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
                 }
             } catch (error) {
                 console.error("Error fetching site settings from Sanity:", error);
