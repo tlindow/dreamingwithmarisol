@@ -1,5 +1,6 @@
 import { ExternalLink, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import type { SanityImageSource } from '@sanity/image-url';
 import { client, urlFor } from '../sanityClient';
 import { Button } from '../components/Button';
 import './Store.css';
@@ -10,7 +11,7 @@ interface Product {
     description: string;
     price: number;
     storeUrl: string;
-    image: any;
+    image: SanityImageSource;
 }
 
 const Store = () => {
