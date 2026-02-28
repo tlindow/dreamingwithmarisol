@@ -1,7 +1,52 @@
+import { useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 import './Healings.css';
 
+// TODO: Replace with your actual Calendly event URL
+const CALENDLY_URL = 'https://calendly.com/YOUR_USERNAME/in-person-healing';
+const CONTACT_EMAIL = 'hello@example.com';
+
+declare global {
+    interface Window {
+        Calendly?: {
+            initPopupWidget: (options: { url: string }) => void;
+        };
+    }
+}
+
 const Healings = () => {
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://assets.calendly.com/assets/external/widget.js';
+        script.async = true;
+        document.head.appendChild(script);
+
+        const link = document.createElement('link');
+        link.href = 'https://assets.calendly.com/assets/external/widget.css';
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+
+        return () => {
+            if (script.parentNode) script.parentNode.removeChild(script);
+            if (link.parentNode) link.parentNode.removeChild(link);
+        };
+    }, []);
+
+    const openCalendly = useCallback(() => {
+        if (window.Calendly) {
+            window.Calendly.initPopupWidget({ url: CALENDLY_URL });
+        } else {
+            window.open(CALENDLY_URL, '_blank');
+        }
+    }, []);
+
+    const waitlistMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+        'Waitlist — In-Person Healing Session'
+    )}&body=${encodeURIComponent(
+        "Hi Marisól,\n\nI'd love to book an in-person Limpia session. Could you please add me to the waitlist and notify me when new appointments become available?\n\nThank you!"
+    )}`;
+
     return (
         <div className="page-wrapper animate-fade-in">
             {/* Header Section */}
@@ -31,8 +76,50 @@ const Healings = () => {
                             </p>
                         </div>
 
+                        <div className="availability-notice">
+                            <svg className="availability-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="22" height="22">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <div>
+                                <strong>Sessions open on the 1st of each month</strong>
+                                <p>Appointments fill quickly — book early to secure your spot.</p>
+                            </div>
+                        </div>
+
                         <div className="booking-cta">
-                            <Button size="lg" variant="primary">Book Your Session</Button>
+                            <Button size="lg" variant="primary" onClick={openCalendly}>
+                                Book Your Session
+                            </Button>
+                        </div>
+
+                        <div className="sold-out-section">
+                            <h3>All booked this month?</h3>
+                            <p>
+                                New sessions are released on the <strong>1st of every month</strong>.
+                                Join the waitlist to be the first to know when spots open up.
+                            </p>
+                            <a href={waitlistMailto}>
+                                <Button size="md" variant="secondary">
+                                    Join the Waitlist
+                                </Button>
+                            </a>
+                            <div className="explore-section">
+                                <p className="explore-label">Explore while you wait</p>
+                                <div className="explore-links">
+                                    <Link to="/online-healings" className="explore-link">
+                                        Online Healings
+                                    </Link>
+                                    <Link to="/learning" className="explore-link">
+                                        Learning Hub
+                                    </Link>
+                                    <Link to="/values" className="explore-link">
+                                        Our Values
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
