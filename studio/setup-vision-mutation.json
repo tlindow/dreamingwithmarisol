@@ -1,0 +1,32 @@
+{
+  "mutations": [
+    {
+      "createOrReplace": {
+        "_type": "siteSettings",
+        "title": "Dreaming with Marisól",
+        "typography": {
+          "primaryFont": "Outfit",
+          "primaryFontUrl": "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap",
+          "secondaryFont": "Playfair Display",
+          "secondaryFontUrl": "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap"
+        },
+        "emojis": {
+          "heroEmoji": "✨",
+          "brandEmoji": "🌙",
+          "decorativeEmojis": ["🍨", "✨", "🌙", "🕯️", "🌸"],
+          "sectionEmojis": {
+            "about": "🌿",
+            "services": "🕯️",
+            "store": "🍨",
+            "learning": "📚"
+          }
+        },
+        "textContent": {
+          "heroTitle": "Hola, I'm Marisól",
+          "heroSubtitle": "Mesoamerican Cleansing Rituals & Spiritual Healing",
+          "siteDescription": "Traditional healing practices and spiritual guidance"
+        }
+      }
+    }
+  ]
+}
