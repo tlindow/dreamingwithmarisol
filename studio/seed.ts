@@ -3,6 +3,76 @@ import { getCliClient } from 'sanity/cli'
 const client = getCliClient()
 
 async function seed() {
+    console.log('Setting up Site Settings...')
+
+    // Check if siteSettings already exists
+    const existingSettings = await client.fetch(`*[_type == "siteSettings"][0]`)
+    
+    if (existingSettings) {
+        console.log('Site Settings already exists. Updating with typography, emojis, and text content...')
+        
+        await client
+            .patch(existingSettings._id)
+            .set({
+                typography: {
+                    primaryFont: 'Outfit',
+                    primaryFontUrl: 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap',
+                    secondaryFont: 'Playfair Display',
+                    secondaryFontUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap',
+                },
+                emojis: {
+                    heroEmoji: '✨',
+                    brandEmoji: '🌙',
+                    decorativeEmojis: ['🍨', '✨', '🌙', '🕯️', '🌸'],
+                    sectionEmojis: {
+                        about: '🌿',
+                        services: '🕯️',
+                        store: '🍨',
+                        learning: '📚',
+                    },
+                },
+                textContent: {
+                    heroTitle: "Hola, I'm Marisól",
+                    heroSubtitle: 'Mesoamerican Cleansing Rituals & Spiritual Healing',
+                    siteDescription: 'Traditional healing practices and spiritual guidance',
+                },
+            })
+            .commit()
+        
+        console.log('Site Settings updated successfully!')
+    } else {
+        console.log('Creating new Site Settings document...')
+        
+        const settings = await client.create({
+            _type: 'siteSettings',
+            title: 'Dreaming with Marisól',
+            typography: {
+                primaryFont: 'Outfit',
+                primaryFontUrl: 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap',
+                secondaryFont: 'Playfair Display',
+                secondaryFontUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap',
+            },
+            emojis: {
+                heroEmoji: '✨',
+                brandEmoji: '🌙',
+                decorativeEmojis: ['🍨', '✨', '🌙', '🕯️', '🌸'],
+                sectionEmojis: {
+                    about: '🌿',
+                    services: '🕯️',
+                    store: '🍨',
+                    learning: '📚',
+                },
+            },
+            textContent: {
+                heroTitle: "Hola, I'm Marisól",
+                heroSubtitle: 'Mesoamerican Cleansing Rituals & Spiritual Healing',
+                siteDescription: 'Traditional healing practices and spiritual guidance',
+            },
+        })
+
+        console.log(`Created Site Settings (ID: ${settings._id})`)
+    }
+
     console.log('Seeding dummy eCommerce product...')
 
     const product = await client.create({
@@ -34,7 +104,7 @@ async function seed() {
     })
 
     console.log(`Created video module: ${video.title} (ID: ${video._id})`)
-    console.log('Finished seeding Sanity dummy data!')
+    console.log('Finished seeding Sanity data!')
 }
 
 seed().catch((err) => {
