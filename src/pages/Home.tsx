@@ -6,17 +6,19 @@ import './Home.css';
 
 const Home = () => {
     const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+    const [heroLoaded, setHeroLoaded] = useState(false);
 
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                // Fetch the first siteSettings document (usually there is only one)
                 const settings = await client.fetch(`*[_type == "siteSettings"][0]`);
                 if (settings?.heroImage) {
                     setHeroImageUrl(urlFor(settings.heroImage).url());
                 }
             } catch (error) {
                 console.error("Error fetching site settings from Sanity:", error);
+            } finally {
+                setHeroLoaded(true);
             }
         };
 
@@ -43,11 +45,11 @@ const Home = () => {
                     <div className="hero-image-wrapper">
                         {heroImageUrl ? (
                             <img src={heroImageUrl} alt="Marisól" className="hero-image" />
-                        ) : (
+                        ) : heroLoaded ? (
                             <div className="image-placeholder">
                                 <span className="placeholder-text">Upload Hero Image in Sanity</span>
                             </div>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </section>
