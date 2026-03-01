@@ -8,7 +8,7 @@ export const Footer = () => {
             <div className="container footer-container">
                 <div className="footer-brand">
                     <Link to="/" className="brand-logo">Dreaming with Marisól</Link>
-                    <p className="footer-subtitle">Spiritual Healing & Education</p>
+                    <p className="footer-subtitle">Spiritual Limpias & Pláticas</p>
                 </div>
 
                 <div className="footer-links-grid">
