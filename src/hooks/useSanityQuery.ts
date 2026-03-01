@@ -9,7 +9,7 @@ interface UseSanityQueryResult<T> {
 
 export function useSanityQuery<T>(
     query: string,
-    params?: Record<string, string | undefined>,
+    params?: Record<string, unknown>,
 ): UseSanityQueryResult<T> {
     const [data, setData] = useState<T | null>(null);
     const [isLoading, setIsLoading] = useState(true);

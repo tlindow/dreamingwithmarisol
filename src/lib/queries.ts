@@ -30,33 +30,9 @@ export const ABOUT_PAGE_QUERY = `{
     }
 }`;
 
-export const HEALINGS_QUERY = `{
+export const HEALING_PAGE_QUERY = `{
     "settings": *[_type == "siteSettings"][0]{ calendlyUrl, sessionsFullyBooked, contactEmail },
-    "service": *[_type == "service" && isOnline == false][0]{
-        title,
-        pageTitle,
-        pageSubtitle,
-        price,
-        duration,
-        description,
-        whatToExpect,
-        cancellationPolicy,
-        refundsPolicy,
-        preparationText
-    },
-    "featuredModules": *[_type == "videoModule" && isFeatured == true] | order(order asc) [0...3] {
-        _id,
-        title,
-        duration,
-        description,
-        thumbnailColor,
-        accessTier
-    }
-}`;
-
-export const ONLINE_HEALINGS_QUERY = `{
-    "settings": *[_type == "siteSettings"][0]{ calendlyUrl, sessionsFullyBooked, contactEmail },
-    "service": *[_type == "service" && isOnline == true][0]{
+    "service": *[_type == "service" && isOnline == $isOnline][0]{
         title,
         pageTitle,
         pageSubtitle,

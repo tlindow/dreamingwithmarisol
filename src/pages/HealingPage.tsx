@@ -1,22 +1,31 @@
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { useCalendlyEmbed } from '../hooks/useCalendlyEmbed';
-import { HEALINGS_QUERY } from '../lib/queries';
+import { HEALING_PAGE_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
-import { DEFAULT_IN_PERSON_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
+import { DEFAULT_IN_PERSON_SERVICE, DEFAULT_ONLINE_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
 import type { ServiceData, SiteSettings, VideoModule } from '../lib/types';
 import './Healings.css';
 
-interface HealingsQueryResult {
+interface HealingPageQueryResult {
     settings: Pick<SiteSettings, 'calendlyUrl' | 'sessionsFullyBooked' | 'contactEmail'> | null;
     service: ServiceData | null;
     featuredModules: VideoModule[] | null;
 }
 
-const Healings = () => {
-    const { data, isLoading: settingsLoading } = useSanityQuery<HealingsQueryResult>(HEALINGS_QUERY);
+interface HealingPageProps {
+    isOnline: boolean;
+}
+
+const HealingPage = ({ isOnline }: HealingPageProps) => {
+    const defaults = isOnline ? DEFAULT_ONLINE_SERVICE : DEFAULT_IN_PERSON_SERVICE;
+    const params = useMemo(() => ({ isOnline }), [isOnline]);
+
+    const { data, isLoading: settingsLoading } =
+        useSanityQuery<HealingPageQueryResult>(HEALING_PAGE_QUERY, params);
 
     const calendlyUrl = data?.settings?.calendlyUrl ?? null;
     const sessionsFullyBooked = data?.settings?.sessionsFullyBooked ?? false;
@@ -24,27 +33,31 @@ const Healings = () => {
     const featuredModules = data?.featuredModules ?? [];
 
     const svc = data?.service;
-    const serviceTitle = svc?.title ?? DEFAULT_IN_PERSON_SERVICE.title;
-    const pageTitle = svc?.pageTitle ?? DEFAULT_IN_PERSON_SERVICE.pageTitle;
-    const pageSubtitle = svc?.pageSubtitle ?? DEFAULT_IN_PERSON_SERVICE.pageSubtitle;
-    const price = svc?.price ?? DEFAULT_IN_PERSON_SERVICE.price;
-    const duration = svc?.duration ?? DEFAULT_IN_PERSON_SERVICE.duration;
-    const description = svc?.description ?? DEFAULT_IN_PERSON_SERVICE.description;
-    const whatToExpect = svc?.whatToExpect ?? DEFAULT_IN_PERSON_SERVICE.whatToExpect;
-    const cancellationPolicy = svc?.cancellationPolicy ?? DEFAULT_IN_PERSON_SERVICE.cancellationPolicy;
-    const refundsPolicy = svc?.refundsPolicy ?? DEFAULT_IN_PERSON_SERVICE.refundsPolicy;
-    const preparationText = svc?.preparationText ?? DEFAULT_IN_PERSON_SERVICE.preparationText;
+    const serviceTitle = svc?.title ?? defaults.title;
+    const pageTitle = svc?.pageTitle ?? defaults.pageTitle;
+    const pageSubtitle = svc?.pageSubtitle ?? defaults.pageSubtitle;
+    const price = svc?.price ?? defaults.price;
+    const duration = svc?.duration ?? defaults.duration;
+    const description = svc?.description ?? defaults.description;
+    const whatToExpect = svc?.whatToExpect ?? defaults.whatToExpect;
+    const cancellationPolicy = svc?.cancellationPolicy ?? defaults.cancellationPolicy;
+    const refundsPolicy = svc?.refundsPolicy ?? defaults.refundsPolicy;
+    const preparationText = svc?.preparationText ?? defaults.preparationText;
 
     const { showCalendly, setShowCalendly, embedRef, fullUrl, handleBookClick } =
         useCalendlyEmbed(calendlyUrl);
 
     const settingsLoaded = !settingsLoading;
     const bookingAvailable = settingsLoaded && !!calendlyUrl && !sessionsFullyBooked;
+    const bookingUnavailable = settingsLoaded && !bookingAvailable;
+
+    const sessionLabel = isOnline ? 'online' : 'in-person';
+    const bookButtonLabel = isOnline ? 'Book Online Session' : 'Book Your Session';
 
     const contactMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
         `Inquiry — ${pageTitle}`
     )}&body=${encodeURIComponent(
-        `Hi Marisól,\n\nI'm interested in learning more about your in-person ${serviceTitle} sessions.\n\nThank you!`
+        `Hi Marisól,\n\nI'm interested in learning more about your ${sessionLabel} ${serviceTitle} sessions.\n\nThank you!`
     )}`;
 
     return (
@@ -88,7 +101,7 @@ const Healings = () => {
                         <div className="booking-cta">
                             {bookingAvailable ? (
                                 <Button size="lg" variant="primary" onClick={handleBookClick}>
-                                    Book Your Session
+                                    {bookButtonLabel}
                                 </Button>
                             ) : settingsLoaded && sessionsFullyBooked ? (
                                 <div className="fully-booked-notice">
@@ -109,7 +122,8 @@ const Healings = () => {
                                         <strong>Booking is not yet open for this month.</strong>
                                     </p>
                                     <p>
-                                        New sessions are released on the 1st — check back soon.
+                                        New sessions are released on the 1st. Explore our learning
+                                        resources below while you wait.
                                     </p>
                                 </div>
                             ) : null}
@@ -138,18 +152,17 @@ const Healings = () => {
                             </div>
                         )}
 
-                        {/* Overflow section: always visible, emphasized when booked */}
-                        <div className={`overflow-section${sessionsFullyBooked ? ' overflow-section--prominent' : ''}`}>
+                        <div className={`overflow-section${bookingUnavailable ? ' overflow-section--prominent' : ''}`}>
                             <div className="overflow-header">
                                 <BookOpen size={24} className="overflow-header-icon" />
                                 <div>
                                     <h3>
-                                        {sessionsFullyBooked
+                                        {bookingUnavailable
                                             ? 'Begin Learning While You Wait'
                                             : 'Deepen Your Practice'}
                                     </h3>
                                     <p>
-                                        {sessionsFullyBooked
+                                        {bookingUnavailable
                                             ? 'Explore ancestral wisdom teachings and prepare for your healing session with our guided learning modules.'
                                             : 'Complement your healing sessions with guided learning on ancestral wisdom and spiritual practice.'}
                                     </p>
@@ -183,7 +196,7 @@ const Healings = () => {
 
                             <div className="overflow-actions">
                                 <Link to="/learning">
-                                    <Button size="md" variant={sessionsFullyBooked ? 'primary' : 'secondary'}>
+                                    <Button size="md" variant={bookingUnavailable ? 'primary' : 'secondary'}>
                                         Explore the Learning Hub <ArrowRight size={16} />
                                     </Button>
                                 </Link>
@@ -192,7 +205,7 @@ const Healings = () => {
                                 </Link>
                             </div>
 
-                            {sessionsFullyBooked && (
+                            {bookingUnavailable && (
                                 <p className="overflow-contact">
                                     Have questions? <a href={contactMailto}>Reach out to Marisól</a>
                                 </p>
@@ -220,4 +233,4 @@ const Healings = () => {
     );
 };
 
-export default Healings;
+export default HealingPage;
