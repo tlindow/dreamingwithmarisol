@@ -3,6 +3,7 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {presentationTool} from 'sanity/presentation'
 import {schemaTypes} from './schemaTypes'
+import {resolve} from './presentation/resolve'
 import type {StructureBuilder} from 'sanity/structure'
 
 const previewUrl =
@@ -55,6 +56,7 @@ export default defineConfig({
         visionTool(),
         presentationTool({
             previewUrl,
+            resolve,
         }),
     ],
 
