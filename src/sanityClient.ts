@@ -2,13 +2,17 @@ import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 
 export const client = createClient({
-    projectId: 't8kqnnav', // replace with your actual Sanity projectId
+    projectId: 't8kqnnav',
     dataset: 'production',
-    useCdn: true, // set to `false` to bypass the edge cache
-    apiVersion: '2025-02-24', // use current date (YYYY-MM-DD) to target the latest API version
+    useCdn: true,
+    apiVersion: '2025-02-24',
     stega: {
         enabled: true,
-        studioUrl: 'http://localhost:3333',
+        studioUrl:
+            import.meta.env.VITE_SANITY_STUDIO_URL ??
+            (import.meta.env.PROD
+                ? 'https://dreaming-with-marisol.sanity.studio'
+                : 'http://localhost:3333'),
     },
 });
 

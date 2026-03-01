@@ -15,7 +15,11 @@ export default defineConfig({
     structureTool(),
     visionTool(),
     presentationTool({
-      previewUrl: 'http://localhost:5173',
+      previewUrl:
+        process.env.SANITY_STUDIO_PREVIEW_URL ??
+        (process.env.NODE_ENV === 'production'
+          ? 'https://dreamingwithmarisol.vercel.app'
+          : 'http://localhost:5173'),
     }),
   ],
 
