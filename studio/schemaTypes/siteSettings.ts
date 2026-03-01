@@ -61,7 +61,7 @@ export default defineType({
             group: 'booking',
             initialValue: false,
             description:
-                'Toggle ON when all sessions for the current month are booked. The healings pages will redirect visitors to the Learning Hub instead of showing a waitlist.',
+                'Auto-updated every 2 hours when a Calendly API token is configured. Can also be toggled manually. When ON, the healings pages redirect visitors to the Learning Hub.',
         }),
         defineField({
             name: 'contactEmail',
