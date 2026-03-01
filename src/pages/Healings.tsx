@@ -1,134 +1,70 @@
-import { useEffect, useCallback, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { client } from '../sanityClient';
+import { useSanityQuery } from '../hooks/useSanityQuery';
+import { useCalendlyEmbed } from '../hooks/useCalendlyEmbed';
+import { HEALINGS_QUERY } from '../lib/queries';
+import { formatPrice } from '../lib/utils';
+import { DEFAULT_IN_PERSON_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
+import type { ServiceData, SiteSettings } from '../lib/types';
 import './Healings.css';
 
-const BRAND_PARAMS =
-    'hide_gdpr_banner=1' +
-    '&background_color=f4f3ef' +
-    '&text_color=2d2a26' +
-    '&primary_color=4a5d23';
-
-function brandedUrl(raw: string) {
-    const sep = raw.includes('?') ? '&' : '?';
-    return `${raw}${sep}${BRAND_PARAMS}`;
+interface HealingsQueryResult {
+    settings: Pick<SiteSettings, 'calendlyUrl' | 'contactEmail'> | null;
+    service: ServiceData | null;
 }
-
-declare global {
-    interface Window {
-        Calendly?: {
-            initPopupWidget: (options: { url: string }) => void;
-            initInlineWidget: (options: {
-                url: string;
-                parentElement: HTMLElement;
-            }) => void;
-        };
-    }
-}
-
-const SETTINGS_QUERY = `*[_type == "siteSettings"][0]{ calendlyUrl, contactEmail }`;
 
 const Healings = () => {
-    const [calendlyUrl, setCalendlyUrl] = useState<string | null>(null);
-    const [contactEmail, setContactEmail] = useState<string | null>(null);
-    const [settingsLoaded, setSettingsLoaded] = useState(false);
-    const [showCalendly, setShowCalendly] = useState(false);
-    const [calendlyReady, setCalendlyReady] = useState(false);
-    const embedRef = useRef<HTMLDivElement>(null);
+    const { data, isLoading: settingsLoading } = useSanityQuery<HealingsQueryResult>(HEALINGS_QUERY);
 
-    useEffect(() => {
-        client
-            .fetch(SETTINGS_QUERY)
-            .then((settings: { calendlyUrl?: string; contactEmail?: string } | null) => {
-                if (settings?.calendlyUrl) setCalendlyUrl(settings.calendlyUrl);
-                if (settings?.contactEmail) setContactEmail(settings.contactEmail);
-            })
-            .catch((err: unknown) => console.error('Failed to fetch site settings:', err))
-            .finally(() => setSettingsLoaded(true));
-    }, []);
+    const calendlyUrl = data?.settings?.calendlyUrl ?? null;
+    const contactEmail = data?.settings?.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail;
 
-    useEffect(() => {
-        const link = document.createElement('link');
-        link.href = 'https://assets.calendly.com/assets/external/widget.css';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
+    const svc = data?.service;
+    const serviceTitle = svc?.title ?? DEFAULT_IN_PERSON_SERVICE.title;
+    const pageTitle = svc?.pageTitle ?? DEFAULT_IN_PERSON_SERVICE.pageTitle;
+    const pageSubtitle = svc?.pageSubtitle ?? DEFAULT_IN_PERSON_SERVICE.pageSubtitle;
+    const price = svc?.price ?? DEFAULT_IN_PERSON_SERVICE.price;
+    const duration = svc?.duration ?? DEFAULT_IN_PERSON_SERVICE.duration;
+    const description = svc?.description ?? DEFAULT_IN_PERSON_SERVICE.description;
+    const whatToExpect = svc?.whatToExpect ?? DEFAULT_IN_PERSON_SERVICE.whatToExpect;
+    const cancellationPolicy = svc?.cancellationPolicy ?? DEFAULT_IN_PERSON_SERVICE.cancellationPolicy;
+    const refundsPolicy = svc?.refundsPolicy ?? DEFAULT_IN_PERSON_SERVICE.refundsPolicy;
+    const preparationText = svc?.preparationText ?? DEFAULT_IN_PERSON_SERVICE.preparationText;
 
-        const script = document.createElement('script');
-        script.src = 'https://assets.calendly.com/assets/external/widget.js';
-        script.async = true;
-        script.onload = () => setCalendlyReady(true);
-        document.head.appendChild(script);
+    const { showCalendly, setShowCalendly, embedRef, fullUrl, handleBookClick } =
+        useCalendlyEmbed(calendlyUrl);
 
-        return () => {
-            if (script.parentNode) script.parentNode.removeChild(script);
-            if (link.parentNode) link.parentNode.removeChild(link);
-        };
-    }, []);
-
-    const fullUrl = calendlyUrl ? brandedUrl(calendlyUrl) : null;
-
-    useEffect(() => {
-        if (showCalendly && calendlyReady && fullUrl && embedRef.current && window.Calendly) {
-            embedRef.current.innerHTML = '';
-            window.Calendly.initInlineWidget({
-                url: fullUrl,
-                parentElement: embedRef.current,
-            });
-            setTimeout(() => {
-                embedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 150);
-        }
-    }, [showCalendly, calendlyReady, fullUrl]);
-
-    const handleBookClick = useCallback(() => {
-        if (!fullUrl) return;
-        if (showCalendly) {
-            embedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            return;
-        }
-        if (calendlyReady) {
-            setShowCalendly(true);
-        } else {
-            window.open(fullUrl, '_blank');
-        }
-    }, [showCalendly, calendlyReady, fullUrl]);
-
-    const email = contactEmail ?? 'hello@example.com';
-    const waitlistMailto = `mailto:${email}?subject=${encodeURIComponent(
-        'Waitlist — In-Person Healing Session'
-    )}&body=${encodeURIComponent(
-        "Hi Marisól,\n\nI'd love to book an in-person Limpia session. Could you please add me to the waitlist and notify me when new appointments become available?\n\nThank you!"
-    )}`;
-
+    const settingsLoaded = !settingsLoading;
     const bookingAvailable = settingsLoaded && !!calendlyUrl;
+
+    const waitlistMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
+        `Waitlist — ${pageTitle}`
+    )}&body=${encodeURIComponent(
+        `Hi Marisól,\n\nI'd love to book an in-person ${serviceTitle} session. Could you please add me to the waitlist and notify me when new appointments become available?\n\nThank you!`
+    )}`;
 
     return (
         <div className="page-wrapper animate-fade-in">
-            {/* Header Section */}
             <section className="section bg-primary-light text-center">
                 <div className="container">
-                    <h1 className="page-title">In-Person Healings</h1>
-                    <p className="page-subtitle">San Diego, CA</p>
+                    <h1 className="page-title">{pageTitle}</h1>
+                    <p className="page-subtitle">{pageSubtitle}</p>
                 </div>
             </section>
 
-            {/* Main Service Description */}
             <section className="section">
                 <div className="container healings-container">
                     <div className="healings-content">
-                        <h2>Limpia (Spiritual Cleansing)</h2>
+                        <h2>{serviceTitle}</h2>
                         <div className="service-details">
-                            <span className="price">$100</span>
-                            <span className="duration">60 Minutes</span>
+                            <span className="price">{formatPrice(price)}</span>
+                            <span className="duration">{duration}</span>
                         </div>
 
                         <div className="prose">
+                            <p>{description}</p>
                             <p>
-                                A Limpia is a traditional Mesoamerican healing practice designed to cleanse the body, mind, and spirit of heavy, stagnant energies. Using sacred smoke (copal, palo santo, or sage), fresh herbs, eggs, and prayer, this ritual restores balance to your energetic field.
-                            </p>
-                            <p>
-                                <strong>What to expect:</strong> We begin with a brief plática (heart-to-heart talk) to set intentions. The cleansing involves sweeping the body with herbs and using localized energetic clearing techniques. Please wear comfortable, light-colored clothing.
+                                <strong>What to expect:</strong> {whatToExpect}
                             </p>
                         </div>
 
@@ -217,21 +153,15 @@ const Healings = () => {
                     <div className="healings-sidebar">
                         <div className="policy-card">
                             <h3>Cancellation Policy</h3>
-                            <p>
-                                Please provide at least 24 hours notice for cancellations or rescheduling. Cancellations made within 24 hours of the appointment time will incur a 50% fee. No-calls/no-shows are charged the full session amount.
-                            </p>
+                            <p>{cancellationPolicy}</p>
                         </div>
                         <div className="policy-card">
                             <h3>Refunds</h3>
-                            <p>
-                                All healing sessions are final sale. No refunds are provided after the service has been rendered.
-                            </p>
+                            <p>{refundsPolicy}</p>
                         </div>
                         <div className="policy-card">
                             <h3>Preparation</h3>
-                            <p>
-                                Consume a light meal 1-2 hours prior. Avoid alcohol and recreational substances 24 hours before your session.
-                            </p>
+                            <p>{preparationText}</p>
                         </div>
                     </div>
                 </div>

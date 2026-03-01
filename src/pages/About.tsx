@@ -1,50 +1,45 @@
-import { useEffect, useState } from 'react';
-import { client, urlFor } from '../sanityClient';
+import { urlFor } from '../sanityClient';
+import { useSanityQuery } from '../hooks/useSanityQuery';
+import { ABOUT_PAGE_QUERY } from '../lib/queries';
+import { DEFAULT_ABOUT_PAGE } from '../content/defaults';
+import type { AboutPageData, SiteSettings } from '../lib/types';
 import './About.css';
 
+interface AboutQueryResult {
+    settings: Pick<SiteSettings, 'portraitImage'> | null;
+    page: AboutPageData | null;
+}
+
 const About = () => {
-    const [portraitImageUrl, setPortraitImageUrl] = useState<string | null>(null);
+    const { data } = useSanityQuery<AboutQueryResult>(ABOUT_PAGE_QUERY);
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const settings = await client.fetch(`*[_type == "siteSettings"][0]`);
-                if (settings?.portraitImage) {
-                    setPortraitImageUrl(urlFor(settings.portraitImage).url());
-                }
-            } catch (error) {
-                console.error("Error fetching site settings from Sanity:", error);
-            }
-        };
+    const page = data?.page;
+    const portraitImage = data?.settings?.portraitImage;
+    const portraitImageUrl = portraitImage ? urlFor(portraitImage).url() : null;
 
-        fetchSettings();
-    }, []);
+    const pageTitle = page?.pageTitle ?? DEFAULT_ABOUT_PAGE.pageTitle;
+    const bio = page?.bio ?? DEFAULT_ABOUT_PAGE.bio;
+    const experienceSectionTitle = page?.experienceSectionTitle ?? DEFAULT_ABOUT_PAGE.experienceSectionTitle;
+    const experienceItems = page?.experienceItems ?? DEFAULT_ABOUT_PAGE.experienceItems;
+
     return (
         <div className="page-wrapper animate-fade-in">
             <section className="section bg-primary-light">
                 <div className="container about-container">
                     <div className="about-content">
-                        <h1 className="page-title">About Marisól</h1>
+                        <h1 className="page-title">{pageTitle}</h1>
 
                         <div className="prose">
-                            <p>
-                                Marisól is a spiritual healer dedicated to guiding individuals through their healing journeys. With deep roots in Mesoamerican traditions, she blends ancestral wisdom with modern energetic practices to offer a holistic approach to wellness.
-                            </p>
+                            <p>{bio}</p>
 
-                            <h2>Experience & Education</h2>
+                            <h2>{experienceSectionTitle}</h2>
                             <div className="training-list">
-                                <div className="training-item">
-                                    <h3>Curanderismo</h3>
-                                    <p>Extensive training and initiation into traditional Mesoamerican healing practices, focusing on spiritual cleansing (Limpias) and energetic balance.</p>
-                                </div>
-                                <div className="training-item">
-                                    <h3>Psychic Training</h3>
-                                    <p>Developed intuitive abilities to assist clients in uncovering deep-seated blockages and navigating life's challenges with clarity.</p>
-                                </div>
-                                <div className="training-item">
-                                    <h3>Reiki</h3>
-                                    <p>Certified Reiki practitioner, utilizing universal life energy to promote physical, emotional, and spiritual healing.</p>
-                                </div>
+                                {experienceItems.map((item) => (
+                                    <div className="training-item" key={item.title}>
+                                        <h3>{item.title}</h3>
+                                        <p>{item.description}</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>

@@ -1,70 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import ReactPlayer from 'react-player';
-import type { SanityImageSource } from '@sanity/image-url';
-import { client, urlFor } from '../sanityClient';
+import { urlFor } from '../sanityClient';
+import { useSanityQuery } from '../hooks/useSanityQuery';
+import { MODULE_DETAIL_QUERY } from '../lib/queries';
+import { formatPrice } from '../lib/utils';
 import { Button } from '../components/Button';
+import type { VideoModule } from '../lib/types';
 import './ModuleDetail.css';
-
-interface Product {
-    _id: string;
-    title: string;
-    description: string;
-    price: number;
-    storeUrl: string;
-    image: SanityImageSource;
-}
-
-interface VideoModule {
-    _id: string;
-    title: string;
-    duration: string;
-    description: string;
-    videoUrl: string;
-    thumbnailColor: string;
-    products?: Product[];
-}
 
 const Player = ReactPlayer as React.ComponentType<Record<string, unknown>>;
 
 const ModuleDetail = () => {
     const { id } = useParams<{ id: string }>();
-    const [moduleFile, setModuleFile] = useState<VideoModule | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        const fetchModule = async () => {
-            if (!id) return;
-            try {
-                const data = await client.fetch(`
-                    *[_type == "videoModule" && _id == $id][0] {
-                        _id,
-                        title,
-                        duration,
-                        description,
-                        videoUrl,
-                        thumbnailColor,
-                        "products": products[]->{
-                            _id,
-                            title,
-                            description,
-                            price,
-                            storeUrl,
-                            image
-                        }
-                    }
-                `, { id });
-                setModuleFile(data);
-            } catch (error) {
-                console.error("Error fetching video module detail:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchModule();
-    }, [id]);
+    const params = useMemo(() => ({ id }), [id]);
+    const { data: moduleFile, isLoading } = useSanityQuery<VideoModule>(MODULE_DETAIL_QUERY, params);
 
     if (isLoading) {
         return (
@@ -143,7 +94,7 @@ const ModuleDetail = () => {
                                                 )}
                                                 <div className="flex-1 flex flex-col">
                                                     <h4 className="font-semibold text-[var(--color-text)] leading-tight mb-1">{product.title}</h4>
-                                                    {product.price && <span className="text-[var(--color-primary-dark)] font-medium mb-2">£{product.price}</span>}
+                                                    {product.price && <span className="text-[var(--color-primary-dark)] font-medium mb-2">{formatPrice(product.price)}</span>}
                                                     {product.description && <p className="text-sm text-[var(--color-text-light)] line-clamp-2 mb-4">{product.description}</p>}
 
                                                     <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
