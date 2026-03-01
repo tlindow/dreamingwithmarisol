@@ -84,6 +84,28 @@
     margin-top: var(--spacing-lg);
 }
 
+.booking-closed-notice {
+    padding: var(--spacing-lg);
+    background-color: var(--color-primary-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.booking-closed-notice p {
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.booking-closed-notice p:last-child {
+    margin-bottom: 0;
+}
+
+.booking-closed-notice strong {
+    color: var(--color-secondary);
+}
+
 /* Inline Calendly Embed */
 .calendly-embed-wrapper {
     margin-top: var(--spacing-2xl);

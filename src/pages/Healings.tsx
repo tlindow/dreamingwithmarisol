@@ -1,17 +1,19 @@
 import { useEffect, useCallback, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
+import { client } from '../sanityClient';
 import './Healings.css';
 
-// TODO: Replace with your actual Calendly event URL and contact email
-const CALENDLY_URL = 'https://calendly.com/YOUR_USERNAME/in-person-healing';
-const CONTACT_EMAIL = 'hello@example.com';
+const BRAND_PARAMS =
+    'hide_gdpr_banner=1' +
+    '&background_color=f4f3ef' +
+    '&text_color=2d2a26' +
+    '&primary_color=4a5d23';
 
-const CALENDLY_BRANDED_URL =
-    `${CALENDLY_URL}?hide_gdpr_banner=1` +
-    `&background_color=f4f3ef` +   // --color-primary-light
-    `&text_color=2d2a26` +         // --color-text-main
-    `&primary_color=4a5d23`;       // --color-secondary (olive green)
+function brandedUrl(raw: string) {
+    const sep = raw.includes('?') ? '&' : '?';
+    return `${raw}${sep}${BRAND_PARAMS}`;
+}
 
 declare global {
     interface Window {
@@ -25,10 +27,26 @@ declare global {
     }
 }
 
+const SETTINGS_QUERY = `*[_type == "siteSettings"][0]{ calendlyUrl, contactEmail }`;
+
 const Healings = () => {
+    const [calendlyUrl, setCalendlyUrl] = useState<string | null>(null);
+    const [contactEmail, setContactEmail] = useState<string | null>(null);
+    const [settingsLoaded, setSettingsLoaded] = useState(false);
     const [showCalendly, setShowCalendly] = useState(false);
     const [calendlyReady, setCalendlyReady] = useState(false);
     const embedRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        client
+            .fetch(SETTINGS_QUERY)
+            .then((settings: { calendlyUrl?: string; contactEmail?: string } | null) => {
+                if (settings?.calendlyUrl) setCalendlyUrl(settings.calendlyUrl);
+                if (settings?.contactEmail) setContactEmail(settings.contactEmail);
+            })
+            .catch((err: unknown) => console.error('Failed to fetch site settings:', err))
+            .finally(() => setSettingsLoaded(true));
+    }, []);
 
     useEffect(() => {
         const link = document.createElement('link');
@@ -48,20 +66,23 @@ const Healings = () => {
         };
     }, []);
 
+    const fullUrl = calendlyUrl ? brandedUrl(calendlyUrl) : null;
+
     useEffect(() => {
-        if (showCalendly && calendlyReady && embedRef.current && window.Calendly) {
+        if (showCalendly && calendlyReady && fullUrl && embedRef.current && window.Calendly) {
             embedRef.current.innerHTML = '';
             window.Calendly.initInlineWidget({
-                url: CALENDLY_BRANDED_URL,
+                url: fullUrl,
                 parentElement: embedRef.current,
             });
             setTimeout(() => {
                 embedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 150);
         }
-    }, [showCalendly, calendlyReady]);
+    }, [showCalendly, calendlyReady, fullUrl]);
 
     const handleBookClick = useCallback(() => {
+        if (!fullUrl) return;
         if (showCalendly) {
             embedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
             return;
@@ -69,15 +90,18 @@ const Healings = () => {
         if (calendlyReady) {
             setShowCalendly(true);
         } else {
-            window.open(CALENDLY_BRANDED_URL, '_blank');
+            window.open(fullUrl, '_blank');
         }
-    }, [showCalendly, calendlyReady]);
+    }, [showCalendly, calendlyReady, fullUrl]);
 
-    const waitlistMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+    const email = contactEmail ?? 'hello@example.com';
+    const waitlistMailto = `mailto:${email}?subject=${encodeURIComponent(
         'Waitlist — In-Person Healing Session'
     )}&body=${encodeURIComponent(
         "Hi Marisól,\n\nI'd love to book an in-person Limpia session. Could you please add me to the waitlist and notify me when new appointments become available?\n\nThank you!"
     )}`;
+
+    const bookingAvailable = settingsLoaded && !!calendlyUrl;
 
     return (
         <div className="page-wrapper animate-fade-in">
@@ -122,12 +146,24 @@ const Healings = () => {
                         </div>
 
                         <div className="booking-cta">
-                            <Button size="lg" variant="primary" onClick={handleBookClick}>
-                                Book Your Session
-                            </Button>
+                            {bookingAvailable ? (
+                                <Button size="lg" variant="primary" onClick={handleBookClick}>
+                                    Book Your Session
+                                </Button>
+                            ) : settingsLoaded ? (
+                                <div className="booking-closed-notice">
+                                    <p>
+                                        <strong>Booking is not yet open for this month.</strong>
+                                    </p>
+                                    <p>
+                                        New sessions are released on the 1st — check back soon
+                                        or join the waitlist below to get notified.
+                                    </p>
+                                </div>
+                            ) : null}
                         </div>
 
-                        {showCalendly && (
+                        {showCalendly && fullUrl && (
                             <div className="calendly-embed-wrapper">
                                 <div className="calendly-embed-header">
                                     <h3>Select a Date &amp; Time</h3>
