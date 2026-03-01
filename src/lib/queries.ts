@@ -31,7 +31,7 @@ export const ABOUT_PAGE_QUERY = `{
 }`;
 
 export const HEALINGS_QUERY = `{
-    "settings": *[_type == "siteSettings"][0]{ calendlyUrl, contactEmail },
+    "settings": *[_type == "siteSettings"][0]{ calendlyUrl, sessionsFullyBooked, contactEmail },
     "service": *[_type == "service" && isOnline == false][0]{
         title,
         pageTitle,
@@ -43,11 +43,19 @@ export const HEALINGS_QUERY = `{
         cancellationPolicy,
         refundsPolicy,
         preparationText
+    },
+    "featuredModules": *[_type == "videoModule" && isFeatured == true] | order(order asc) [0...3] {
+        _id,
+        title,
+        duration,
+        description,
+        thumbnailColor,
+        accessTier
     }
 }`;
 
 export const ONLINE_HEALINGS_QUERY = `{
-    "settings": *[_type == "siteSettings"][0]{ calendlyUrl, contactEmail },
+    "settings": *[_type == "siteSettings"][0]{ calendlyUrl, sessionsFullyBooked, contactEmail },
     "service": *[_type == "service" && isOnline == true][0]{
         title,
         pageTitle,
@@ -59,6 +67,14 @@ export const ONLINE_HEALINGS_QUERY = `{
         cancellationPolicy,
         refundsPolicy,
         preparationText
+    },
+    "featuredModules": *[_type == "videoModule" && isFeatured == true] | order(order asc) [0...3] {
+        _id,
+        title,
+        duration,
+        description,
+        thumbnailColor,
+        accessTier
     }
 }`;
 
@@ -80,7 +96,9 @@ export const LEARNING_HUB_QUERY = `*[_type == "videoModule"] | order(order asc) 
     title,
     duration,
     description,
-    thumbnailColor
+    thumbnailColor,
+    accessTier,
+    isFeatured
 }`;
 
 export const MODULE_DETAIL_QUERY = `*[_type == "videoModule" && _id == $id][0] {

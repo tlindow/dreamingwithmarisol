@@ -6,6 +6,7 @@ export interface SiteSettings {
     heroImage?: SanityImageSource;
     portraitImage?: SanityImageSource;
     calendlyUrl?: string;
+    sessionsFullyBooked?: boolean;
     contactEmail?: string;
     instagramUrl?: string;
     substackUrl?: string;
@@ -80,6 +81,8 @@ export interface VideoModule {
     duration: string;
     description: string;
     thumbnailColor: string;
+    accessTier?: 'free' | 'premium';
+    isFeatured?: boolean;
     videoUrl?: string;
     products?: Product[];
 }

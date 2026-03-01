@@ -55,12 +55,21 @@ export default defineType({
                 Rule.uri({scheme: ['https']}).error('Must be a valid https:// URL'),
         }),
         defineField({
+            name: 'sessionsFullyBooked',
+            title: 'Sessions Fully Booked',
+            type: 'boolean',
+            group: 'booking',
+            initialValue: false,
+            description:
+                'Toggle ON when all sessions for the current month are booked. The healings pages will redirect visitors to the Learning Hub instead of showing a waitlist.',
+        }),
+        defineField({
             name: 'contactEmail',
-            title: 'Contact / Waitlist Email',
+            title: 'Contact Email',
             type: 'string',
             group: 'booking',
             description:
-                'Email address used for the "Join the Waitlist" button on the healings page.',
+                'General contact email shown on the site.',
             validation: (Rule) => Rule.email().error('Must be a valid email address'),
         }),
         defineField({

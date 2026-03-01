@@ -53,6 +53,7 @@ async function sync() {
             p.setIfMissing({
                 tagline: 'Spiritual Healing & Education',
                 instagramUrl: 'https://instagram.com/dreamingwithmarisol',
+                sessionsFullyBooked: false,
             })
         )
     }

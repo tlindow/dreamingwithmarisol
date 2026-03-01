@@ -1,23 +1,27 @@
 import { Link } from 'react-router-dom';
+import { BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '../components/Button';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { useCalendlyEmbed } from '../hooks/useCalendlyEmbed';
 import { HEALINGS_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
 import { DEFAULT_IN_PERSON_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
-import type { ServiceData, SiteSettings } from '../lib/types';
+import type { ServiceData, SiteSettings, VideoModule } from '../lib/types';
 import './Healings.css';
 
 interface HealingsQueryResult {
-    settings: Pick<SiteSettings, 'calendlyUrl' | 'contactEmail'> | null;
+    settings: Pick<SiteSettings, 'calendlyUrl' | 'sessionsFullyBooked' | 'contactEmail'> | null;
     service: ServiceData | null;
+    featuredModules: VideoModule[] | null;
 }
 
 const Healings = () => {
     const { data, isLoading: settingsLoading } = useSanityQuery<HealingsQueryResult>(HEALINGS_QUERY);
 
     const calendlyUrl = data?.settings?.calendlyUrl ?? null;
+    const sessionsFullyBooked = data?.settings?.sessionsFullyBooked ?? false;
     const contactEmail = data?.settings?.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail;
+    const featuredModules = data?.featuredModules ?? [];
 
     const svc = data?.service;
     const serviceTitle = svc?.title ?? DEFAULT_IN_PERSON_SERVICE.title;
@@ -35,12 +39,12 @@ const Healings = () => {
         useCalendlyEmbed(calendlyUrl);
 
     const settingsLoaded = !settingsLoading;
-    const bookingAvailable = settingsLoaded && !!calendlyUrl;
+    const bookingAvailable = settingsLoaded && !!calendlyUrl && !sessionsFullyBooked;
 
-    const waitlistMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
-        `Waitlist — ${pageTitle}`
+    const contactMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
+        `Inquiry — ${pageTitle}`
     )}&body=${encodeURIComponent(
-        `Hi Marisól,\n\nI'd love to book an in-person ${serviceTitle} session. Could you please add me to the waitlist and notify me when new appointments become available?\n\nThank you!`
+        `Hi Marisól,\n\nI'm interested in learning more about your in-person ${serviceTitle} sessions.\n\nThank you!`
     )}`;
 
     return (
@@ -86,14 +90,26 @@ const Healings = () => {
                                 <Button size="lg" variant="primary" onClick={handleBookClick}>
                                     Book Your Session
                                 </Button>
+                            ) : settingsLoaded && sessionsFullyBooked ? (
+                                <div className="fully-booked-notice">
+                                    <Sparkles size={20} className="fully-booked-icon" />
+                                    <div>
+                                        <p>
+                                            <strong>This month's sessions are fully booked.</strong>
+                                        </p>
+                                        <p>
+                                            New sessions open on the 1st of next month. In the meantime,
+                                            start your healing journey with our learning resources below.
+                                        </p>
+                                    </div>
+                                </div>
                             ) : settingsLoaded ? (
                                 <div className="booking-closed-notice">
                                     <p>
                                         <strong>Booking is not yet open for this month.</strong>
                                     </p>
                                     <p>
-                                        New sessions are released on the 1st — check back soon
-                                        or join the waitlist below to get notified.
+                                        New sessions are released on the 1st — check back soon.
                                     </p>
                                 </div>
                             ) : null}
@@ -122,31 +138,65 @@ const Healings = () => {
                             </div>
                         )}
 
-                        <div className="sold-out-section">
-                            <h3>All booked this month?</h3>
-                            <p>
-                                New sessions are released on the <strong>1st of every month</strong>.
-                                Join the waitlist to be the first to know when spots open up.
-                            </p>
-                            <a href={waitlistMailto}>
-                                <Button size="md" variant="secondary">
-                                    Join the Waitlist
-                                </Button>
-                            </a>
-                            <div className="explore-section">
-                                <p className="explore-label">Explore while you wait</p>
-                                <div className="explore-links">
-                                    <Link to="/online-healings" className="explore-link">
-                                        Online Healings
-                                    </Link>
-                                    <Link to="/learning" className="explore-link">
-                                        Learning Hub
-                                    </Link>
-                                    <Link to="/values" className="explore-link">
-                                        Our Values
-                                    </Link>
+                        {/* Overflow section: always visible, emphasized when booked */}
+                        <div className={`overflow-section${sessionsFullyBooked ? ' overflow-section--prominent' : ''}`}>
+                            <div className="overflow-header">
+                                <BookOpen size={24} className="overflow-header-icon" />
+                                <div>
+                                    <h3>
+                                        {sessionsFullyBooked
+                                            ? 'Begin Learning While You Wait'
+                                            : 'Deepen Your Practice'}
+                                    </h3>
+                                    <p>
+                                        {sessionsFullyBooked
+                                            ? 'Explore ancestral wisdom teachings and prepare for your healing session with our guided learning modules.'
+                                            : 'Complement your healing sessions with guided learning on ancestral wisdom and spiritual practice.'}
+                                    </p>
                                 </div>
                             </div>
+
+                            {featuredModules.length > 0 && (
+                                <div className="overflow-modules">
+                                    {featuredModules.map((mod) => (
+                                        <Link
+                                            to={`/learning/${mod._id}`}
+                                            key={mod._id}
+                                            className="overflow-module-card"
+                                        >
+                                            <div className={`overflow-module-thumb ${mod.thumbnailColor || 'bg-primary'}`}>
+                                                {mod.accessTier === 'premium' && (
+                                                    <span className="tier-badge tier-badge--premium">Premium</span>
+                                                )}
+                                                {mod.accessTier === 'free' && (
+                                                    <span className="tier-badge tier-badge--free">Free</span>
+                                                )}
+                                            </div>
+                                            <div className="overflow-module-info">
+                                                <h4>{mod.title}</h4>
+                                                <span className="overflow-module-duration">{mod.duration}</span>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+
+                            <div className="overflow-actions">
+                                <Link to="/learning">
+                                    <Button size="md" variant={sessionsFullyBooked ? 'primary' : 'secondary'}>
+                                        Explore the Learning Hub <ArrowRight size={16} />
+                                    </Button>
+                                </Link>
+                                <Link to="/store" className="overflow-store-link">
+                                    Browse Healing Supplies
+                                </Link>
+                            </div>
+
+                            {sessionsFullyBooked && (
+                                <p className="overflow-contact">
+                                    Have questions? <a href={contactMailto}>Reach out to Marisól</a>
+                                </p>
+                            )}
                         </div>
                     </div>
 
