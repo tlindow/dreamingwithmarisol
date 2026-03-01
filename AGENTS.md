@@ -4,6 +4,60 @@
 
 This is a React + Vite frontend with a Sanity Studio CMS backend, all in one repo (not a monorepo workspace — two separate `npm install` runs are required).
 
+### Local agent git workflow
+
+For any new implementation task, local agents should follow this exact flow (deterministic):
+
+1. Ensure working tree is clean before switching branches:
+   - `git status --short`
+2. Fetch latest remote refs:
+   - `git fetch origin`
+3. Switch to `main`:
+   - `git checkout main`
+4. Fast-forward local `main` only (no merge commits):
+   - `git pull --ff-only origin main`
+5. Create and switch to a new branch from updated `main`:
+   - `git checkout -b <type>/<short-description>`
+6. Do implementation and validation (logic + visual checks).
+7. Before opening PR, re-sync with updated `main`:
+   - `git fetch origin`
+   - `git rebase origin/main`
+8. Push branch to remote:
+   - `git push -u origin <branch-name>`
+9. Open PR in **Ready for review** state (not draft) only after both checks are approved.
+10. End the flow by sharing a clickable PR link in Markdown format:
+   - `[PR #<number>](https://github.com/<owner>/<repo>/pull/<number>)`
+
+Rules:
+- Never branch from an existing feature branch.
+- Never use `git push --force` on shared branches unless explicitly requested.
+- Prefer `--ff-only` pulls to avoid accidental merge commits on `main`.
+
+### Local agent visual validation (match Cursor Cloud flow)
+
+Local agents must run UI validation and attach visual proof before PR creation.
+
+Required flow:
+1. Install dependencies if needed:
+   - Root: `npm install`
+   - Studio: `cd studio && npm install`
+2. Start the frontend dev server from repo root:
+   - `npm run dev` (expect `http://localhost:5173`)
+3. If task touches Studio/content editing, also start Studio:
+   - `cd studio && npm run dev` (expect `http://localhost:3333`)
+4. Open the target user flows in a browser automation session.
+5. Capture evidence for each changed flow:
+   - At least one screenshot per changed page/state.
+   - A short video capture (or step-by-step screenshot sequence) of the end-to-end happy path.
+6. If visuals do not match expected behavior, continue iterating until they do.
+7. Only then proceed to push branch and open PR in **Ready for review**.
+
+PR evidence requirements:
+- Include links or attached artifacts for screenshots/video in the PR description.
+- Include a short checklist of validated flows (logic + visual).
+- Do not mark PR ready until evidence is present.
+- In the final handoff message, include a clickable Markdown link to the PR URL.
+
 ### Services
 
 | Service | Port | Start command | Directory |
