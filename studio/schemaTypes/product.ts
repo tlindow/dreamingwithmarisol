@@ -22,6 +22,13 @@ export default defineType({
             type: 'text',
         }),
         defineField({
+            name: 'kitName',
+            title: 'Kit Name',
+            type: 'string',
+            description:
+                'Use the same kit name across related products so the storefront can encourage bundle purchases.',
+        }),
+        defineField({
             name: 'image',
             title: 'Product Image',
             type: 'image',
