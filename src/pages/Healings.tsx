@@ -1,31 +1,46 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 import './Healings.css';
 
-// TODO: Replace with your actual Calendly event URL
+// TODO: Replace with your actual Calendly event URL and contact email
 const CALENDLY_URL = 'https://calendly.com/YOUR_USERNAME/in-person-healing';
 const CONTACT_EMAIL = 'hello@example.com';
+
+const CALENDLY_BRANDED_URL =
+    `${CALENDLY_URL}?hide_gdpr_banner=1` +
+    `&background_color=f4f3ef` +   // --color-primary-light
+    `&text_color=2d2a26` +         // --color-text-main
+    `&primary_color=4a5d23`;       // --color-secondary (olive green)
 
 declare global {
     interface Window {
         Calendly?: {
             initPopupWidget: (options: { url: string }) => void;
+            initInlineWidget: (options: {
+                url: string;
+                parentElement: HTMLElement;
+            }) => void;
         };
     }
 }
 
 const Healings = () => {
-    useEffect(() => {
-        const script = document.createElement('script');
-        script.src = 'https://assets.calendly.com/assets/external/widget.js';
-        script.async = true;
-        document.head.appendChild(script);
+    const [showCalendly, setShowCalendly] = useState(false);
+    const [calendlyReady, setCalendlyReady] = useState(false);
+    const embedRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
         const link = document.createElement('link');
         link.href = 'https://assets.calendly.com/assets/external/widget.css';
         link.rel = 'stylesheet';
         document.head.appendChild(link);
+
+        const script = document.createElement('script');
+        script.src = 'https://assets.calendly.com/assets/external/widget.js';
+        script.async = true;
+        script.onload = () => setCalendlyReady(true);
+        document.head.appendChild(script);
 
         return () => {
             if (script.parentNode) script.parentNode.removeChild(script);
@@ -33,13 +48,30 @@ const Healings = () => {
         };
     }, []);
 
-    const openCalendly = useCallback(() => {
-        if (window.Calendly) {
-            window.Calendly.initPopupWidget({ url: CALENDLY_URL });
-        } else {
-            window.open(CALENDLY_URL, '_blank');
+    useEffect(() => {
+        if (showCalendly && calendlyReady && embedRef.current && window.Calendly) {
+            embedRef.current.innerHTML = '';
+            window.Calendly.initInlineWidget({
+                url: CALENDLY_BRANDED_URL,
+                parentElement: embedRef.current,
+            });
+            setTimeout(() => {
+                embedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
         }
-    }, []);
+    }, [showCalendly, calendlyReady]);
+
+    const handleBookClick = useCallback(() => {
+        if (showCalendly) {
+            embedRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            return;
+        }
+        if (calendlyReady) {
+            setShowCalendly(true);
+        } else {
+            window.open(CALENDLY_BRANDED_URL, '_blank');
+        }
+    }, [showCalendly, calendlyReady]);
 
     const waitlistMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
         'Waitlist — In-Person Healing Session'
@@ -90,10 +122,33 @@ const Healings = () => {
                         </div>
 
                         <div className="booking-cta">
-                            <Button size="lg" variant="primary" onClick={openCalendly}>
+                            <Button size="lg" variant="primary" onClick={handleBookClick}>
                                 Book Your Session
                             </Button>
                         </div>
+
+                        {showCalendly && (
+                            <div className="calendly-embed-wrapper">
+                                <div className="calendly-embed-header">
+                                    <h3>Select a Date &amp; Time</h3>
+                                    <button
+                                        className="calendly-close-btn"
+                                        onClick={() => setShowCalendly(false)}
+                                        aria-label="Close calendar"
+                                    >
+                                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                                            <line x1="18" y1="6" x2="6" y2="18" />
+                                            <line x1="6" y1="6" x2="18" y2="18" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div
+                                    ref={embedRef}
+                                    className="calendly-embed-body"
+                                    style={{ minWidth: '320px', height: '700px' }}
+                                />
+                            </div>
+                        )}
 
                         <div className="sold-out-section">
                             <h3>All booked this month?</h3>

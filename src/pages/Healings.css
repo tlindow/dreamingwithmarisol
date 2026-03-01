@@ -84,6 +84,68 @@
     margin-top: var(--spacing-lg);
 }
 
+/* Inline Calendly Embed */
+.calendly-embed-wrapper {
+    margin-top: var(--spacing-2xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-primary-light);
+    box-shadow: var(--shadow-md);
+    animation: embedReveal 0.4s ease;
+}
+
+@keyframes embedReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calendly-embed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-primary-light);
+}
+
+.calendly-embed-header h3 {
+    font-family: var(--font-secondary);
+    font-size: 1.15rem;
+    color: var(--color-secondary);
+    margin-bottom: 0;
+}
+
+.calendly-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    color: var(--color-text-light);
+    transition: all 0.2s ease;
+}
+
+.calendly-close-btn:hover {
+    background-color: var(--color-border);
+    color: var(--color-text-main);
+}
+
+.calendly-embed-body {
+    overflow: hidden;
+}
+
+.calendly-embed-body iframe {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
 /* Sold-out / Waitlist Fallback */
 .sold-out-section {
     margin-top: var(--spacing-3xl);
