@@ -6,11 +6,6 @@ import {schemaTypes} from './schemaTypes'
 import {resolve} from './presentation/resolve'
 import type {StructureBuilder} from 'sanity/structure'
 
-const previewUrl =
-    location.hostname === 'localhost'
-        ? 'http://localhost:5173'
-        : 'https://dreamingwithmarisol.vercel.app'
-
 const singletonTypes = new Set(['siteSettings', 'homePage', 'aboutPage', 'valuesPage', 'pricingPage'])
 
 function singletonItem(S: StructureBuilder, typeName: string, title: string) {
@@ -55,8 +50,12 @@ export default defineConfig({
         }),
         visionTool(),
         presentationTool({
-            previewUrl,
-            resolve,
+          previewUrl:
+          process.env.SANITY_STUDIO_PREVIEW_URL ??
+          (process.env.NODE_ENV === 'production'
+            ? 'https://dreamingwithmarisol.vercel.app'
+            : 'http://localhost:5173'),
+          resolve,
         }),
     ],
 
