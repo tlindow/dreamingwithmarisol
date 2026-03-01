@@ -1,45 +1,16 @@
 import { ExternalLink, ShoppingBag } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { client, urlFor } from '../sanityClient';
+import { urlFor } from '../sanityClient';
+import { useSanityQuery } from '../hooks/useSanityQuery';
+import { STORE_QUERY } from '../lib/queries';
+import { formatPrice } from '../lib/utils';
 import { Button } from '../components/Button';
+import type { Product } from '../lib/types';
 import './Store.css';
 
-interface Product {
-    _id: string;
-    title: string;
-    description: string;
-    price: number;
-    storeUrl: string;
-    image: any;
-}
-
 const Store = () => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { data: products, isLoading } = useSanityQuery<Product[]>(STORE_QUERY);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const data = await client.fetch(`
-                    *[_type == "product"] | order(_createdAt desc) {
-                        _id,
-                        title,
-                        description,
-                        price,
-                        storeUrl,
-                        image
-                    }
-                `);
-                setProducts(data || []);
-            } catch (error) {
-                console.error("Error fetching products from Sanity:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchProducts();
-    }, []);
+    const items = products ?? [];
 
     return (
         <div className="page-wrapper animate-fade-in">
@@ -56,9 +27,9 @@ const Store = () => {
                         <div className="text-center py-12">
                             <p className="text-[var(--color-text-light)]">Loading shop artifacts...</p>
                         </div>
-                    ) : products.length > 0 ? (
+                    ) : items.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {products.map((product) => (
+                            {items.map((product) => (
                                 <div key={product._id} className="bg-white rounded-lg shadow-sm border border-[var(--color-primary-light)] overflow-hidden flex flex-col hover:shadow-md transition-shadow">
                                     <div className="aspect-square bg-[var(--color-primary-light)] relative overflow-hidden flex items-center justify-center">
                                         {product.image ? (
@@ -74,7 +45,7 @@ const Store = () => {
                                     <div className="p-6 flex flex-col flex-grow">
                                         <div className="flex justify-between items-start mb-2">
                                             <h3 className="text-xl font-semibold text-[var(--color-text)]">{product.title}</h3>
-                                            {product.price && <span className="text-lg font-medium">£{product.price}</span>}
+                                            {product.price && <span className="text-lg font-medium">{formatPrice(product.price)}</span>}
                                         </div>
                                         {product.description && (
                                             <p className="text-[var(--color-text-light)] mb-6 flex-grow">{product.description}</p>

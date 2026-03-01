@@ -49,8 +49,182 @@
     color: var(--color-text-light);
 }
 
-.booking-cta {
+/* Availability Notice */
+.availability-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
     margin-top: var(--spacing-2xl);
+    padding: var(--spacing-lg);
+    background-color: var(--color-primary-light);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+}
+
+.availability-icon {
+    flex-shrink: 0;
+    color: var(--color-accent-hover);
+    margin-top: 2px;
+}
+
+.availability-notice strong {
+    display: block;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-xs);
+    font-size: 1rem;
+}
+
+.availability-notice p {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    margin-bottom: 0;
+}
+
+.booking-cta {
+    margin-top: var(--spacing-lg);
+}
+
+.booking-closed-notice {
+    padding: var(--spacing-lg);
+    background-color: var(--color-primary-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.booking-closed-notice p {
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.booking-closed-notice p:last-child {
+    margin-bottom: 0;
+}
+
+.booking-closed-notice strong {
+    color: var(--color-secondary);
+}
+
+/* Inline Calendly Embed */
+.calendly-embed-wrapper {
+    margin-top: var(--spacing-2xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-primary-light);
+    box-shadow: var(--shadow-md);
+    animation: embedReveal 0.4s ease;
+}
+
+@keyframes embedReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calendly-embed-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-primary-light);
+}
+
+.calendly-embed-header h3 {
+    font-family: var(--font-secondary);
+    font-size: 1.15rem;
+    color: var(--color-secondary);
+    margin-bottom: 0;
+}
+
+.calendly-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    color: var(--color-text-light);
+    transition: all 0.2s ease;
+}
+
+.calendly-close-btn:hover {
+    background-color: var(--color-border);
+    color: var(--color-text-main);
+}
+
+.calendly-embed-body {
+    overflow: hidden;
+}
+
+.calendly-embed-body iframe {
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Sold-out / Waitlist Fallback */
+.sold-out-section {
+    margin-top: var(--spacing-3xl);
+    padding-top: var(--spacing-2xl);
+    border-top: 1px solid var(--color-border);
+}
+
+.sold-out-section h3 {
+    font-family: var(--font-secondary);
+    font-size: 1.5rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.sold-out-section > p {
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+.sold-out-section > a {
+    display: inline-block;
+}
+
+.explore-section {
+    margin-top: var(--spacing-2xl);
+}
+
+.explore-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-sm);
+}
+
+.explore-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.explore-link {
+    display: inline-block;
+    padding: 0.35rem 0.9rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-main);
+    transition: all 0.2s ease;
+}
+
+.explore-link:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-main);
 }
 
 .healings-sidebar {

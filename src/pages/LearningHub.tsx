@@ -1,44 +1,14 @@
 import './LearningHub.css';
 import { Play } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { client } from '../sanityClient';
-
-interface VideoModule {
-    _id: string;
-    title: string;
-    duration: string;
-    description: string;
-    thumbnailColor: string;
-}
+import { useSanityQuery } from '../hooks/useSanityQuery';
+import { LEARNING_HUB_QUERY } from '../lib/queries';
+import type { VideoModule } from '../lib/types';
 
 const LearningHub = () => {
-    const [modules, setModules] = useState<VideoModule[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const { data: modules, isLoading } = useSanityQuery<VideoModule[]>(LEARNING_HUB_QUERY);
 
-    useEffect(() => {
-        const fetchModules = async () => {
-            try {
-                // Fetch videos basic info for the grid
-                const data = await client.fetch(`
-                    *[_type == "videoModule"] | order(order asc) {
-                        _id,
-                        title,
-                        duration,
-                        description,
-                        thumbnailColor
-                    }
-                `);
-                setModules(data || []);
-            } catch (error) {
-                console.error("Error fetching video modules from Sanity:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchModules();
-    }, []);
+    const items = modules ?? [];
 
     return (
         <div className="page-wrapper animate-fade-in">
@@ -56,8 +26,8 @@ const LearningHub = () => {
                             <div className="col-span-full text-center py-12">
                                 <p className="text-[var(--color-text-light)]">Loading modules...</p>
                             </div>
-                        ) : modules.length > 0 ? (
-                            modules.map((mod) => (
+                        ) : items.length > 0 ? (
+                            items.map((mod) => (
                                 <Link to={`/learning/${mod._id}`} key={mod._id} className="module-card group hover:shadow-lg transition-all duration-300">
                                     <div className={`module-thumbnail ${mod.thumbnailColor || 'bg-primary'}`}>
                                         <div className="play-button group-hover:scale-110 transition-transform bg-white/20 backdrop-blur-sm" aria-label={`Play ${mod.title}`}>

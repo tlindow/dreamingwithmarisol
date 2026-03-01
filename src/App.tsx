@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -11,14 +12,19 @@ import LearningHub from './pages/LearningHub';
 import ModuleDetail from './pages/ModuleDetail';
 import Store from './pages/Store';
 
-import { VisualEditing } from '@sanity/visual-editing/react';
+import { enableVisualEditing } from '@sanity/visual-editing';
+
+function VisualEditingBridge() {
+  useEffect(() => enableVisualEditing(), []);
+  return null;
+}
 
 function App() {
   return (
     <Router>
       <div className="app-layout">
         <Navbar />
-        <VisualEditing portal />
+        <VisualEditingBridge />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -30,7 +36,6 @@ function App() {
             <Route path="/store" element={<Store />} />
             <Route path="/online-healings" element={<OnlineHealings />} />
             <Route path="/pricing" element={<Pricing />} />
-            {/* Fallback for unbuilt pages */}
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
