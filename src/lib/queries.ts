@@ -96,7 +96,8 @@ export const MODULE_DETAIL_QUERY = `*[_type == "videoModule" && _id == $id][0] {
         description,
         price,
         storeUrl,
-        image
+        image,
+        kitName
     }
 }`;
 
@@ -106,5 +107,6 @@ export const STORE_QUERY = `*[_type == "product"] | order(_createdAt desc) {
     description,
     price,
     storeUrl,
-    image
+    image,
+    kitName
 }`;

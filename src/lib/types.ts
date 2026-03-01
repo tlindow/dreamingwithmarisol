@@ -91,4 +91,5 @@ export interface Product {
     price: number;
     storeUrl: string;
     image: SanityImageSource;
+    kitName?: string;
 }
