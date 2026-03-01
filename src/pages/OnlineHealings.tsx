@@ -17,7 +17,7 @@ const OnlineHealings = () => {
                             <h2 style={{ fontFamily: 'var(--font-secondary)', color: 'var(--color-secondary)' }}>Distance Limpia & Plática</h2>
                         </div>
                         <div className="service-details">
-                            <span className="price">$150</span>
+                            <span className="price">$100</span>
                             <span className="duration">60 Minutes</span>
                         </div>
 
