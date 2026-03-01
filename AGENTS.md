@@ -25,6 +25,8 @@ For any new implementation task, local agents should follow this exact flow (det
 8. Push branch to remote:
    - `git push -u origin <branch-name>`
 9. Open PR in **Ready for review** state (not draft) only after both checks are approved.
+10. End the flow by sharing a clickable PR link in Markdown format:
+   - `[PR #<number>](https://github.com/<owner>/<repo>/pull/<number>)`
 
 Rules:
 - Never branch from an existing feature branch.
@@ -54,6 +56,7 @@ PR evidence requirements:
 - Include links or attached artifacts for screenshots/video in the PR description.
 - Include a short checklist of validated flows (logic + visual).
 - Do not mark PR ready until evidence is present.
+- In the final handoff message, include a clickable Markdown link to the PR URL.
 
 ### Services
 
