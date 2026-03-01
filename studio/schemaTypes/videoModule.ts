@@ -60,5 +60,18 @@ export default defineType({
             ],
             description: 'Link eCommerce or affiliate products mentioned in this video.',
         }),
+        defineField({
+            name: 'kitBundleUrl',
+            title: 'Kit Bundle Purchase Link',
+            type: 'url',
+            description: 'Optional link to purchase all kit items together at a bundled price (e.g., a Stripe or Shopify bundle link).',
+        }),
+        defineField({
+            name: 'kitBundleSavings',
+            title: 'Kit Bundle Savings ($)',
+            type: 'number',
+            description: 'Dollar amount saved when purchasing the complete kit vs. individual items.',
+            validation: (Rule) => Rule.min(0),
+        }),
     ],
 })

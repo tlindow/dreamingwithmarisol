@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Package, Sparkles, Check } from 'lucide-react';
 import ReactPlayer from 'react-player';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
@@ -16,6 +16,11 @@ const ModuleDetail = () => {
     const { id } = useParams<{ id: string }>();
     const params = useMemo(() => ({ id }), [id]);
     const { data: moduleFile, isLoading } = useSanityQuery<VideoModule>(MODULE_DETAIL_QUERY, params);
+
+    const kitTotal = useMemo(() => {
+        if (!moduleFile?.products) return 0;
+        return moduleFile.products.reduce((sum, p) => sum + (p.price ?? 0), 0);
+    }, [moduleFile]);
 
     if (isLoading) {
         return (
@@ -35,6 +40,9 @@ const ModuleDetail = () => {
             </div>
         );
     }
+
+    const hasProducts = moduleFile.products && moduleFile.products.length > 0;
+    const bundlePrice = moduleFile.kitBundleSavings ? kitTotal - moduleFile.kitBundleSavings : kitTotal;
 
     return (
         <div className="page-wrapper animate-fade-in">
@@ -76,36 +84,78 @@ const ModuleDetail = () => {
                             </p>
                         </div>
 
-                        {moduleFile.products && moduleFile.products.length > 0 && (
+                        {hasProducts && (
                             <div className="module-kit-sidebar">
-                                <div className="bg-[var(--color-primary-light)] rounded-xl p-6 shadow-sm border border-[var(--color-primary)]/20">
-                                    <h3 className="text-xl font-serif text-[var(--color-primary-dark)] mb-6 text-center">Required Materials Kit</h3>
-                                    <div className="flex flex-col gap-6">
-                                        {moduleFile.products.map(product => (
-                                            <div key={product._id} className="kit-item flex flex-col gap-3 bg-white p-4 rounded-lg shadow-sm">
-                                                {product.image && (
-                                                    <div className="aspect-square w-full bg-[var(--color-primary-light)] rounded-md overflow-hidden flex items-center justify-center">
-                                                        <img
-                                                            src={urlFor(product.image).width(400).height(400).url()}
-                                                            alt={product.title}
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                )}
-                                                <div className="flex-1 flex flex-col">
-                                                    <h4 className="font-semibold text-[var(--color-text)] leading-tight mb-1">{product.title}</h4>
-                                                    {product.price && <span className="text-[var(--color-primary-dark)] font-medium mb-2">{formatPrice(product.price)}</span>}
-                                                    {product.description && <p className="text-sm text-[var(--color-text-light)] line-clamp-2 mb-4">{product.description}</p>}
+                                <div className="kit-sidebar-card">
+                                    {/* Kit Header */}
+                                    <div className="kit-sidebar-header">
+                                        <div className="kit-sidebar-badge">
+                                            <Package size={16} />
+                                            <span>Kit · {moduleFile.products!.length} {moduleFile.products!.length === 1 ? 'item' : 'items'}</span>
+                                        </div>
+                                        <h3 className="kit-sidebar-title">Required Materials Kit</h3>
+                                        <div className="kit-sidebar-pricing">
+                                            {moduleFile.kitBundleSavings ? (
+                                                <>
+                                                    <span className="kit-sidebar-price">{formatPrice(bundlePrice)}</span>
+                                                    <span className="kit-sidebar-original">{formatPrice(kitTotal)}</span>
+                                                </>
+                                            ) : (
+                                                <span className="kit-sidebar-price">{formatPrice(kitTotal)} total</span>
+                                            )}
+                                        </div>
+                                        {moduleFile.kitBundleSavings && (
+                                            <div className="kit-sidebar-savings">
+                                                <Sparkles size={14} />
+                                                <span>Save {formatPrice(moduleFile.kitBundleSavings)} buying as a kit</span>
+                                            </div>
+                                        )}
+                                    </div>
 
-                                                    <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
-                                                        <button className="w-full py-2 px-4 bg-[var(--color-accent)] hover:bg-[#e0b02d] text-white font-medium rounded transition-colors flex items-center justify-center gap-2 text-sm shadow-sm">
-                                                            Purchase Item <ExternalLink size={16} />
-                                                        </button>
-                                                    </a>
+                                    {/* Bundle CTA */}
+                                    {moduleFile.kitBundleUrl && (
+                                        <div className="kit-sidebar-bundle-cta">
+                                            <a href={moduleFile.kitBundleUrl} target="_blank" rel="noopener noreferrer">
+                                                <Button variant="primary" className="w-full flex items-center justify-center gap-2">
+                                                    Buy Complete Kit <ExternalLink size={16} />
+                                                </Button>
+                                            </a>
+                                        </div>
+                                    )}
+
+                                    {/* Kit Items */}
+                                    <div className="kit-sidebar-items">
+                                        {moduleFile.products!.map(product => (
+                                            <div key={product._id} className="kit-sidebar-item">
+                                                <div className="kit-sidebar-item-visual">
+                                                    {product.image && (
+                                                        <img
+                                                            src={urlFor(product.image).width(200).height(200).url()}
+                                                            alt={product.title}
+                                                        />
+                                                    )}
+                                                    <div className="kit-sidebar-item-check">
+                                                        <Check size={12} />
+                                                    </div>
                                                 </div>
+                                                <div className="kit-sidebar-item-details">
+                                                    <h4>{product.title}</h4>
+                                                    {product.price && <span className="kit-sidebar-item-price">{formatPrice(product.price)}</span>}
+                                                    {product.description && <p>{product.description}</p>}
+                                                </div>
+                                                <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="kit-sidebar-item-buy">
+                                                    <ExternalLink size={14} />
+                                                </a>
                                             </div>
                                         ))}
                                     </div>
+
+                                    {/* Bottom CTA for kits without a bundle URL */}
+                                    {!moduleFile.kitBundleUrl && (
+                                        <div className="kit-sidebar-bottom-hint">
+                                            <p>Get all materials to follow along with this lesson</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}

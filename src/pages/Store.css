@@ -1,9 +1,210 @@
 /* Store.css */
-/* Styles for the Store page */
 
-.offerings-grid {
+/* ── Kit Bundles Section ── */
+
+.kit-bundles-section {
+    margin-bottom: 2rem;
+}
+
+.kit-bundles-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.kit-bundles-header svg {
+    margin: 0 auto 0.5rem;
+}
+
+.kit-bundles-header h2 {
+    margin-bottom: 0.25rem;
+}
+
+.kit-bundles-header p {
+    font-size: 0.95rem;
+}
+
+.kit-bundles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
     gap: 2rem;
-    margin-top: 2rem;
+}
+
+/* ── Kit Bundle Card ── */
+
+.kit-bundle-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-secondary);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.kit-bundle-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+}
+
+.kit-bundle-header {
+    background: linear-gradient(135deg, var(--color-secondary), #3a4a1c);
+    color: white;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.kit-bundle-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.75rem;
+}
+
+.kit-bundle-title {
+    font-family: var(--font-secondary);
+    font-size: 1.35rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.kit-bundle-pricing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.kit-bundle-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.kit-bundle-original-price {
+    font-size: 1rem;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.kit-bundle-savings-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: var(--color-accent);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* ── Kit Bundle Items List ── */
+
+.kit-bundle-items {
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex-grow: 1;
+}
+
+.kit-bundle-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: var(--color-primary-light);
+    border-radius: var(--radius-md);
+}
+
+.kit-bundle-item-image {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kit-bundle-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.kit-bundle-item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.kit-bundle-item-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kit-bundle-item-price {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+    flex-shrink: 0;
+    margin-left: 0.5rem;
+}
+
+/* ── Kit Bundle Actions ── */
+
+.kit-bundle-actions {
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.kit-bundle-cta-link {
+    display: block;
+}
+
+.kit-cta-savings {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* ── Product Kit Badge ── */
+
+.product-kit-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--color-secondary);
+    color: white;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+    z-index: 1;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 640px) {
+    .kit-bundles-grid {
+        grid-template-columns: 1fr;
+    }
 }

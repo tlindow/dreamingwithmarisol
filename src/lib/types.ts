@@ -82,6 +82,20 @@ export interface VideoModule {
     thumbnailColor: string;
     videoUrl?: string;
     products?: Product[];
+    kitBundleUrl?: string;
+    kitBundleSavings?: number;
+}
+
+export interface KitBundle {
+    _id: string;
+    title: string;
+    products: Product[];
+    kitBundleUrl?: string;
+    kitBundleSavings?: number;
+}
+
+export interface ProductWithKits extends Product {
+    kits: { _id: string; title: string }[];
 }
 
 export interface Product {

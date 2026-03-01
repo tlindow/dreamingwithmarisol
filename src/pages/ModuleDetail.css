@@ -3,12 +3,201 @@
 .video-player-wrapper {
     position: relative;
     width: 100%;
-    /* Let the aspect-video utility handle the height automatically to maintain 16:9 ratio */
 }
 
-/* Ensure ReactPlayer fills the container properly * /
 .video-player-wrapper > div {
     position: absolute;
     top: 0;
     left: 0;
+}
+
+/* ── Kit Sidebar Card ── */
+
+.kit-sidebar-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 2px solid var(--color-secondary);
+    background: white;
+    box-shadow: var(--shadow-md);
+}
+
+.kit-sidebar-header {
+    background: linear-gradient(135deg, var(--color-secondary), #3a4a1c);
+    color: white;
+    padding: 1.25rem;
+    text-align: center;
+}
+
+.kit-sidebar-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.6rem;
+}
+
+.kit-sidebar-title {
+    font-family: var(--font-secondary);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.kit-sidebar-pricing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.kit-sidebar-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.kit-sidebar-original {
+    font-size: 0.95rem;
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.kit-sidebar-savings {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: var(--color-accent);
+    color: white;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.6rem;
+}
+
+/* ── Bundle CTA ── */
+
+.kit-sidebar-bundle-cta {
+    padding: 1rem 1.25rem 0;
+}
+
+.kit-sidebar-bundle-cta a {
+    display: block;
+}
+
+/* ── Kit Items ── */
+
+.kit-sidebar-items {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.kit-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem;
+    background: var(--color-primary-light);
+    border-radius: var(--radius-md);
+    transition: background 0.15s ease;
+}
+
+.kit-sidebar-item:hover {
+    background: var(--color-primary);
+}
+
+.kit-sidebar-item-visual {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--color-primary);
+}
+
+.kit-sidebar-item-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.kit-sidebar-item-check {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-secondary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.kit-sidebar-item-details {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.kit-sidebar-item-details h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin-bottom: 0;
+    line-height: 1.3;
+}
+
+.kit-sidebar-item-price {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-secondary);
+}
+
+.kit-sidebar-item-details p {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    line-height: 1.3;
+    margin-top: 0.15rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.kit-sidebar-item-buy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+}
+
+.kit-sidebar-item-buy:hover {
+    background: var(--color-accent-hover);
+}
+
+/* ── Bottom Hint ── */
+
+.kit-sidebar-bottom-hint {
+    padding: 0.75rem 1.25rem 1.25rem;
+    text-align: center;
+}
+
+.kit-sidebar-bottom-hint p {
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    font-style: italic;
 }

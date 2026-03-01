@@ -90,6 +90,8 @@ export const MODULE_DETAIL_QUERY = `*[_type == "videoModule" && _id == $id][0] {
     description,
     videoUrl,
     thumbnailColor,
+    kitBundleUrl,
+    kitBundleSavings,
     "products": products[]->{
         _id,
         title,
@@ -107,4 +109,29 @@ export const STORE_QUERY = `*[_type == "product"] | order(_createdAt desc) {
     price,
     storeUrl,
     image
+}`;
+
+export const STORE_WITH_KITS_QUERY = `{
+    "products": *[_type == "product"] | order(_createdAt desc) {
+        _id,
+        title,
+        description,
+        price,
+        storeUrl,
+        image
+    },
+    "kits": *[_type == "videoModule" && count(products) > 0] | order(order asc) {
+        _id,
+        title,
+        kitBundleUrl,
+        kitBundleSavings,
+        "products": products[]->{
+            _id,
+            title,
+            description,
+            price,
+            storeUrl,
+            image
+        }
+    }
 }`;
