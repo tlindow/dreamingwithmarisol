@@ -10,11 +10,11 @@ const Pricing = () => {
                         <ul style={{ listStyle: 'none', padding: 0, marginBottom: 'var(--spacing-2xl)' }}>
                             <li style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--spacing-sm) 0', borderBottom: '1px solid var(--color-border)' }}>
                                 <span>In-Person Limpia (60 Min)</span>
-                                <strong>$150</strong>
+                                <strong>$100</strong>
                             </li>
                             <li style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--spacing-sm) 0', borderBottom: '1px solid var(--color-border)' }}>
                                 <span>Distance Limpia & Plática (60 Min)</span>
-                                <strong>$150</strong>
+                                <strong>$100</strong>
                             </li>
                         </ul>
 

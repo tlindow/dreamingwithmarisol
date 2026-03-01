@@ -18,7 +18,7 @@ const Healings = () => {
                     <div className="healings-content">
                         <h2>Limpia (Spiritual Cleansing)</h2>
                         <div className="service-details">
-                            <span className="price">$150</span>
+                            <span className="price">$100</span>
                             <span className="duration">60 Minutes</span>
                         </div>
 
