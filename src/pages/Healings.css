@@ -168,6 +168,137 @@
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
+/* Checking availability indicator */
+.availability-checking {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) 0;
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+
+.checking-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* No-availability fallback section */
+.no-availability-section {
+    margin-top: var(--spacing-2xl);
+    animation: fadeIn 0.5s ease;
+}
+
+.no-availability-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xl);
+    background-color: var(--color-primary-light);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.no-availability-icon {
+    flex-shrink: 0;
+    color: var(--color-accent-hover);
+    margin-top: 2px;
+}
+
+.no-availability-header h3 {
+    font-family: var(--font-secondary);
+    font-size: 1.25rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.no-availability-header p {
+    font-size: 0.95rem;
+    color: var(--color-text-light);
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+.no-availability-section > a {
+    display: inline-block;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.explore-offerings {
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid var(--color-border);
+}
+
+.explore-offerings-label {
+    font-family: var(--font-secondary);
+    font-size: 1.15rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.explore-offerings-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 520px) {
+    .explore-offerings-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.offering-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-lg);
+    background-color: var(--color-primary-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.offering-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    color: var(--color-text-main);
+}
+
+.offering-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.offering-card strong {
+    font-size: 1rem;
+    color: var(--color-secondary);
+}
+
+.offering-card > span:last-child {
+    font-size: 0.875rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+}
+
 /* Sold-out / Waitlist Fallback */
 .sold-out-section {
     margin-top: var(--spacing-3xl);

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { useCalendlyEmbed } from '../hooks/useCalendlyEmbed';
+import { useCalendlyAvailability } from '../hooks/useCalendlyAvailability';
 import { ONLINE_HEALINGS_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
 import { DEFAULT_ONLINE_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
@@ -34,8 +35,18 @@ const OnlineHealings = () => {
     const { showCalendly, setShowCalendly, embedRef, fullUrl, handleBookClick } =
         useCalendlyEmbed(calendlyUrl);
 
+    const { status: availabilityStatus } = useCalendlyAvailability(calendlyUrl);
+
     const settingsLoaded = !settingsLoading;
-    const bookingAvailable = settingsLoaded && !!calendlyUrl;
+
+    const showBooking =
+        availabilityStatus === 'available' ||
+        (availabilityStatus === 'error' && !!calendlyUrl);
+
+    const showUnavailableFallback =
+        settingsLoaded &&
+        !showBooking &&
+        availabilityStatus !== 'loading';
 
     const waitlistMailto = `mailto:${contactEmail}?subject=${encodeURIComponent(
         `Waitlist — ${pageTitle}`
@@ -82,20 +93,15 @@ const OnlineHealings = () => {
                         </div>
 
                         <div className="booking-cta">
-                            {bookingAvailable ? (
+                            {availabilityStatus === 'loading' && settingsLoaded ? (
+                                <div className="availability-checking">
+                                    <span className="checking-dot" />
+                                    <span>Checking availability&hellip;</span>
+                                </div>
+                            ) : showBooking ? (
                                 <Button size="lg" variant="primary" onClick={handleBookClick}>
                                     Book Online Session
                                 </Button>
-                            ) : settingsLoaded ? (
-                                <div className="booking-closed-notice">
-                                    <p>
-                                        <strong>Booking is not yet open for this month.</strong>
-                                    </p>
-                                    <p>
-                                        New sessions are released on the 1st — check back soon
-                                        or join the waitlist below to get notified.
-                                    </p>
-                                </div>
                             ) : null}
                         </div>
 
@@ -122,32 +128,97 @@ const OnlineHealings = () => {
                             </div>
                         )}
 
-                        <div className="sold-out-section">
-                            <h3>All booked this month?</h3>
-                            <p>
-                                New sessions are released on the <strong>1st of every month</strong>.
-                                Join the waitlist to be the first to know when spots open up.
-                            </p>
-                            <a href={waitlistMailto}>
-                                <Button size="md" variant="secondary">
-                                    Join the Waitlist
-                                </Button>
-                            </a>
-                            <div className="explore-section">
-                                <p className="explore-label">Explore while you wait</p>
-                                <div className="explore-links">
-                                    <Link to="/healings" className="explore-link">
-                                        In-Person Healings
-                                    </Link>
-                                    <Link to="/learning" className="explore-link">
-                                        Learning Hub
-                                    </Link>
-                                    <Link to="/values" className="explore-link">
-                                        Our Values
-                                    </Link>
+                        {showUnavailableFallback && (
+                            <div className="no-availability-section">
+                                <div className="no-availability-header">
+                                    <svg className="no-availability-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="28" height="28">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 6v6l4 2" />
+                                    </svg>
+                                    <div>
+                                        <h3>Sessions are fully booked right now</h3>
+                                        <p>
+                                            New appointments open on the <strong>1st of each month</strong> and
+                                            fill quickly. Join the waitlist to be notified the moment spots open&nbsp;up.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <a href={waitlistMailto}>
+                                    <Button size="md" variant="primary">
+                                        Join the Waitlist
+                                    </Button>
+                                </a>
+
+                                <div className="explore-offerings">
+                                    <p className="explore-offerings-label">
+                                        There&rsquo;s so much more to explore in the meantime
+                                    </p>
+                                    <div className="explore-offerings-grid">
+                                        <Link to="/store" className="offering-card">
+                                            <span className="offering-card-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                                            </span>
+                                            <strong>Apothecary &amp; Digital&nbsp;Media</strong>
+                                            <span>Sacred tools, supplies &amp; digital offerings curated by&nbsp;Marisól</span>
+                                        </Link>
+                                        <Link to="/healings" className="offering-card">
+                                            <span className="offering-card-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                                            </span>
+                                            <strong>In-Person Healings</strong>
+                                            <span>Traditional Mesoamerican spiritual cleansing in San&nbsp;Diego</span>
+                                        </Link>
+                                        <Link to="/learning" className="offering-card">
+                                            <span className="offering-card-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+                                            </span>
+                                            <strong>Learning Hub</strong>
+                                            <span>Video teachings on spiritual practices &amp;&nbsp;healing</span>
+                                        </Link>
+                                        <Link to="/pricing" className="offering-card">
+                                            <span className="offering-card-icon">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="24" height="24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                                            </span>
+                                            <strong>Pricing &amp; Policies</strong>
+                                            <span>Session details, rates &amp; cancellation&nbsp;info</span>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
+
+                        {showBooking && (
+                            <div className="sold-out-section">
+                                <h3>All booked this month?</h3>
+                                <p>
+                                    New sessions are released on the <strong>1st of every month</strong>.
+                                    Join the waitlist to be the first to know when spots open up.
+                                </p>
+                                <a href={waitlistMailto}>
+                                    <Button size="md" variant="secondary">
+                                        Join the Waitlist
+                                    </Button>
+                                </a>
+                                <div className="explore-section">
+                                    <p className="explore-label">Explore while you wait</p>
+                                    <div className="explore-links">
+                                        <Link to="/healings" className="explore-link">
+                                            In-Person Healings
+                                        </Link>
+                                        <Link to="/store" className="explore-link">
+                                            Apothecary &amp; Store
+                                        </Link>
+                                        <Link to="/learning" className="explore-link">
+                                            Learning Hub
+                                        </Link>
+                                        <Link to="/values" className="explore-link">
+                                            Our Values
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="healings-sidebar">
