@@ -6,6 +6,8 @@ import homePage from './homePage'
 import aboutPage from './aboutPage'
 import valuesPage from './valuesPage'
 import pricingPage from './pricingPage'
+import eventsPage from './eventsPage'
+import event from './event'
 
 export const schemaTypes = [
     siteSettings,
@@ -13,7 +15,9 @@ export const schemaTypes = [
     aboutPage,
     valuesPage,
     pricingPage,
+    eventsPage,
     service,
     videoModule,
     product,
+    event,
 ]

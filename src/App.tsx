@@ -11,6 +11,7 @@ import Pricing from './pages/Pricing';
 import LearningHub from './pages/LearningHub';
 import ModuleDetail from './pages/ModuleDetail';
 import Store from './pages/Store';
+import Events from './pages/Events';
 
 import { enableVisualEditing } from '@sanity/visual-editing';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/store" element={<Store />} />
             <Route path="/online-healings" element={<OnlineHealings />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/events" element={<Events />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>

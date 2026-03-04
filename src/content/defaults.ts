@@ -4,6 +4,8 @@ import type {
     ServiceData,
     ValuesPageData,
     PricingPageData,
+    EventsPageData,
+    EventItem,
     SiteSettings,
 } from '../lib/types';
 
@@ -119,11 +121,47 @@ export const DEFAULT_PRICING_PAGE: Required<PricingPageData> = {
     refundsPolicy: 'All healing sessions are final sale. No refunds are provided after the service has been rendered. If you are unsatisfied, please bring it up during our plática.',
 };
 
+export const DEFAULT_EVENTS_PAGE: Required<EventsPageData> = {
+    pageTitle: 'Upcoming Events',
+    pageSubtitle: 'Join us for ceremonies, workshops, and community gatherings.',
+};
+
+export const DEFAULT_EVENTS: EventItem[] = [
+    {
+        _id: 'default-event-1',
+        title: 'Full Moon Ceremony',
+        date: '2026-04-12T19:00:00-07:00',
+        endDate: '2026-04-12T21:00:00-07:00',
+        location: 'San Diego, CA',
+        eventType: 'ceremony',
+        description: 'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition.',
+    },
+    {
+        _id: 'default-event-2',
+        title: 'Introduction to Curanderismo',
+        date: '2026-04-26T10:00:00-07:00',
+        endDate: '2026-04-26T16:00:00-07:00',
+        location: 'San Diego, CA',
+        eventType: 'workshop',
+        description: 'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing.',
+    },
+    {
+        _id: 'default-event-3',
+        title: 'Community Meditation & Plática',
+        date: '2026-05-03T18:00:00-07:00',
+        endDate: '2026-05-03T19:30:00-07:00',
+        location: 'Online via Zoom',
+        eventType: 'online',
+        description: 'A virtual gathering open to all with guided meditation and heart-to-heart plática.',
+    },
+];
+
 export const NAV_LINKS = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Learning', path: '/learning' },
     { name: 'Store', path: '/store' },
+    { name: 'Events', path: '/events' },
     { name: 'Values', path: '/values' },
     { name: 'Healings', path: '/healings' },
     { name: 'Online Healings', path: '/online-healings' },

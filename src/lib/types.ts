@@ -92,3 +92,20 @@ export interface Product {
     storeUrl: string;
     image: SanityImageSource;
 }
+
+export interface EventItem {
+    _id: string;
+    title: string;
+    date: string;
+    endDate?: string;
+    location: string;
+    eventType: string;
+    description: string;
+    image?: SanityImageSource;
+    registrationUrl?: string;
+}
+
+export interface EventsPageData {
+    pageTitle?: string;
+    pageSubtitle?: string;
+}
