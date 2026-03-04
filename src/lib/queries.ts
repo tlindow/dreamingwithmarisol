@@ -123,6 +123,21 @@ export const EVENTS_PAGE_QUERY = `{
         eventType,
         description,
         image,
-        registrationUrl
+        price
     }
+}`;
+
+export const EVENT_DETAIL_QUERY = `*[_type == "event" && _id == $id][0]{
+    _id,
+    title,
+    date,
+    endDate,
+    location,
+    eventType,
+    description,
+    detailedDescription,
+    image,
+    flyer,
+    price,
+    stripePaymentLink
 }`;

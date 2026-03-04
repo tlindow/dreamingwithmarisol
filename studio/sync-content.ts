@@ -255,7 +255,7 @@ async function sync() {
 
     // ── sample events ──
     console.log('Creating sample events')
-    tx.createIfNotExists({
+    tx.createOrReplace({
         _id: 'event-full-moon-ceremony',
         _type: 'event',
         title: 'Full Moon Ceremony',
@@ -264,10 +264,12 @@ async function sync() {
         location: 'San Diego, CA',
         eventType: 'ceremony',
         description:
-            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us, set intentions, and honor the lunar cycle with copal, prayer, and community.',
-        registrationUrl: 'https://calendly.com',
+            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us and set intentions for the cycle ahead.',
+        detailedDescription:
+            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us, set intentions, and honor the lunar cycle with copal, prayer, and community.\n\nThis ceremony includes a guided group limpia, intention-setting with copal smoke, drumming, and communal prayer. All are welcome regardless of experience level. Please wear comfortable, light-colored clothing and bring an open heart.\n\nLight refreshments will be provided after the ceremony.',
+        price: 35,
     })
-    tx.createIfNotExists({
+    tx.createOrReplace({
         _id: 'event-curanderismo-workshop',
         _type: 'event',
         title: 'Introduction to Curanderismo',
@@ -277,9 +279,11 @@ async function sync() {
         eventType: 'workshop',
         description:
             'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.',
-        registrationUrl: 'https://calendly.com',
+        detailedDescription:
+            'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.\n\nTopics covered:\n• History and philosophy of Curanderismo\n• Introduction to the four elements in healing\n• Hands-on herb preparation and identification\n• Guided practice: performing a basic limpia\n• Q&A and integration circle\n\nLunch and all materials are included. Space is limited to 15 participants to ensure personalized instruction.',
+        price: 120,
     })
-    tx.createIfNotExists({
+    tx.createOrReplace({
         _id: 'event-online-meditation',
         _type: 'event',
         title: 'Community Meditation & Plática',
@@ -289,7 +293,8 @@ async function sync() {
         eventType: 'online',
         description:
             'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.',
-        registrationUrl: 'https://calendly.com',
+        detailedDescription:
+            'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.\n\nThis is a free community event — no prior experience needed. Zoom link will be sent after registration. Please find a quiet, private space and have a candle or glass of water nearby.',
     })
 
     // ── Commit ──

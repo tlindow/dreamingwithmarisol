@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { EVENTS_PAGE_QUERY } from '../lib/queries';
 import { DEFAULT_EVENTS_PAGE, DEFAULT_EVENTS } from '../content/defaults';
+import { formatPrice } from '../lib/utils';
 import type { EventsPageData, EventItem } from '../lib/types';
 import './Events.css';
 
@@ -19,8 +21,7 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
 };
 
 function formatEventDate(dateStr: string): string {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', {
+    return new Date(dateStr).toLocaleDateString('en-US', {
         weekday: 'long',
         month: 'long',
         day: 'numeric',
@@ -29,8 +30,7 @@ function formatEventDate(dateStr: string): string {
 }
 
 function formatEventTime(dateStr: string): string {
-    const d = new Date(dateStr);
-    return d.toLocaleTimeString('en-US', {
+    return new Date(dateStr).toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
     });
@@ -39,8 +39,7 @@ function formatEventTime(dateStr: string): string {
 function formatTimeRange(start: string, end?: string): string {
     const startTime = formatEventTime(start);
     if (!end) return startTime;
-    const endTime = formatEventTime(end);
-    return `${startTime} – ${endTime}`;
+    return `${startTime} – ${formatEventTime(end)}`;
 }
 
 function isUpcoming(dateStr: string): boolean {
@@ -99,6 +98,7 @@ const Events = () => {
 function EventCard({ event, isPast }: { event: EventItem; isPast?: boolean }) {
     const imageUrl = event.image ? urlFor(event.image).width(600).height(400).url() : null;
     const typeLabel = EVENT_TYPE_LABELS[event.eventType] ?? event.eventType;
+    const isFree = event.price == null || event.price === 0;
 
     return (
         <article className={`event-card${isPast ? ' event-card--past' : ''}`}>
@@ -130,16 +130,14 @@ function EventCard({ event, isPast }: { event: EventItem; isPast?: boolean }) {
 
                 <p className="event-card-description">{event.description}</p>
 
-                {event.registrationUrl && !isPast && (
-                    <a
-                        href={event.registrationUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="event-register-btn"
-                    >
-                        Register
-                    </a>
-                )}
+                <div className="event-card-footer">
+                    {!isFree && (
+                        <span className="event-card-price">{formatPrice(event.price!)}</span>
+                    )}
+                    <Link to={`/events/${event._id}`} className="event-register-btn">
+                        {isPast ? 'View Details' : 'Register'}
+                    </Link>
+                </div>
             </div>
         </article>
     );

@@ -101,8 +101,11 @@ export interface EventItem {
     location: string;
     eventType: string;
     description: string;
+    detailedDescription?: string;
     image?: SanityImageSource;
-    registrationUrl?: string;
+    flyer?: SanityImageSource;
+    price?: number;
+    stripePaymentLink?: string;
 }
 
 export interface EventsPageData {

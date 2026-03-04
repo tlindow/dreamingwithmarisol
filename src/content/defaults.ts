@@ -135,6 +135,7 @@ export const DEFAULT_EVENTS: EventItem[] = [
         location: 'San Diego, CA',
         eventType: 'ceremony',
         description: 'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition.',
+        price: 35,
     },
     {
         _id: 'default-event-2',
@@ -144,6 +145,7 @@ export const DEFAULT_EVENTS: EventItem[] = [
         location: 'San Diego, CA',
         eventType: 'workshop',
         description: 'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing.',
+        price: 120,
     },
     {
         _id: 'default-event-3',
