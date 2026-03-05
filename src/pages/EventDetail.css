@@ -121,21 +121,44 @@
 }
 
 .ed-pay-btn {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     width: 100%;
-    text-align: center;
     padding: var(--spacing-md) var(--spacing-xl);
     background-color: var(--color-accent);
     color: #fff;
     font-size: 1.1rem;
     font-weight: 600;
+    border: none;
     border-radius: var(--radius-md);
+    cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-.ed-pay-btn:hover {
+.ed-pay-btn:hover:not(:disabled) {
     background-color: var(--color-accent-hover);
     color: #fff;
+}
+
+.ed-pay-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.ed-spinner {
+    animation: ed-spin 0.8s linear infinite;
+}
+
+@keyframes ed-spin {
+    to { transform: rotate(360deg); }
+}
+
+.ed-checkout-error {
+    color: #c53030;
+    font-size: 0.9rem;
+    margin: 0;
 }
 
 .ed-coming-soon {

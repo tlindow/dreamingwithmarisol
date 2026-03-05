@@ -14,6 +14,8 @@ import Store from './pages/Store';
 import ProductDetail from './pages/ProductDetail';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
+import CheckoutSuccess from './pages/CheckoutSuccess';
+import CheckoutCancel from './pages/CheckoutCancel';
 
 import { enableVisualEditing } from '@sanity/visual-editing';
 
@@ -42,6 +44,8 @@ function App() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetail />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>

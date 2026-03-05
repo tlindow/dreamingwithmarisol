@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ShoppingBag, Download, Check, ShieldCheck, Zap } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, Download, Check, ShieldCheck, Zap, Loader2 } from 'lucide-react';
 import { stegaClean } from '@sanity/client/stega';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
+import { createCheckoutSession } from '../lib/checkout';
 import { PRODUCT_DETAIL_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
 import type { Product, PortableTextBlock } from '../lib/types';
@@ -34,6 +35,8 @@ const ProductDetail = () => {
     const params = useMemo(() => ({ id }), [id]);
     const { data: product, isLoading } = useSanityQuery<Product>(PRODUCT_DETAIL_QUERY, params);
     const [activeImage, setActiveImage] = useState(0);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
     if (isLoading) {
         return (
@@ -65,7 +68,27 @@ const ProductDetail = () => {
     const cleanCategory = stegaClean(product.category);
     const categoryLabel = cleanCategory ? CATEGORY_LABELS[cleanCategory] : 'Curated Pick';
     const isDigital = cleanCategory === 'digital';
-    const purchaseUrl = stegaClean(product.stripePaymentLink) || stegaClean(product.storeUrl);
+    const stripeLink = stegaClean(product.stripePaymentLink);
+    const storeLink = stegaClean(product.storeUrl);
+    const hasDirectLink = stripeLink || storeLink;
+    const canUseCheckoutApi = product.price != null && product.price > 0 && !stripeLink;
+
+    const handlePurchase = async () => {
+        if (hasDirectLink) {
+            window.location.href = stripeLink || storeLink!;
+            return;
+        }
+        if (!canUseCheckoutApi || !id) return;
+        setCheckoutError(null);
+        setCheckoutLoading(true);
+        try {
+            const { url } = await createCheckoutSession({ type: 'product', id });
+            window.location.href = url;
+        } catch (err) {
+            setCheckoutError(err instanceof Error ? err.message : 'Checkout failed');
+            setCheckoutLoading(false);
+        }
+    };
 
     const allImages: { src: string; alt: string }[] = [];
     if (product.image) {
@@ -157,32 +180,42 @@ const ProductDetail = () => {
 
                             {/* Purchase card */}
                             <div className="pd-purchase-card">
-                                {purchaseUrl ? (
-                                    <a
-                                        href={purchaseUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="pd-buy-btn"
-                                    >
-                                        {isDigital ? (
-                                            <>
-                                                <Download size={20} />
-                                                {product.price != null ? `Buy Now — ${formatPrice(product.price)}` : 'Buy Now'}
-                                            </>
-                                        ) : (
-                                            <>
-                                                <ShoppingBag size={20} />
-                                                {product.price != null ? `Shop Now — ${formatPrice(product.price)}` : 'Shop Now'}
-                                            </>
+                                {(hasDirectLink || canUseCheckoutApi) ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="pd-buy-btn"
+                                            onClick={handlePurchase}
+                                            disabled={checkoutLoading}
+                                        >
+                                            {checkoutLoading ? (
+                                                <>
+                                                    <Loader2 size={20} className="pd-spinner" />
+                                                    Redirecting…
+                                                </>
+                                            ) : isDigital ? (
+                                                <>
+                                                    <Download size={20} />
+                                                    {product.price != null ? `Buy Now — ${formatPrice(product.price)}` : 'Buy Now'}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <ShoppingBag size={20} />
+                                                    {product.price != null ? `Shop Now — ${formatPrice(product.price)}` : 'Shop Now'}
+                                                </>
+                                            )}
+                                        </button>
+                                        {checkoutError && (
+                                            <p className="pd-checkout-error">{checkoutError}</p>
                                         )}
-                                    </a>
+                                    </>
                                 ) : (
                                     <span className="pd-coming-soon">Available soon</span>
                                 )}
 
                                 <p className="pd-secure-note">
                                     <ShieldCheck size={14} />
-                                    {product.stripePaymentLink
+                                    {stripeLink || canUseCheckoutApi
                                         ? 'Secure checkout powered by Stripe'
                                         : 'Secure external checkout'}
                                 </p>

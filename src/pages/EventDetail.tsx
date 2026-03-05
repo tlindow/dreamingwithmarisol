@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
+import { createCheckoutSession } from '../lib/checkout';
 import { EVENT_DETAIL_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
 import type { EventItem } from '../lib/types';
@@ -41,6 +43,8 @@ const EventDetail = () => {
     const { id } = useParams<{ id: string }>();
     const params = useMemo(() => ({ id }), [id]);
     const { data: event, isLoading } = useSanityQuery<EventItem>(EVENT_DETAIL_QUERY, params);
+    const [checkoutLoading, setCheckoutLoading] = useState(false);
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
     if (isLoading) {
         return (
@@ -70,13 +74,33 @@ const EventDetail = () => {
     }
 
     const typeLabel = EVENT_TYPE_LABELS[event.eventType] ?? event.eventType;
+    const isFree = event.price == null || event.price === 0;
+    const stripeLink = event.stripePaymentLink;
+    const canUseCheckoutApi = !isFree && event.price != null && event.price > 0 && !stripeLink && id;
+
+    const handleRegister = async () => {
+        if (stripeLink) {
+            window.location.href = stripeLink;
+            return;
+        }
+        if (!canUseCheckoutApi) return;
+        setCheckoutError(null);
+        setCheckoutLoading(true);
+        try {
+            const { url } = await createCheckoutSession({ type: 'event', id });
+            window.location.href = url;
+        } catch (err) {
+            setCheckoutError(err instanceof Error ? err.message : 'Checkout failed');
+            setCheckoutLoading(false);
+        }
+    };
+
     const flyerUrl = event.flyer
         ? urlFor(event.flyer).width(1200).url()
         : event.image
             ? urlFor(event.image).width(1200).url()
             : null;
     const longDescription = event.detailedDescription || event.description;
-    const isFree = event.price == null || event.price === 0;
 
     return (
         <div className="page-wrapper animate-fade-in">
@@ -127,25 +151,41 @@ const EventDetail = () => {
                                     {isFree ? 'Free' : formatPrice(event.price!)}
                                 </div>
 
-                                {event.stripePaymentLink ? (
-                                    <a
-                                        href={event.stripePaymentLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="ed-pay-btn"
-                                    >
-                                        Register &amp; Pay
-                                    </a>
+                                {isFree ? (
+                                    <span className="ed-coming-soon">Free event — no registration required</span>
+                                ) : stripeLink || canUseCheckoutApi ? (
+                                    <>
+                                        <button
+                                            type="button"
+                                            className="ed-pay-btn"
+                                            onClick={handleRegister}
+                                            disabled={checkoutLoading}
+                                        >
+                                            {checkoutLoading ? (
+                                                <>
+                                                    <Loader2 size={18} className="ed-spinner" />
+                                                    Redirecting…
+                                                </>
+                                            ) : (
+                                                'Register & Pay'
+                                            )}
+                                        </button>
+                                        {checkoutError && (
+                                            <p className="ed-checkout-error">{checkoutError}</p>
+                                        )}
+                                    </>
                                 ) : (
                                     <span className="ed-coming-soon">
                                         Registration opening soon
                                     </span>
                                 )}
 
-                                <p className="ed-secure-note">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                    Secure checkout powered by Stripe
-                                </p>
+                                {(stripeLink || canUseCheckoutApi) && (
+                                    <p className="ed-secure-note">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        Secure checkout powered by Stripe
+                                    </p>
+                                )}
                             </div>
                         </aside>
                     </div>
