@@ -102,6 +102,27 @@
     pointer-events: none;
 }
 
+.product-card__badge--digital {
+    background: var(--color-accent);
+    color: var(--color-text-main);
+}
+
+.product-card__digital-icon {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+    pointer-events: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+
 /* ── Body ─────────────────────────────────────────── */
 .product-card__body {
     display: flex;
@@ -179,6 +200,17 @@
 
 .product-card:hover .product-card__cta {
     background-color: var(--color-accent-hover);
+}
+
+/* Digital products get a slightly distinct CTA */
+.product-card__cta--digital {
+    background-color: var(--color-secondary);
+    color: #ffffff;
+}
+
+.product-card:hover .product-card__cta--digital {
+    background-color: var(--color-primary-dark, #3b2a1a);
+    color: #ffffff;
 }
 
 /* ── Loading Skeleton ─────────────────────────────── */

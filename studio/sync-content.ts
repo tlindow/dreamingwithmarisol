@@ -297,6 +297,105 @@ async function sync() {
             'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.\n\nThis is a free community event — no prior experience needed. Zoom link will be sent after registration. Please find a quiet, private space and have a candle or glass of water nearby.',
     })
 
+    // ── sample products ──
+    console.log('Creating sample products')
+
+    // Digital: Guided Meditation Audio
+    tx.createIfNotExists({
+        _id: 'product-guided-meditation',
+        _type: 'product',
+        title: 'Ancestral Healing Meditation — Audio Bundle',
+        category: 'digital',
+        price: 22,
+        description:
+            'Three guided meditation recordings rooted in Mesoamerican tradition. Perfect for daily practice, these audios guide you through energetic cleansing, ancestral connection, and grounding.',
+        features: [
+            '3 MP3 audio files (approx. 20 min each)',
+            'Guided limpia visualization with copal & herbs',
+            'Ancestral connection & gratitude meditation',
+            'Grounding & protection practice',
+            'PDF companion guide with affirmations',
+            'Instant download — yours forever',
+        ],
+    })
+
+    // Digital: Curanderismo E-Book
+    tx.createIfNotExists({
+        _id: 'product-curanderismo-ebook',
+        _type: 'product',
+        title: 'Introduction to Curanderismo — Digital Guide',
+        category: 'digital',
+        price: 18,
+        description:
+            'A 40-page illustrated guide to the foundations of Mesoamerican healing. Learn the history, philosophy, herbs, and rituals of Curanderismo from the comfort of home.',
+        features: [
+            '40-page illustrated PDF e-book',
+            'History & philosophy of Curanderismo',
+            'Herb profiles: copal, rue, sage, palo santo',
+            'Step-by-step limpia instructions',
+            'Glossary of key terms in Spanish & English',
+            'Instant download — print or read digitally',
+        ],
+    })
+
+    // Digital: Ritual Journal
+    tx.createIfNotExists({
+        _id: 'product-ritual-journal',
+        _type: 'product',
+        title: 'Spiritual Practice Journal — Printable',
+        category: 'digital',
+        price: 12,
+        description:
+            'A beautifully designed 30-page printable journal for tracking your spiritual practice, moon cycles, dreams, and healing intentions. Print at home on any standard paper.',
+        features: [
+            '30 printable pages (US Letter & A4)',
+            'Moon cycle tracker',
+            'Dream & vision journal pages',
+            'Weekly intention-setting spreads',
+            'Gratitude & release practice prompts',
+            'Instant download PDF',
+        ],
+    })
+
+    // Physical: Limpia Starter Kit
+    tx.createIfNotExists({
+        _id: 'product-limpia-kit',
+        _type: 'product',
+        title: 'Limpia Starter Kit',
+        category: 'physical',
+        price: 45,
+        description:
+            'Everything you need to perform a basic spiritual cleansing at home. Curated by Marisól, this kit includes ethically sourced herbs, copal resin, and a beginner\'s instruction card.',
+        features: [
+            'Dried rue bundle (ruda)',
+            'White sage bundle',
+            'Copal resin (approx. 1 oz)',
+            'Palo santo stick',
+            'Small charcoal disk for resin burning',
+            'Hand-written instruction card by Marisól',
+        ],
+    })
+
+    // Physical: Crystal Set
+    tx.createIfNotExists({
+        _id: 'product-crystal-set',
+        _type: 'product',
+        title: 'Curandera Crystal Collection',
+        category: 'physical',
+        price: 38,
+        description:
+            'A hand-selected set of five crystals commonly used in Mesoamerican healing practice. Each stone is cleansed and charged before shipping.',
+        features: [
+            'Black tourmaline (protection)',
+            'Clear quartz (amplification)',
+            'Rose quartz (heart healing)',
+            'Obsidian (grounding)',
+            'Amethyst (intuition)',
+            'Drawstring pouch included',
+            'Crystal meaning card',
+        ],
+    })
+
     // ── Commit ──
     console.log('\nCommitting transaction...')
     const result = await tx.commit()

@@ -84,13 +84,26 @@ export interface VideoModule {
     products?: Product[];
 }
 
+export interface PortableTextBlock {
+    _type: 'block';
+    _key: string;
+    style?: string;
+    children: Array<{ _type: 'span'; _key: string; text: string; marks?: string[] }>;
+    markDefs?: Array<{ _type: string; _key: string; href?: string }>;
+}
+
 export interface Product {
     _id: string;
     title: string;
+    category?: 'digital' | 'physical' | 'bundle';
     description: string;
+    body?: PortableTextBlock[];
+    features?: string[];
     price: number;
-    storeUrl: string;
+    storeUrl?: string;
+    stripePaymentLink?: string;
     image: SanityImageSource;
+    gallery?: SanityImageSource[];
 }
 
 export interface EventItem {
