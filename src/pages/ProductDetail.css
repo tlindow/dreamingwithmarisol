@@ -1,0 +1,343 @@
+/* ── Back link ── */
+.pd-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-text-light);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-2xl);
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+
+.pd-back-link:hover {
+    color: var(--color-secondary);
+}
+
+/* ── Two-column layout ── */
+.pd-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xl);
+    margin-bottom: var(--spacing-3xl);
+}
+
+@media (min-width: 768px) {
+    .pd-layout {
+        flex-direction: row;
+        gap: var(--spacing-3xl);
+        align-items: flex-start;
+    }
+}
+
+/* ── Image column ── */
+.pd-images {
+    flex: 1;
+    min-width: 0;
+}
+
+.pd-main-image-wrap {
+    position: relative;
+    background: #fafaf7;
+    border-radius: var(--radius-lg);
+    border: 1.5px solid #e8e4d8;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.pd-main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.35s ease;
+}
+
+.pd-main-image-wrap:hover .pd-main-image {
+    transform: scale(1.04);
+}
+
+.pd-main-image-placeholder {
+    color: #c5bfb3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.pd-badge {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    background: var(--color-secondary);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    pointer-events: none;
+}
+
+/* digital badge gets accent color */
+.pd-badge--digital {
+    background: var(--color-accent);
+    color: var(--color-text-main);
+}
+
+/* ── Thumbnails ── */
+.pd-thumbnails {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pd-thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-sm);
+    border: 2px solid #e8e4d8;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    background: #fafaf7;
+    transition: border-color 0.2s ease;
+}
+
+.pd-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pd-thumb--active,
+.pd-thumb:hover {
+    border-color: var(--color-accent);
+}
+
+/* ── Info column ── */
+.pd-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+    .pd-info {
+        max-width: 440px;
+    }
+}
+
+.pd-title {
+    font-family: var(--font-secondary);
+    font-size: 2rem;
+    color: var(--color-secondary);
+    line-height: 1.2;
+    margin: 0;
+}
+
+.pd-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.pd-short-desc {
+    color: var(--color-text-light);
+    line-height: 1.7;
+    font-size: 0.97rem;
+    margin: 0;
+}
+
+/* ── Digital instant delivery banner ── */
+.pd-digital-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: linear-gradient(135deg, #fff9e6, #fff3c4);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #7a5a00;
+}
+
+.pd-digital-badge svg {
+    flex-shrink: 0;
+    color: var(--color-accent);
+}
+
+/* ── Features list ── */
+.pd-features {
+    background: #fff;
+    border: 1.5px solid #e8e4d8;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.pd-features-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-light);
+    margin-bottom: var(--spacing-md);
+}
+
+.pd-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.pd-features-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-main);
+    line-height: 1.5;
+}
+
+.pd-features-icon {
+    flex-shrink: 0;
+    color: var(--color-secondary);
+    margin-top: 0.15rem;
+}
+
+/* ── Purchase card ── */
+.pd-purchase-card {
+    background: var(--color-primary-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.pd-buy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.5rem;
+    background-color: var(--color-accent);
+    color: var(--color-text-main);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.pd-buy-btn:hover {
+    background-color: var(--color-accent-hover);
+    color: var(--color-text-main);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.16);
+}
+
+.pd-coming-soon {
+    display: block;
+    text-align: center;
+    padding: 0.9rem 1.5rem;
+    background-color: var(--color-border);
+    color: var(--color-text-light);
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+}
+
+.pd-secure-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.pd-secure-note svg {
+    flex-shrink: 0;
+    color: var(--color-secondary);
+}
+
+.pd-digital-note {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+}
+
+/* ── Full description below fold ── */
+.pd-body-section {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-3xl);
+    max-width: 720px;
+}
+
+.pd-body-heading {
+    font-family: var(--font-secondary);
+    font-size: 1.6rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.pd-body-content {
+    color: var(--color-text-main);
+    line-height: 1.8;
+}
+
+.pd-body-p {
+    margin-bottom: var(--spacing-md);
+}
+
+.pd-body-h2 {
+    font-family: var(--font-secondary);
+    font-size: 1.3rem;
+    color: var(--color-secondary);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-sm);
+}
+
+.pd-body-h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-top: var(--spacing-lg);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* ── Loading & not-found ── */
+.pd-loading,
+.pd-not-found {
+    text-align: center;
+    padding: var(--spacing-4xl) 0;
+    color: var(--color-text-light);
+}
+
+.pd-not-found h2 {
+    font-family: var(--font-secondary);
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-lg);
+}

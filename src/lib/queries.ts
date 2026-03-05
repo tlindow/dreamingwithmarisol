@@ -103,10 +103,26 @@ export const MODULE_DETAIL_QUERY = `*[_type == "videoModule" && _id == $id][0] {
 export const STORE_QUERY = `*[_type == "product"] | order(_createdAt desc) {
     _id,
     title,
+    category,
     description,
     price,
     storeUrl,
+    stripePaymentLink,
     image
+}`;
+
+export const PRODUCT_DETAIL_QUERY = `*[_type == "product" && _id == $id][0] {
+    _id,
+    title,
+    category,
+    description,
+    body,
+    features,
+    price,
+    storeUrl,
+    stripePaymentLink,
+    image,
+    gallery
 }`;
 
 export const EVENTS_PAGE_QUERY = `{

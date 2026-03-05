@@ -11,6 +11,7 @@ import Pricing from './pages/Pricing';
 import LearningHub from './pages/LearningHub';
 import ModuleDetail from './pages/ModuleDetail';
 import Store from './pages/Store';
+import ProductDetail from './pages/ProductDetail';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/learning" element={<LearningHub />} />
             <Route path="/learning/:id" element={<ModuleDetail />} />
             <Route path="/store" element={<Store />} />
+            <Route path="/store/:id" element={<ProductDetail />} />
             <Route path="/online-healings" element={<OnlineHealings />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/events" element={<Events />} />

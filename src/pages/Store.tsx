@@ -1,9 +1,17 @@
-import { ShoppingCart, ShoppingBag, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ShoppingBag, Star, Download, ArrowRight } from 'lucide-react';
+import { stegaClean } from '@sanity/client/stega';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { STORE_QUERY } from '../lib/queries';
 import type { Product } from '../lib/types';
 import './Store.css';
+
+const CATEGORY_LABELS: Record<string, string> = {
+    digital: 'Digital Download',
+    physical: 'Handcrafted',
+    bundle: 'Bundle',
+};
 
 const formatProductPrice = (price: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
@@ -32,56 +40,78 @@ const Store = () => {
                         </div>
                     ) : items.length > 0 ? (
                         <div className="product-grid">
-                            {items.map((product) => (
-                                <a
-                                    key={product._id}
-                                    href={product.storeUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="product-card"
-                                >
-                                    <div className="product-card__image-wrap">
-                                        {product.image ? (
-                                            <img
-                                                src={urlFor(product.image).width(500).height(500).url()}
-                                                alt={product.title}
-                                                className="product-card__image"
-                                            />
-                                        ) : (
-                                            <div className="product-card__image-placeholder">
-                                                <ShoppingBag size={48} />
-                                            </div>
-                                        )}
-                                        <span className="product-card__badge">Handcrafted</span>
-                                    </div>
+                            {items.map((product) => {
+                                const cleanCategory = stegaClean(product.category);
+                                const categoryLabel = cleanCategory
+                                    ? CATEGORY_LABELS[cleanCategory]
+                                    : 'Curated Pick';
+                                const isDigital = cleanCategory === 'digital';
 
-                                    <div className="product-card__body">
-                                        <h3 className="product-card__title">{product.title}</h3>
-
-                                        <div className="product-card__rating">
-                                            {[1, 2, 3, 4, 5].map((s) => (
-                                                <Star key={s} size={13} fill="var(--color-accent)" color="var(--color-accent)" />
-                                            ))}
-                                            <span className="product-card__rating-label">Curated pick</span>
+                                return (
+                                    <Link
+                                        key={product._id}
+                                        to={`/store/${product._id}`}
+                                        className="product-card"
+                                    >
+                                        <div className="product-card__image-wrap">
+                                            {product.image ? (
+                                                <img
+                                                    src={urlFor(product.image).width(500).height(500).url()}
+                                                    alt={product.title}
+                                                    className="product-card__image"
+                                                />
+                                            ) : (
+                                                <div className="product-card__image-placeholder">
+                                                    <ShoppingBag size={48} />
+                                                </div>
+                                            )}
+                                            <span className={`product-card__badge${isDigital ? ' product-card__badge--digital' : ''}`}>
+                                                {categoryLabel}
+                                            </span>
+                                            {isDigital && (
+                                                <span className="product-card__digital-icon" title="Instant digital download">
+                                                    <Download size={15} />
+                                                </span>
+                                            )}
                                         </div>
 
-                                        {product.price && (
-                                            <div className="product-card__price">
-                                                {formatProductPrice(product.price)}
+                                        <div className="product-card__body">
+                                            <h3 className="product-card__title">{product.title}</h3>
+
+                                            <div className="product-card__rating">
+                                                {[1, 2, 3, 4, 5].map((s) => (
+                                                    <Star key={s} size={13} fill="var(--color-accent)" color="var(--color-accent)" />
+                                                ))}
+                                                <span className="product-card__rating-label">Curated pick</span>
                                             </div>
-                                        )}
 
-                                        {product.description && (
-                                            <p className="product-card__desc">{product.description}</p>
-                                        )}
+                                            {product.price && (
+                                                <div className="product-card__price">
+                                                    {formatProductPrice(product.price)}
+                                                </div>
+                                            )}
 
-                                        <div className="product-card__cta">
-                                            <ShoppingCart size={16} />
-                                            Shop Now
+                                            {product.description && (
+                                                <p className="product-card__desc">{product.description}</p>
+                                            )}
+
+                                            <div className={`product-card__cta${isDigital ? ' product-card__cta--digital' : ''}`}>
+                                                {isDigital ? (
+                                                    <>
+                                                        <Download size={16} />
+                                                        Get Instant Access
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <ArrowRight size={16} />
+                                                        View Details
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                </a>
-                            ))}
+                                    </Link>
+                                );
+                            })}
                         </div>
                     ) : (
                         <div className="text-center py-12">
