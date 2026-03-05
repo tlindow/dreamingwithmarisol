@@ -1,11 +1,12 @@
-import { ExternalLink, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, ShoppingBag, Star } from 'lucide-react';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { STORE_QUERY } from '../lib/queries';
-import { formatPrice } from '../lib/utils';
-import { Button } from '../components/Button';
 import type { Product } from '../lib/types';
 import './Store.css';
+
+const formatProductPrice = (price: number) =>
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 
 const Store = () => {
     const { data: products, isLoading } = useSanityQuery<Product[]>(STORE_QUERY);
@@ -24,46 +25,69 @@ const Store = () => {
             <section className="section">
                 <div className="container">
                     {isLoading ? (
-                        <div className="text-center py-12">
-                            <p className="text-[var(--color-text-light)]">Loading shop artifacts...</p>
+                        <div className="product-grid">
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <div key={i} className="product-card-skeleton" />
+                            ))}
                         </div>
                     ) : items.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div className="product-grid">
                             {items.map((product) => (
-                                <div key={product._id} className="bg-white rounded-lg shadow-sm border border-[var(--color-primary-light)] overflow-hidden flex flex-col hover:shadow-md transition-shadow">
-                                    <div className="aspect-square bg-[var(--color-primary-light)] relative overflow-hidden flex items-center justify-center">
+                                <a
+                                    key={product._id}
+                                    href={product.storeUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="product-card"
+                                >
+                                    <div className="product-card__image-wrap">
                                         {product.image ? (
                                             <img
-                                                src={urlFor(product.image).width(400).height(400).url()}
+                                                src={urlFor(product.image).width(500).height(500).url()}
                                                 alt={product.title}
-                                                className="w-full h-full object-cover"
+                                                className="product-card__image"
                                             />
                                         ) : (
-                                            <ShoppingBag size={48} className="text-[var(--color-primary-dark)] opacity-20" />
+                                            <div className="product-card__image-placeholder">
+                                                <ShoppingBag size={48} />
+                                            </div>
                                         )}
+                                        <span className="product-card__badge">Handcrafted</span>
                                     </div>
-                                    <div className="p-6 flex flex-col flex-grow">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <h3 className="text-xl font-semibold text-[var(--color-text)]">{product.title}</h3>
-                                            {product.price && <span className="text-lg font-medium">{formatPrice(product.price)}</span>}
+
+                                    <div className="product-card__body">
+                                        <h3 className="product-card__title">{product.title}</h3>
+
+                                        <div className="product-card__rating">
+                                            {[1, 2, 3, 4, 5].map((s) => (
+                                                <Star key={s} size={13} fill="var(--color-accent)" color="var(--color-accent)" />
+                                            ))}
+                                            <span className="product-card__rating-label">Curated pick</span>
                                         </div>
+
+                                        {product.price && (
+                                            <div className="product-card__price">
+                                                {formatProductPrice(product.price)}
+                                            </div>
+                                        )}
+
                                         {product.description && (
-                                            <p className="text-[var(--color-text-light)] mb-6 flex-grow">{product.description}</p>
+                                            <p className="product-card__desc">{product.description}</p>
                                         )}
-                                        <div className="mt-auto">
-                                            <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="block">
-                                                <Button variant="primary" className="w-full flex items-center justify-center gap-2">
-                                                    Purchase Now <ExternalLink size={18} />
-                                                </Button>
-                                            </a>
+
+                                        <div className="product-card__cta">
+                                            <ShoppingCart size={16} />
+                                            Shop Now
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             ))}
                         </div>
                     ) : (
                         <div className="text-center py-12">
-                            <p className="text-[var(--color-text-light)]">The apothecary is currently empty. Check back soon for new artifacts.</p>
+                            <p style={{ color: 'var(--color-text-light)' }}>
+                                The apothecary is currently empty. Check back soon for new artifacts.
+                            </p>
                         </div>
                     )}
                 </div>
