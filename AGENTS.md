@@ -4,7 +4,28 @@
 
 This is a React + Vite frontend with a Sanity Studio CMS backend, all in one repo (not a monorepo workspace — two separate `npm install` runs are required).
 
-### Local agent git workflow
+### Cursor Cloud agent git workflow (cloud sessions — use this one)
+
+Cursor Cloud pre-creates a `cursor/<task-id>` branch for every session and auto-opens a PR when commits are pushed to it. **Do not switch away from it.**
+
+For any new implementation task, cloud agents must follow this exact flow:
+
+1. Note the current branch name (it will be `cursor/<task-id>`): `git branch --show-current`
+2. Ensure working tree is clean: `git status --short`
+3. Sync with latest `main` without changing branches: `git fetch origin && git rebase origin/main`
+4. Do implementation and validation (logic + visual checks).
+5. Commit each logical change: `git add -A && git commit -m "..."`
+6. Push to the same `cursor/<task-id>` branch: `git push` (Cursor Cloud auto-creates/updates the PR)
+7. End the flow by confirming the branch was pushed — Cursor Cloud will attach the PR to the session automatically.
+
+Rules:
+- **Never** run `git checkout main` or `git checkout -b ...` — stay on the `cursor/<task-id>` branch.
+- **Never** run `gh pr create` — the integration token doesn't have write access; the auto-PR handles it.
+- Use `git fetch origin && git rebase origin/main` (not pull) to stay in sync with `main`.
+
+---
+
+### Local agent git workflow (local dev machine only — not for cloud sessions)
 
 For any new implementation task, local agents should follow this exact flow (deterministic):
 
