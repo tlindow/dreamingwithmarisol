@@ -13,9 +13,26 @@ import ModuleDetail from './pages/ModuleDetail';
 import Store from './pages/Store';
 
 import { enableVisualEditing } from '@sanity/visual-editing';
+import { triggerPreviewRefresh } from './lib/previewRefresh';
 
 function VisualEditingBridge() {
-  useEffect(() => enableVisualEditing(), []);
+  useEffect(() => {
+    return enableVisualEditing({
+      // When Sanity Studio signals a mutation or a manual refresh, re-fetch all
+      // active queries without a full page reload. If a live-preview loader is
+      // already connected (livePreviewEnabled), let it handle the update instead.
+      refresh: (payload) => {
+        // When a live-preview loader is connected it handles its own updates.
+        if (payload.livePreviewEnabled) return false;
+        // Otherwise re-fetch all active queries and suppress the default full
+        // page reload that the SDK would otherwise trigger.
+        return new Promise<void>((resolve) => {
+          triggerPreviewRefresh();
+          resolve();
+        });
+      },
+    });
+  }, []);
   return null;
 }
 

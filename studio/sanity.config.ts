@@ -50,11 +50,24 @@ export default defineConfig({
         }),
         visionTool(),
         presentationTool({
-          previewUrl:
-          process.env.SANITY_STUDIO_PREVIEW_URL ??
-          (process.env.NODE_ENV === 'production'
-            ? 'https://dreamingwithmarisol.vercel.app'
-            : 'http://localhost:5173'),
+          // `initial` is the default URL the Presentation iframe opens.
+          // Priority order:
+          //   1. SANITY_STUDIO_PREVIEW_URL build-time env var (set in Sanity
+          //      project settings, or via `sanity deploy --env` per branch).
+          //   2. Production Vercel deployment when the hosted Studio is running.
+          //   3. Local Vite dev server otherwise.
+          //
+          // To point the Studio at a Vercel preview deployment, set
+          // SANITY_STUDIO_PREVIEW_URL=https://<branch>-<hash>.vercel.app in your
+          // Sanity project's environment variables and redeploy the Studio, OR
+          // open the Studio with the ?preview=<url> query param in the browser.
+          previewUrl: {
+            initial:
+              process.env.SANITY_STUDIO_PREVIEW_URL ??
+              (process.env.NODE_ENV === 'production'
+                ? 'https://dreamingwithmarisol.vercel.app'
+                : 'http://localhost:5173'),
+          },
           resolve,
         }),
     ],
