@@ -68,5 +68,24 @@ export const resolve: PresentationPluginOptions['resolve'] = {
                 locations: [{title: doc?.title || 'Product', href: '/store'}],
             }),
         }),
+
+        eventsPage: defineLocations({
+            select: {title: 'pageTitle'},
+            resolve: (doc) => ({
+                locations: [{title: doc?.title || 'Events', href: '/events'}],
+            }),
+        }),
+
+        event: defineLocations({
+            select: {title: 'title', id: '_id'},
+            resolve: (doc) => ({
+                locations: [
+                    ...(doc?.id
+                        ? [{title: doc?.title || 'Event', href: `/events/${doc.id}`}]
+                        : []),
+                    {title: 'All Events', href: '/events'},
+                ],
+            }),
+        }),
     },
 }

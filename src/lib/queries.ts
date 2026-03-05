@@ -108,3 +108,36 @@ export const STORE_QUERY = `*[_type == "product"] | order(_createdAt desc) {
     storeUrl,
     image
 }`;
+
+export const EVENTS_PAGE_QUERY = `{
+    "page": *[_type == "eventsPage" && _id == "eventsPage"][0]{
+        pageTitle,
+        pageSubtitle
+    },
+    "events": *[_type == "event"] | order(date asc) {
+        _id,
+        title,
+        date,
+        endDate,
+        location,
+        eventType,
+        description,
+        image,
+        price
+    }
+}`;
+
+export const EVENT_DETAIL_QUERY = `*[_type == "event" && _id == $id][0]{
+    _id,
+    title,
+    date,
+    endDate,
+    location,
+    eventType,
+    description,
+    detailedDescription,
+    image,
+    flyer,
+    price,
+    stripePaymentLink
+}`;

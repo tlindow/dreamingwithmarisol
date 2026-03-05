@@ -243,6 +243,60 @@ async function sync() {
             'Find a quiet, private space. Have a candle or glass of water nearby. Avoid alcohol and recreational substances 24 hours before your session.',
     })
 
+    // ── eventsPage ──
+    console.log('Creating eventsPage singleton')
+    tx.createOrReplace({
+        _id: 'eventsPage',
+        _type: 'eventsPage',
+        pageTitle: 'Upcoming Events',
+        pageSubtitle:
+            'Join us for ceremonies, workshops, and community gatherings.',
+    })
+
+    // ── sample events ──
+    console.log('Creating sample events')
+    tx.createOrReplace({
+        _id: 'event-full-moon-ceremony',
+        _type: 'event',
+        title: 'Full Moon Ceremony',
+        date: '2026-04-12T19:00:00-07:00',
+        endDate: '2026-04-12T21:00:00-07:00',
+        location: 'San Diego, CA',
+        eventType: 'ceremony',
+        description:
+            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us and set intentions for the cycle ahead.',
+        detailedDescription:
+            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us, set intentions, and honor the lunar cycle with copal, prayer, and community.\n\nThis ceremony includes a guided group limpia, intention-setting with copal smoke, drumming, and communal prayer. All are welcome regardless of experience level. Please wear comfortable, light-colored clothing and bring an open heart.\n\nLight refreshments will be provided after the ceremony.',
+        price: 35,
+    })
+    tx.createOrReplace({
+        _id: 'event-curanderismo-workshop',
+        _type: 'event',
+        title: 'Introduction to Curanderismo',
+        date: '2026-04-26T10:00:00-07:00',
+        endDate: '2026-04-26T16:00:00-07:00',
+        location: 'San Diego, CA',
+        eventType: 'workshop',
+        description:
+            'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.',
+        detailedDescription:
+            'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.\n\nTopics covered:\n• History and philosophy of Curanderismo\n• Introduction to the four elements in healing\n• Hands-on herb preparation and identification\n• Guided practice: performing a basic limpia\n• Q&A and integration circle\n\nLunch and all materials are included. Space is limited to 15 participants to ensure personalized instruction.',
+        price: 120,
+    })
+    tx.createOrReplace({
+        _id: 'event-online-meditation',
+        _type: 'event',
+        title: 'Community Meditation & Plática',
+        date: '2026-05-03T18:00:00-07:00',
+        endDate: '2026-05-03T19:30:00-07:00',
+        location: 'Online via Zoom',
+        eventType: 'online',
+        description:
+            'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.',
+        detailedDescription:
+            'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.\n\nThis is a free community event — no prior experience needed. Zoom link will be sent after registration. Please find a quiet, private space and have a candle or glass of water nearby.',
+    })
+
     // ── Commit ──
     console.log('\nCommitting transaction...')
     const result = await tx.commit()
@@ -250,7 +304,7 @@ async function sync() {
 
     // ── Verify ──
     const docs = await client.fetch<{ _id: string; _type: string }[]>(
-        `*[_type in ["siteSettings","homePage","aboutPage","valuesPage","pricingPage","service","videoModule","product"]]{_id, _type}`
+        `*[_type in ["siteSettings","homePage","aboutPage","valuesPage","pricingPage","eventsPage","service","videoModule","product","event"]]{_id, _type}`
     )
     const counts: Record<string, number> = {}
     for (const d of docs) {
