@@ -1,6 +1,7 @@
 import './LearningHub.css';
 import { Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { stegaClean } from '@sanity/client/stega';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { LEARNING_HUB_QUERY } from '../lib/queries';
 import type { VideoModule } from '../lib/types';
@@ -29,7 +30,7 @@ const LearningHub = () => {
                         ) : items.length > 0 ? (
                             items.map((mod) => (
                                 <Link to={`/learning/${mod._id}`} key={mod._id} className="module-card group hover:shadow-lg transition-all duration-300">
-                                    <div className={`module-thumbnail ${mod.thumbnailColor || 'bg-primary'}`}>
+                                    <div className={`module-thumbnail ${stegaClean(mod.thumbnailColor) || 'bg-primary'}`}>
                                         <div className="play-button group-hover:scale-110 transition-transform bg-white/20 backdrop-blur-sm" aria-label={`Play ${mod.title}`}>
                                             <Play size={32} fill="currentColor" />
                                         </div>

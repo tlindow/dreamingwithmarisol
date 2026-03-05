@@ -1,4 +1,5 @@
 import { ExternalLink, ShoppingBag } from 'lucide-react';
+import { stegaClean } from '@sanity/client/stega';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { STORE_QUERY } from '../lib/queries';
@@ -51,7 +52,7 @@ const Store = () => {
                                             <p className="text-[var(--color-text-light)] mb-6 flex-grow">{product.description}</p>
                                         )}
                                         <div className="mt-auto">
-                                            <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="block">
+                                                <a href={stegaClean(product.storeUrl)} target="_blank" rel="noopener noreferrer" className="block">
                                                 <Button variant="primary" className="w-full flex items-center justify-center gap-2">
                                                     Purchase Now <ExternalLink size={18} />
                                                 </Button>

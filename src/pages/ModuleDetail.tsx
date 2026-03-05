@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import ReactPlayer from 'react-player';
+import { stegaClean } from '@sanity/client/stega';
 import { urlFor } from '../sanityClient';
 import { useSanityQuery } from '../hooks/useSanityQuery';
 import { MODULE_DETAIL_QUERY } from '../lib/queries';
@@ -97,7 +98,7 @@ const ModuleDetail = () => {
                                                     {product.price && <span className="text-[var(--color-primary-dark)] font-medium mb-2">{formatPrice(product.price)}</span>}
                                                     {product.description && <p className="text-sm text-[var(--color-text-light)] line-clamp-2 mb-4">{product.description}</p>}
 
-                                                    <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
+                                                    <a href={stegaClean(product.storeUrl)} target="_blank" rel="noopener noreferrer" className="mt-auto">
                                                         <button className="w-full py-2 px-4 bg-[var(--color-accent)] hover:bg-[#e0b02d] text-white font-medium rounded transition-colors flex items-center justify-center gap-2 text-sm shadow-sm">
                                                             Purchase Item <ExternalLink size={16} />
                                                         </button>
