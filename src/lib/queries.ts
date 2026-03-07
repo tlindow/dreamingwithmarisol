@@ -139,7 +139,8 @@ export const EVENTS_PAGE_QUERY = `{
         eventType,
         description,
         image,
-        price
+        price,
+        stripePaymentLink
     }
 }`;
 
