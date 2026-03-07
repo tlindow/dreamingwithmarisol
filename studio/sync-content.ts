@@ -268,6 +268,7 @@ async function sync() {
         detailedDescription:
             'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us, set intentions, and honor the lunar cycle with copal, prayer, and community.\n\nThis ceremony includes a guided group limpia, intention-setting with copal smoke, drumming, and communal prayer. All are welcome regardless of experience level. Please wear comfortable, light-colored clothing and bring an open heart.\n\nLight refreshments will be provided after the ceremony.',
         price: 35,
+        stripePaymentLink: 'https://buy.stripe.com/test_aFaaEQ2KCaVP67R4tV1Jm05',
     })
     tx.createOrReplace({
         _id: 'event-curanderismo-workshop',
@@ -282,6 +283,7 @@ async function sync() {
         detailedDescription:
             'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.\n\nTopics covered:\n• History and philosophy of Curanderismo\n• Introduction to the four elements in healing\n• Hands-on herb preparation and identification\n• Guided practice: performing a basic limpia\n• Q&A and integration circle\n\nLunch and all materials are included. Space is limited to 15 participants to ensure personalized instruction.',
         price: 120,
+        stripePaymentLink: 'https://buy.stripe.com/test_eVqdR2fxo6FzgMvf8z1Jm06',
     })
     tx.createOrReplace({
         _id: 'event-online-meditation',
@@ -309,6 +311,7 @@ async function sync() {
         price: 22,
         description:
             'Three guided meditation recordings rooted in Mesoamerican tradition. Perfect for daily practice, these audios guide you through energetic cleansing, ancestral connection, and grounding.',
+        stripePaymentLink: 'https://buy.stripe.com/test_28E00c990e81dAj1hJ1Jm00',
         features: [
             '3 MP3 audio files (approx. 20 min each)',
             'Guided limpia visualization with copal & herbs',
@@ -328,6 +331,7 @@ async function sync() {
         price: 18,
         description:
             'A 40-page illustrated guide to the foundations of Mesoamerican healing. Learn the history, philosophy, herbs, and rituals of Curanderismo from the comfort of home.',
+        stripePaymentLink: 'https://buy.stripe.com/test_14A28kad48NH1RBgcD1Jm01',
         features: [
             '40-page illustrated PDF e-book',
             'History & philosophy of Curanderismo',
@@ -347,6 +351,7 @@ async function sync() {
         price: 12,
         description:
             'A beautifully designed 30-page printable journal for tracking your spiritual practice, moon cycles, dreams, and healing intentions. Print at home on any standard paper.',
+        stripePaymentLink: 'https://buy.stripe.com/test_aFa4gs2KC7JDgMv3pR1Jm02',
         features: [
             '30 printable pages (US Letter & A4)',
             'Moon cycle tracker',
@@ -366,6 +371,7 @@ async function sync() {
         price: 45,
         description:
             'Everything you need to perform a basic spiritual cleansing at home. Curated by Marisól, this kit includes ethically sourced herbs, copal resin, and a beginner\'s instruction card.',
+        stripePaymentLink: 'https://buy.stripe.com/test_8x24gs1Gy0hb8fZe4v1Jm03',
         features: [
             'Dried rue bundle (ruda)',
             'White sage bundle',
@@ -385,6 +391,7 @@ async function sync() {
         price: 38,
         description:
             'A hand-selected set of five crystals commonly used in Mesoamerican healing practice. Each stone is cleansed and charged before shipping.',
+        stripePaymentLink: 'https://buy.stripe.com/test_5kQ8wIgBse81ao7f8z1Jm04',
         features: [
             'Black tourmaline (protection)',
             'Clear quartz (amplification)',

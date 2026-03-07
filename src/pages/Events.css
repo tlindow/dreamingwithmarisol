@@ -140,6 +140,15 @@
     align-items: center;
     gap: var(--spacing-md);
     margin-top: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.event-card-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    margin-left: auto;
 }
 
 .event-card-price {
@@ -158,10 +167,28 @@
     font-weight: 600;
     border-radius: var(--radius-md);
     transition: background-color 0.2s ease;
+    white-space: nowrap;
 }
 
 .event-register-btn:hover {
     background-color: var(--color-accent-hover);
+    color: #fff;
+}
+
+.event-details-btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: transparent;
+    color: var(--color-secondary);
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-secondary);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+
+.event-details-btn:hover {
+    background-color: var(--color-secondary);
     color: #fff;
 }
 

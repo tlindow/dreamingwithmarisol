@@ -134,9 +134,29 @@ function EventCard({ event, isPast }: { event: EventItem; isPast?: boolean }) {
                     {!isFree && (
                         <span className="event-card-price">{formatPrice(event.price!)}</span>
                     )}
-                    <Link to={`/events/${event._id}`} className="event-register-btn">
-                        {isPast ? 'View Details' : 'Register'}
-                    </Link>
+                    {isFree && (
+                        <span className="event-card-price">Free</span>
+                    )}
+                    <div className="event-card-actions">
+                        <Link to={`/events/${event._id}`} className="event-details-btn">
+                            {isPast ? 'View Details' : 'Details'}
+                        </Link>
+                        {!isPast && event.stripePaymentLink && (
+                            <a
+                                href={event.stripePaymentLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="event-register-btn"
+                            >
+                                {isFree ? 'Register Free' : 'Register & Pay'}
+                            </a>
+                        )}
+                        {!isPast && !event.stripePaymentLink && (
+                            <Link to={`/events/${event._id}`} className="event-register-btn">
+                                Register
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </div>
         </article>
