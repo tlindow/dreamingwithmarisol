@@ -77,6 +77,21 @@ button {
   font-family: inherit;
 }
 
+/* Page header: title + subtitle spacing (especially for mobile) */
+.page-title {
+  margin-bottom: var(--spacing-md);
+}
+
+.page-title + .page-subtitle {
+  margin-top: 0;
+}
+
+@media (max-width: 767px) {
+  .page-title {
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
 /* Base Layout Classes */
 .container {
   max-width: 1200px;

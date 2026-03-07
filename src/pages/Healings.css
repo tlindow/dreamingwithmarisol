@@ -1,7 +1,13 @@
 .page-subtitle {
     font-size: 1.25rem;
     color: var(--color-text-light);
-    margin-top: calc(var(--spacing-md) * -1);
+    margin-top: var(--spacing-sm);
+}
+
+@media (max-width: 767px) {
+    .page-title {
+        margin-bottom: var(--spacing-lg);
+    }
 }
 
 .text-center {
