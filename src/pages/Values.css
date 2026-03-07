@@ -4,6 +4,24 @@
     margin-inline: auto;
 }
 
+.values-header .page-title {
+    font-family: var(--font-secondary);
+    font-size: 2.5rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.values-header .page-subtitle {
+    color: var(--color-text-light);
+    font-size: 1.125rem;
+}
+
+@media (max-width: 767px) {
+    .values-header .page-title {
+        margin-bottom: var(--spacing-lg);
+    }
+}
+
 .values-grid {
     display: grid;
     grid-template-columns: 1fr;
