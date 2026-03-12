@@ -1,5 +1,11 @@
 # AGENTS.md
 
+## Session behavior
+
+The first prompt of a session should always enter a **planning mode**, unless otherwise stated. Plan before implementing.
+
+---
+
 ## Cursor Cloud specific instructions
 
 This is a React + Vite frontend with a Sanity Studio CMS backend, all in one repo (not a monorepo workspace — two separate `npm install` runs are required).
