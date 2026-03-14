@@ -1,20 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Instagram } from 'lucide-react';
 import { useState } from 'react';
-import { useSanityQuery } from '../hooks/useSanityQuery';
+import { useContent } from '../content/ContentContext';
 import { NAV_LINKS, DEFAULT_SITE_SETTINGS } from '../content/defaults';
-import type { SiteSettings } from '../lib/types';
 import './Navbar.css';
-
-const NAV_SETTINGS_QUERY = `*[_type == "siteSettings"][0]{ title, instagramUrl }`;
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const location = useLocation();
-    const { data } = useSanityQuery<Pick<SiteSettings, 'title' | 'instagramUrl'>>(NAV_SETTINGS_QUERY);
+    const { content } = useContent();
 
-    const siteTitle = data?.title ?? DEFAULT_SITE_SETTINGS.title;
-    const instagramUrl = data?.instagramUrl ?? DEFAULT_SITE_SETTINGS.instagramUrl;
+    const siteTitle = content.siteSettings.title ?? DEFAULT_SITE_SETTINGS.title;
+    const instagramUrl = content.siteSettings.instagramUrl ?? DEFAULT_SITE_SETTINGS.instagramUrl;
 
     const toggleMenu = () => setIsOpen(!isOpen);
 

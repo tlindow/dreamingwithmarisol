@@ -1,10 +1,8 @@
-import type { SanityImageSource } from '@sanity/image-url';
-
 export interface SiteSettings {
     title?: string;
     tagline?: string;
-    heroImage?: SanityImageSource;
-    portraitImage?: SanityImageSource;
+    heroImageUrl?: string;
+    portraitImageUrl?: string;
     calendlyUrl?: string;
     contactEmail?: string;
     instagramUrl?: string;
@@ -81,15 +79,7 @@ export interface VideoModule {
     description: string;
     thumbnailColor: string;
     videoUrl?: string;
-    products?: Product[];
-}
-
-export interface PortableTextBlock {
-    _type: 'block';
-    _key: string;
-    style?: string;
-    children: Array<{ _type: 'span'; _key: string; text: string; marks?: string[] }>;
-    markDefs?: Array<{ _type: string; _key: string; href?: string }>;
+    productIds?: string[];
 }
 
 export interface Product {
@@ -97,13 +87,13 @@ export interface Product {
     title: string;
     category?: 'digital' | 'physical' | 'bundle';
     description: string;
-    body?: PortableTextBlock[];
+    body?: string;
     features?: string[];
     price: number;
     storeUrl?: string;
     stripePaymentLink?: string;
-    image: SanityImageSource;
-    gallery?: SanityImageSource[];
+    imageUrl?: string;
+    gallery?: string[];
 }
 
 export interface EventItem {
@@ -115,8 +105,8 @@ export interface EventItem {
     eventType: string;
     description: string;
     detailedDescription?: string;
-    image?: SanityImageSource;
-    flyer?: SanityImageSource;
+    imageUrl?: string;
+    flyerUrl?: string;
     price?: number;
     stripePaymentLink?: string;
 }
@@ -124,4 +114,18 @@ export interface EventItem {
 export interface EventsPageData {
     pageTitle?: string;
     pageSubtitle?: string;
+}
+
+export interface SiteContent {
+    siteSettings: SiteSettings;
+    homePage: HomePageData;
+    aboutPage: AboutPageData;
+    inPersonService: ServiceData;
+    onlineService: ServiceData;
+    valuesPage: ValuesPageData;
+    pricingPage: PricingPageData;
+    eventsPage: EventsPageData;
+    events: EventItem[];
+    learningModules: VideoModule[];
+    products: Product[];
 }

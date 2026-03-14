@@ -1,26 +1,19 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { useSanityQuery } from '../hooks/useSanityQuery';
+import { useContent } from '../content/ContentContext';
 import { useCalendlyEmbed } from '../hooks/useCalendlyEmbed';
 import { useCalendlyAvailability } from '../hooks/useCalendlyAvailability';
-import { HEALINGS_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
 import { DEFAULT_IN_PERSON_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
-import type { ServiceData, SiteSettings } from '../lib/types';
 import './Healings.css';
 
-interface HealingsQueryResult {
-    settings: Pick<SiteSettings, 'calendlyUrl' | 'contactEmail'> | null;
-    service: ServiceData | null;
-}
-
 const Healings = () => {
-    const { data, isLoading: settingsLoading } = useSanityQuery<HealingsQueryResult>(HEALINGS_QUERY);
+    const { content } = useContent();
 
-    const calendlyUrl = data?.settings?.calendlyUrl ?? null;
-    const contactEmail = data?.settings?.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail;
+    const calendlyUrl = content.siteSettings.calendlyUrl ?? null;
+    const contactEmail = content.siteSettings.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail;
 
-    const svc = data?.service;
+    const svc = content.inPersonService;
     const serviceTitle = svc?.title ?? DEFAULT_IN_PERSON_SERVICE.title;
     const pageTitle = svc?.pageTitle ?? DEFAULT_IN_PERSON_SERVICE.pageTitle;
     const pageSubtitle = svc?.pageSubtitle ?? DEFAULT_IN_PERSON_SERVICE.pageSubtitle;
@@ -37,7 +30,7 @@ const Healings = () => {
 
     const { status: availabilityStatus } = useCalendlyAvailability(calendlyUrl);
 
-    const settingsLoaded = !settingsLoading;
+    const settingsLoaded = true;
 
     const showBooking =
         availabilityStatus === 'available' ||

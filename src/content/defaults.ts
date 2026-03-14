@@ -6,16 +6,23 @@ import type {
     PricingPageData,
     EventsPageData,
     EventItem,
+    Product,
+    SiteContent,
     SiteSettings,
+    VideoModule,
 } from '../lib/types';
 
 export const DEFAULT_SITE_SETTINGS: Required<Pick<SiteSettings,
     'title' | 'tagline' | 'contactEmail' | 'instagramUrl'
->> = {
+>> & Pick<SiteSettings, 'heroImageUrl' | 'portraitImageUrl' | 'calendlyUrl' | 'substackUrl'> = {
     title: 'Dreaming with Marisól',
     tagline: 'Spiritual Healing & Education',
     contactEmail: 'hello@example.com',
     instagramUrl: 'https://instagram.com/dreamingwithmarisol',
+    calendlyUrl: '',
+    heroImageUrl: '',
+    portraitImageUrl: '',
+    substackUrl: '',
 };
 
 export const DEFAULT_HOME_PAGE: Required<HomePageData> = {
@@ -136,6 +143,7 @@ export const DEFAULT_EVENTS: EventItem[] = [
         eventType: 'ceremony',
         description: 'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition.',
         price: 35,
+        imageUrl: '',
     },
     {
         _id: 'default-event-2',
@@ -146,6 +154,7 @@ export const DEFAULT_EVENTS: EventItem[] = [
         eventType: 'workshop',
         description: 'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing.',
         price: 120,
+        imageUrl: '',
     },
     {
         _id: 'default-event-3',
@@ -155,8 +164,73 @@ export const DEFAULT_EVENTS: EventItem[] = [
         location: 'Online via Zoom',
         eventType: 'online',
         description: 'A virtual gathering open to all with guided meditation and heart-to-heart plática.',
+        imageUrl: '',
     },
 ];
+
+export const DEFAULT_PRODUCTS: Product[] = [
+    {
+        _id: 'product-limpia-kit',
+        title: 'Limpia Ritual Kit',
+        category: 'physical',
+        description: 'A curated kit of herbs, copal incense, and ritual tools for at-home energetic cleansing.',
+        body: 'Use this kit to create a grounding ritual at home. Includes guidance card and cleansing prayer.',
+        features: ['Copal incense', 'Ritual herbs', 'Guidance card'],
+        price: 48,
+        imageUrl: '',
+        gallery: [],
+        storeUrl: '',
+        stripePaymentLink: '',
+    },
+    {
+        _id: 'product-ancestral-audio',
+        title: 'Ancestral Grounding Audio',
+        category: 'digital',
+        description: 'A 20-minute guided energetic reset meditation for daily grounding.',
+        body: 'Instant download after checkout. Perfect for mornings, transitions, or after emotionally heavy days.',
+        features: ['MP3 audio', 'Printable ritual prompt', 'Lifetime access'],
+        price: 18,
+        imageUrl: '',
+        gallery: [],
+        storeUrl: '',
+        stripePaymentLink: '',
+    },
+];
+
+export const DEFAULT_LEARNING_MODULES: VideoModule[] = [
+    {
+        _id: 'module-smoke-cleansing',
+        title: 'Smoke Cleansing Fundamentals',
+        duration: '18 min',
+        description: 'Learn the energetic intention, prayer structure, and respectful use of sacred smoke.',
+        thumbnailColor: 'bg-primary',
+        videoUrl: '',
+        productIds: ['product-limpia-kit'],
+    },
+    {
+        _id: 'module-protection-practice',
+        title: 'Daily Protection Practice',
+        duration: '24 min',
+        description: 'Build a practical daily ritual for grounding, spiritual boundaries, and energy hygiene.',
+        thumbnailColor: 'bg-secondary',
+        videoUrl: '',
+        productIds: ['product-ancestral-audio'],
+    },
+];
+
+export const DEFAULT_SITE_CONTENT: SiteContent = {
+    siteSettings: DEFAULT_SITE_SETTINGS,
+    homePage: DEFAULT_HOME_PAGE,
+    aboutPage: DEFAULT_ABOUT_PAGE,
+    inPersonService: DEFAULT_IN_PERSON_SERVICE,
+    onlineService: DEFAULT_ONLINE_SERVICE,
+    valuesPage: DEFAULT_VALUES_PAGE,
+    pricingPage: DEFAULT_PRICING_PAGE,
+    eventsPage: DEFAULT_EVENTS_PAGE,
+    events: DEFAULT_EVENTS,
+    learningModules: DEFAULT_LEARNING_MODULES,
+    products: DEFAULT_PRODUCTS,
+};
 
 export const NAV_LINKS = [
     { name: 'Home', path: '/' },
