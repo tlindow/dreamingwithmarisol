@@ -41,6 +41,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useContent() {
     const ctx = useContext(ContentContext);
     if (!ctx) {

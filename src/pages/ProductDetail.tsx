@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ShoppingBag, Download, Check, ShieldCheck, Zap } from 'lucide-react';
 import { useContent } from '../content/ContentContext';
