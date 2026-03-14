@@ -14,6 +14,7 @@ import Store from './pages/Store';
 import ProductDetail from './pages/ProductDetail';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
+import JourneyMockups from './pages/JourneyMockups';
 
 import { enableVisualEditing } from '@sanity/visual-editing';
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetail />} />
+            <Route path="/journeys-mockups" element={<JourneyMockups />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
