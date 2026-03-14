@@ -1,12 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ShoppingBag, Download, Check, ShieldCheck, Zap } from 'lucide-react';
-import { stegaClean } from '@sanity/client/stega';
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { PRODUCT_DETAIL_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { formatPrice } from '../lib/utils';
-import type { Product, PortableTextBlock } from '../lib/types';
 import './ProductDetail.css';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -15,24 +11,11 @@ const CATEGORY_LABELS: Record<string, string> = {
     bundle: 'Bundle',
 };
 
-function renderPortableText(blocks: PortableTextBlock[]): React.ReactElement[] {
-    return blocks.map((block) => {
-        if (block._type !== 'block') return <span key={block._key} />;
-        const text = block.children.map((child) => {
-            if (child.marks?.includes('strong')) return <strong key={child._key}>{child.text}</strong>;
-            if (child.marks?.includes('em')) return <em key={child._key}>{child.text}</em>;
-            return <span key={child._key}>{child.text}</span>;
-        });
-        if (block.style === 'h2') return <h2 key={block._key} className="pd-body-h2">{text}</h2>;
-        if (block.style === 'h3') return <h3 key={block._key} className="pd-body-h3">{text}</h3>;
-        return <p key={block._key} className="pd-body-p">{text}</p>;
-    });
-}
-
 const ProductDetail = () => {
     const { id } = useParams<{ id: string }>();
-    const params = useMemo(() => ({ id }), [id]);
-    const { data: product, isLoading } = useSanityQuery<Product>(PRODUCT_DETAIL_QUERY, params);
+    const { content } = useContent();
+    const product = useMemo(() => content.products.find((item) => item._id === id), [content.products, id]);
+    const isLoading = false;
     const [activeImage, setActiveImage] = useState(0);
 
     if (isLoading) {
@@ -62,18 +45,18 @@ const ProductDetail = () => {
         );
     }
 
-    const cleanCategory = stegaClean(product.category);
+    const cleanCategory = product.category;
     const categoryLabel = cleanCategory ? CATEGORY_LABELS[cleanCategory] : 'Curated Pick';
     const isDigital = cleanCategory === 'digital';
-    const purchaseUrl = stegaClean(product.stripePaymentLink) || stegaClean(product.storeUrl);
+    const purchaseUrl = product.stripePaymentLink || product.storeUrl;
 
     const allImages: { src: string; alt: string }[] = [];
-    if (product.image) {
-        allImages.push({ src: urlFor(product.image).width(800).height(800).url(), alt: product.title });
+    if (product.imageUrl) {
+        allImages.push({ src: product.imageUrl, alt: product.title });
     }
     if (product.gallery) {
         product.gallery.forEach((img, i) => {
-            allImages.push({ src: urlFor(img).width(800).height(800).url(), alt: `${product.title} — view ${i + 2}` });
+            allImages.push({ src: img, alt: `${product.title} — view ${i + 2}` });
         });
     }
 
@@ -201,7 +184,9 @@ const ProductDetail = () => {
                         <div className="pd-body-section">
                             <h2 className="pd-body-heading">About this product</h2>
                             <div className="pd-body-content">
-                                {renderPortableText(product.body)}
+                                {product.body.split('\n').filter(Boolean).map((paragraph, index) => (
+                                    <p key={index} className="pd-body-p">{paragraph}</p>
+                                ))}
                             </div>
                         </div>
                     )}

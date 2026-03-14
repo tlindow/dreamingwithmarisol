@@ -1,21 +1,12 @@
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { ABOUT_PAGE_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { DEFAULT_ABOUT_PAGE } from '../content/defaults';
-import type { AboutPageData, SiteSettings } from '../lib/types';
 import './About.css';
 
-interface AboutQueryResult {
-    settings: Pick<SiteSettings, 'portraitImage'> | null;
-    page: AboutPageData | null;
-}
-
 const About = () => {
-    const { data } = useSanityQuery<AboutQueryResult>(ABOUT_PAGE_QUERY);
+    const { content } = useContent();
 
-    const page = data?.page;
-    const portraitImage = data?.settings?.portraitImage;
-    const portraitImageUrl = portraitImage ? urlFor(portraitImage).url() : null;
+    const page = content.aboutPage;
+    const portraitImageUrl = content.siteSettings.portraitImageUrl ?? null;
 
     const pageTitle = page?.pageTitle ?? DEFAULT_ABOUT_PAGE.pageTitle;
     const bio = page?.bio ?? DEFAULT_ABOUT_PAGE.bio;
@@ -49,7 +40,7 @@ const About = () => {
                             <img src={portraitImageUrl} alt="Marisól" className="about-image" />
                         ) : (
                             <div className="image-placeholder">
-                                <span className="placeholder-text">Upload Portrait Image in Sanity</span>
+                                <span className="placeholder-text">Add portrait image URL in /content</span>
                             </div>
                         )}
                     </div>

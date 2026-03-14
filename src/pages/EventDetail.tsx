@@ -1,10 +1,6 @@
-import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { EVENT_DETAIL_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { formatPrice } from '../lib/utils';
-import type { EventItem } from '../lib/types';
 import './EventDetail.css';
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
@@ -39,8 +35,9 @@ function formatTimeRange(start: string, end?: string): string {
 
 const EventDetail = () => {
     const { id } = useParams<{ id: string }>();
-    const params = useMemo(() => ({ id }), [id]);
-    const { data: event, isLoading } = useSanityQuery<EventItem>(EVENT_DETAIL_QUERY, params);
+    const { content } = useContent();
+    const event = content.events.find((item) => item._id === id);
+    const isLoading = false;
 
     if (isLoading) {
         return (
@@ -70,10 +67,10 @@ const EventDetail = () => {
     }
 
     const typeLabel = EVENT_TYPE_LABELS[event.eventType] ?? event.eventType;
-    const flyerUrl = event.flyer
-        ? urlFor(event.flyer).width(1200).url()
-        : event.image
-            ? urlFor(event.image).width(1200).url()
+    const flyerUrl = event.flyerUrl
+        ? event.flyerUrl
+        : event.imageUrl
+            ? event.imageUrl
             : null;
     const longDescription = event.detailedDescription || event.description;
     const isFree = event.price == null || event.price === 0;

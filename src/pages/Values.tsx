@@ -1,11 +1,10 @@
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { VALUES_PAGE_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { DEFAULT_VALUES_PAGE } from '../content/defaults';
-import type { ValuesPageData } from '../lib/types';
 import './Values.css';
 
 const Values = () => {
-    const { data } = useSanityQuery<ValuesPageData>(VALUES_PAGE_QUERY);
+    const { content } = useContent();
+    const data = content.valuesPage;
 
     const pageTitle = data?.pageTitle ?? DEFAULT_VALUES_PAGE.pageTitle;
     const pageSubtitle = data?.pageSubtitle ?? DEFAULT_VALUES_PAGE.pageSubtitle;

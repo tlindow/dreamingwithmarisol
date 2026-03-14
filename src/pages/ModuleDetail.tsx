@@ -1,21 +1,19 @@
-import { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import ReactPlayer from 'react-player';
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { MODULE_DETAIL_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { formatPrice } from '../lib/utils';
 import { Button } from '../components/Button';
-import type { VideoModule } from '../lib/types';
 import './ModuleDetail.css';
 
 const Player = ReactPlayer as React.ComponentType<Record<string, unknown>>;
 
 const ModuleDetail = () => {
     const { id } = useParams<{ id: string }>();
-    const params = useMemo(() => ({ id }), [id]);
-    const { data: moduleFile, isLoading } = useSanityQuery<VideoModule>(MODULE_DETAIL_QUERY, params);
+    const { content } = useContent();
+    const moduleFile = content.learningModules.find((module) => module._id === id);
+    const moduleProducts = content.products.filter((product) => moduleFile?.productIds?.includes(product._id));
+    const isLoading = false;
 
     if (isLoading) {
         return (
@@ -76,17 +74,17 @@ const ModuleDetail = () => {
                             </p>
                         </div>
 
-                        {moduleFile.products && moduleFile.products.length > 0 && (
+                        {moduleProducts.length > 0 && (
                             <div className="module-kit-sidebar">
                                 <div className="bg-[var(--color-primary-light)] rounded-xl p-6 shadow-sm border border-[var(--color-primary)]/20">
                                     <h3 className="text-xl font-serif text-[var(--color-primary-dark)] mb-6 text-center">Required Materials Kit</h3>
                                     <div className="flex flex-col gap-6">
-                                        {moduleFile.products.map(product => (
+                                        {moduleProducts.map((product) => (
                                             <div key={product._id} className="kit-item flex flex-col gap-3 bg-white p-4 rounded-lg shadow-sm">
-                                                {product.image && (
+                                                {product.imageUrl && (
                                                     <div className="aspect-square w-full bg-[var(--color-primary-light)] rounded-md overflow-hidden flex items-center justify-center">
                                                         <img
-                                                            src={urlFor(product.image).width(400).height(400).url()}
+                                                            src={product.imageUrl}
                                                             alt={product.title}
                                                             className="w-full h-full object-cover"
                                                         />
@@ -97,7 +95,12 @@ const ModuleDetail = () => {
                                                     {product.price && <span className="text-[var(--color-primary-dark)] font-medium mb-2">{formatPrice(product.price)}</span>}
                                                     {product.description && <p className="text-sm text-[var(--color-text-light)] line-clamp-2 mb-4">{product.description}</p>}
 
-                                                    <a href={product.storeUrl} target="_blank" rel="noopener noreferrer" className="mt-auto">
+                                                    <a
+                                                        href={product.stripePaymentLink || product.storeUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="mt-auto"
+                                                    >
                                                         <button className="w-full py-2 px-4 bg-[var(--color-accent)] hover:bg-[#e0b02d] text-white font-medium rounded transition-colors flex items-center justify-center gap-2 text-sm shadow-sm">
                                                             Purchase Item <ExternalLink size={16} />
                                                         </button>

@@ -1,16 +1,9 @@
 import { Link } from 'react-router-dom';
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { EVENTS_PAGE_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { DEFAULT_EVENTS_PAGE, DEFAULT_EVENTS } from '../content/defaults';
 import { formatPrice } from '../lib/utils';
 import type { EventsPageData, EventItem } from '../lib/types';
 import './Events.css';
-
-interface EventsQueryResult {
-    page: EventsPageData | null;
-    events: EventItem[] | null;
-}
 
 const EVENT_TYPE_LABELS: Record<string, string> = {
     ceremony: 'Ceremony',
@@ -47,10 +40,10 @@ function isUpcoming(dateStr: string): boolean {
 }
 
 const Events = () => {
-    const { data } = useSanityQuery<EventsQueryResult>(EVENTS_PAGE_QUERY);
+    const { content } = useContent();
 
-    const page = data?.page;
-    const allEvents = data?.events ?? DEFAULT_EVENTS;
+    const page: EventsPageData = content.eventsPage;
+    const allEvents: EventItem[] = content.events ?? DEFAULT_EVENTS;
 
     const pageTitle = page?.pageTitle ?? DEFAULT_EVENTS_PAGE.pageTitle;
     const pageSubtitle = page?.pageSubtitle ?? DEFAULT_EVENTS_PAGE.pageSubtitle;
@@ -96,7 +89,7 @@ const Events = () => {
 };
 
 function EventCard({ event, isPast }: { event: EventItem; isPast?: boolean }) {
-    const imageUrl = event.image ? urlFor(event.image).width(600).height(400).url() : null;
+    const imageUrl = event.imageUrl ?? null;
     const typeLabel = EVENT_TYPE_LABELS[event.eventType] ?? event.eventType;
     const isFree = event.price == null || event.price === 0;
 

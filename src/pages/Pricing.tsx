@@ -1,11 +1,10 @@
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { PRICING_PAGE_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { formatPrice } from '../lib/utils';
 import { DEFAULT_PRICING_PAGE } from '../content/defaults';
-import type { PricingPageData } from '../lib/types';
 
 const Pricing = () => {
-    const { data } = useSanityQuery<PricingPageData>(PRICING_PAGE_QUERY);
+    const { content } = useContent();
+    const data = content.pricingPage;
 
     const pageTitle = data?.pageTitle ?? DEFAULT_PRICING_PAGE.pageTitle;
     const servicesList = data?.servicesList ?? DEFAULT_PRICING_PAGE.servicesList;

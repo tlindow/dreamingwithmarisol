@@ -1,23 +1,14 @@
 import { Button } from '../components/Button';
 import { Link } from 'react-router-dom';
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { HOME_PAGE_QUERY } from '../lib/queries';
+import { useContent } from '../content/ContentContext';
 import { DEFAULT_HOME_PAGE } from '../content/defaults';
-import type { HomePageData, SiteSettings } from '../lib/types';
 import './Home.css';
 
-interface HomeQueryResult {
-    settings: Pick<SiteSettings, 'heroImage'> | null;
-    page: HomePageData | null;
-}
-
 const Home = () => {
-    const { data, isLoading } = useSanityQuery<HomeQueryResult>(HOME_PAGE_QUERY);
+    const { content } = useContent();
 
-    const page = data?.page;
-    const heroImage = data?.settings?.heroImage;
-    const heroImageUrl = heroImage ? urlFor(heroImage).url() : null;
+    const page = content.homePage;
+    const heroImageUrl = content.siteSettings.heroImageUrl ?? null;
 
     const heroTitle = page?.heroTitle ?? DEFAULT_HOME_PAGE.heroTitle;
     const heroSubtitle = page?.heroSubtitle ?? DEFAULT_HOME_PAGE.heroSubtitle;
@@ -44,11 +35,11 @@ const Home = () => {
                     <div className="hero-image-wrapper">
                         {heroImageUrl ? (
                             <img src={heroImageUrl} alt="Marisól" className="hero-image" />
-                        ) : !isLoading ? (
+                        ) : (
                             <div className="image-placeholder">
-                                <span className="placeholder-text">Upload Hero Image in Sanity</span>
+                                <span className="placeholder-text">Add hero image URL in /content</span>
                             </div>
-                        ) : null}
+                        )}
                     </div>
                 </div>
             </section>

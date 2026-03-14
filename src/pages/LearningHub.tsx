@@ -1,14 +1,12 @@
 import './LearningHub.css';
 import { Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { LEARNING_HUB_QUERY } from '../lib/queries';
-import type { VideoModule } from '../lib/types';
+import { useContent } from '../content/ContentContext';
 
 const LearningHub = () => {
-    const { data: modules, isLoading } = useSanityQuery<VideoModule[]>(LEARNING_HUB_QUERY);
-
-    const items = modules ?? [];
+    const { content } = useContent();
+    const items = content.learningModules;
+    const isLoading = false;
 
     return (
         <div className="page-wrapper animate-fade-in">

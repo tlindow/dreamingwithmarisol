@@ -1,26 +1,19 @@
 import { Link } from 'react-router-dom';
 import { Button } from '../components/Button';
-import { useSanityQuery } from '../hooks/useSanityQuery';
+import { useContent } from '../content/ContentContext';
 import { useCalendlyEmbed } from '../hooks/useCalendlyEmbed';
 import { useCalendlyAvailability } from '../hooks/useCalendlyAvailability';
-import { ONLINE_HEALINGS_QUERY } from '../lib/queries';
 import { formatPrice } from '../lib/utils';
 import { DEFAULT_ONLINE_SERVICE, DEFAULT_SITE_SETTINGS } from '../content/defaults';
-import type { ServiceData, SiteSettings } from '../lib/types';
 import './Healings.css';
 
-interface OnlineHealingsQueryResult {
-    settings: Pick<SiteSettings, 'calendlyUrl' | 'contactEmail'> | null;
-    service: ServiceData | null;
-}
-
 const OnlineHealings = () => {
-    const { data, isLoading: settingsLoading } = useSanityQuery<OnlineHealingsQueryResult>(ONLINE_HEALINGS_QUERY);
+    const { content } = useContent();
 
-    const calendlyUrl = data?.settings?.calendlyUrl ?? null;
-    const contactEmail = data?.settings?.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail;
+    const calendlyUrl = content.siteSettings.calendlyUrl ?? null;
+    const contactEmail = content.siteSettings.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail;
 
-    const svc = data?.service;
+    const svc = content.onlineService;
     const serviceTitle = svc?.title ?? DEFAULT_ONLINE_SERVICE.title;
     const pageTitle = svc?.pageTitle ?? DEFAULT_ONLINE_SERVICE.pageTitle;
     const pageSubtitle = svc?.pageSubtitle ?? DEFAULT_ONLINE_SERVICE.pageSubtitle;
@@ -37,7 +30,7 @@ const OnlineHealings = () => {
 
     const { status: availabilityStatus } = useCalendlyAvailability(calendlyUrl);
 
-    const settingsLoaded = !settingsLoading;
+    const settingsLoaded = true;
 
     const showBooking =
         availabilityStatus === 'available' ||

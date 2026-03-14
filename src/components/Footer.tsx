@@ -1,19 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Instagram } from 'lucide-react';
-import { useSanityQuery } from '../hooks/useSanityQuery';
+import { useContent } from '../content/ContentContext';
 import { DEFAULT_SITE_SETTINGS } from '../content/defaults';
-import type { SiteSettings } from '../lib/types';
 import './Footer.css';
 
-const FOOTER_SETTINGS_QUERY = `*[_type == "siteSettings"][0]{ title, tagline, instagramUrl, substackUrl }`;
-
 export const Footer = () => {
-    const { data } = useSanityQuery<Pick<SiteSettings, 'title' | 'tagline' | 'instagramUrl' | 'substackUrl'>>(FOOTER_SETTINGS_QUERY);
+    const { content } = useContent();
 
-    const siteTitle = data?.title ?? DEFAULT_SITE_SETTINGS.title;
-    const tagline = data?.tagline ?? DEFAULT_SITE_SETTINGS.tagline;
-    const instagramUrl = data?.instagramUrl ?? DEFAULT_SITE_SETTINGS.instagramUrl;
-    const substackUrl = data?.substackUrl ?? null;
+    const siteTitle = content.siteSettings.title ?? DEFAULT_SITE_SETTINGS.title;
+    const tagline = content.siteSettings.tagline ?? DEFAULT_SITE_SETTINGS.tagline;
+    const instagramUrl = content.siteSettings.instagramUrl ?? DEFAULT_SITE_SETTINGS.instagramUrl;
+    const substackUrl = content.siteSettings.substackUrl ?? null;
 
     return (
         <footer className="footer section">

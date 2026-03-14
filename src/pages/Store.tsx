@@ -1,10 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ShoppingBag, Star, Download, ArrowRight } from 'lucide-react';
-import { stegaClean } from '@sanity/client/stega';
-import { urlFor } from '../sanityClient';
-import { useSanityQuery } from '../hooks/useSanityQuery';
-import { STORE_QUERY } from '../lib/queries';
-import type { Product } from '../lib/types';
+import { useContent } from '../content/ContentContext';
 import './Store.css';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -17,9 +13,9 @@ const formatProductPrice = (price: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 
 const Store = () => {
-    const { data: products, isLoading } = useSanityQuery<Product[]>(STORE_QUERY);
-
-    const items = products ?? [];
+    const { content } = useContent();
+    const items = content.products ?? [];
+    const isLoading = false;
 
     return (
         <div className="page-wrapper animate-fade-in">
@@ -41,7 +37,7 @@ const Store = () => {
                     ) : items.length > 0 ? (
                         <div className="product-grid">
                             {items.map((product) => {
-                                const cleanCategory = stegaClean(product.category);
+                                const cleanCategory = product.category;
                                 const categoryLabel = cleanCategory
                                     ? CATEGORY_LABELS[cleanCategory]
                                     : 'Curated Pick';
@@ -54,9 +50,9 @@ const Store = () => {
                                         className="product-card"
                                     >
                                         <div className="product-card__image-wrap">
-                                            {product.image ? (
+                                            {product.imageUrl ? (
                                                 <img
-                                                    src={urlFor(product.image).width(500).height(500).url()}
+                                                    src={product.imageUrl}
                                                     alt={product.title}
                                                     className="product-card__image"
                                                 />
