@@ -72,11 +72,11 @@ export default defineType({
         }),
         defineField({
             name: 'cancellationPolicy',
-            title: 'Cancellation Policy',
+            title: 'Rescheduling Policy',
             type: 'text',
             rows: 4,
             initialValue:
-                'Please provide at least 24 hours notice for cancellations or rescheduling. Cancellations made within 24 hours of the appointment time will incur a 50% fee. No-calls/no-shows are charged the full session amount.',
+                'Life happens — to all of us. Sometimes you need to reschedule, sometimes I do, and there\'s no shame in that. All I ask is that you let me know as soon as you can and do something small to make it right — even just sending a quick dollar amount via Apple Pay. We communicate, we figure it out, and we move forward.',
         }),
         defineField({
             name: 'refundsPolicy',

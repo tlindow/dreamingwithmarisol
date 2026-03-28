@@ -190,7 +190,7 @@ async function sync() {
             },
         ],
         cancellationPolicy:
-            'Your time is valuable, and so is mine. Please provide at least 24 hours notice for cancellations or rescheduling. Cancellations made within 24 hours of the appointment time will incur a 50% fee. No-calls/no-shows are charged the full session amount.',
+            'Life happens — to all of us. Sometimes you need to reschedule, sometimes I do, and there\'s no shame in that. All I ask is that you let me know as soon as you can and do something small to make it right — even just sending a quick dollar amount via Apple Pay. We communicate, we figure it out, and we move forward.',
         refundsPolicy:
             'All healing sessions are final sale. No refunds are provided after the service has been rendered. If you are unsatisfied, please bring it up during our plática.',
     })
@@ -212,7 +212,7 @@ async function sync() {
         whatToExpect:
             'We begin with a brief plática (heart-to-heart talk) to set intentions. The cleansing involves sweeping the body with herbs and using localized energetic clearing techniques. Please wear comfortable, light-colored clothing.',
         cancellationPolicy:
-            'Please provide at least 24 hours notice for cancellations or rescheduling. Cancellations made within 24 hours of the appointment time will incur a 50% fee. No-calls/no-shows are charged the full session amount.',
+            'Life happens — to all of us. Sometimes you need to reschedule, sometimes I do, and there\'s no shame in that. All I ask is that you let me know as soon as you can and do something small to make it right — even just sending a quick dollar amount via Apple Pay. We communicate, we figure it out, and we move forward.',
         refundsPolicy:
             'All healing sessions are final sale. No refunds are provided after the service has been rendered.',
         preparationText:
@@ -236,7 +236,7 @@ async function sync() {
         whatToExpect:
             'We begin with a virtual plática to set intentions and connect energetically. The session includes guided breathwork, energetic clearing techniques, and a closing meditation. Please find a quiet, private space and have a candle or glass of water nearby.',
         cancellationPolicy:
-            'Please provide at least 24 hours notice for cancellations or rescheduling. Cancellations made within 24 hours of the appointment time will incur a 50% fee. No-calls/no-shows are charged the full session amount.',
+            'Life happens — to all of us. Sometimes you need to reschedule, sometimes I do, and there\'s no shame in that. All I ask is that you let me know as soon as you can and do something small to make it right — even just sending a quick dollar amount via Apple Pay. We communicate, we figure it out, and we move forward.',
         refundsPolicy:
             'All healing sessions are final sale. No refunds are provided after the service has been rendered.',
         preparationText:

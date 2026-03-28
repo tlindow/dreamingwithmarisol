@@ -223,7 +223,7 @@ const OnlineHealings = () => {
 
                     <div className="healings-sidebar">
                         <div className="policy-card">
-                            <h3>Cancellation Policy</h3>
+                            <h3>Rescheduling</h3>
                             <p>{cancellationPolicy}</p>
                         </div>
                         <div className="policy-card">

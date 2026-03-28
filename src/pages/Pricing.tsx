@@ -29,7 +29,7 @@ const Pricing = () => {
                             ))}
                         </ul>
 
-                        <h2 style={{ fontFamily: 'var(--font-secondary)', color: 'var(--color-secondary)' }}>Cancellation Policy</h2>
+                        <h2 style={{ fontFamily: 'var(--font-secondary)', color: 'var(--color-secondary)' }}>Rescheduling</h2>
                         <p>{cancellationPolicy}</p>
 
                         <h2 style={{ fontFamily: 'var(--font-secondary)', color: 'var(--color-secondary)', marginTop: 'var(--spacing-xl)' }}>Refunds</h2>
