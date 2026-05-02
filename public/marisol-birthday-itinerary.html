@@ -11,6 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <style>
       :root {
         --color-primary: #e6e2d3;
@@ -323,7 +324,7 @@
         <button class="secondary" type="button" onclick="window.history.length > 1 ? window.history.back() : window.location.assign('/')">
           ← Back
         </button>
-        <button type="button" onclick="window.print()">Save as PDF</button>
+        <button id="save-image" type="button">Save as Image</button>
       </div>
 
       <article class="card">
@@ -360,23 +361,37 @@
           </div>
 
           <div class="item">
-            <div class="time">8:30<span class="ampm">AM</span></div>
+            <div class="time">8:00<span class="ampm">AM</span></div>
             <div class="activity">
-              <h3>Vanilla lattes &amp; a slow start</h3>
-              <p class="where">
-                <strong>Communal Coffee</strong> · North Park
-              </p>
+              <h3>Settle in &amp; vanilla lattes at home</h3>
+              <p class="where">Home base</p>
               <p>
-                A sun-filled room with long communal tables — easy to spread out,
-                catch up, and ease into the day. Order Marisól's usual vanilla
-                latte and linger.
+                Drop Ylianna's bag, brew vanilla lattes, and ease into the
+                morning. Light bites only — brunch is the real meal.
               </p>
-              <span class="tag">Cafe · Vanilla latte</span>
+              <span class="tag">Slow morning</span>
             </div>
           </div>
 
           <div class="item">
-            <div class="time">10:00<span class="ampm">AM</span></div>
+            <div class="time">10:30<span class="ampm">AM</span></div>
+            <div class="activity">
+              <h3>Birthday brunch</h3>
+              <p class="where">
+                <strong>Morning Glory</strong> · Little Italy
+              </p>
+              <p>
+                A proper sit-down brunch in the pastel-pink dining room — roomy
+                enough to spread out and a full espresso bar so Marisól can
+                pair her meal with a vanilla latte. Order a few things to share
+                and pace it slow; this covers lunch too.
+              </p>
+              <span class="tag">Brunch · Vanilla latte</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="time">12:30<span class="ampm">PM</span></div>
             <div class="activity">
               <h3>Seals &amp; sea lions at La Jolla Cove</h3>
               <p class="where">
@@ -386,24 +401,9 @@
                 Animals without the zoo. Walk the bluff path between the Cove
                 and the Children's Pool to watch the harbor seals and sea lions
                 lounging on the rocks. Bring layers — the marine breeze cuts
-                even on warm mornings.
+                even on warm afternoons.
               </p>
               <span class="tag">Outdoors · Wildlife</span>
-            </div>
-          </div>
-
-          <div class="item">
-            <div class="time">12:30<span class="ampm">PM</span></div>
-            <div class="activity">
-              <h3>Lunch in the village</h3>
-              <p class="where">
-                <strong>La Jolla</strong> · pick a spot before heading back
-              </p>
-              <p>
-                Keep it light — dinner at Azuki is the main event. A salad,
-                ceviche, or shareable plates with an ocean view will do nicely.
-              </p>
-              <span class="tag">Light lunch</span>
             </div>
           </div>
 
@@ -512,5 +512,49 @@
         <p class="footer">With love, for Marisól ✦</p>
       </article>
     </div>
+    <script>
+      (function () {
+        const button = document.getElementById('save-image');
+        const card = document.querySelector('.card');
+        if (!button || !card) return;
+
+        button.addEventListener('click', async () => {
+          if (typeof html2canvas !== 'function') {
+            alert('Image library is still loading — please try again in a moment.');
+            return;
+          }
+
+          const original = button.textContent;
+          button.disabled = true;
+          button.textContent = 'Rendering…';
+
+          try {
+            if (document.fonts && document.fonts.ready) {
+              await document.fonts.ready;
+            }
+
+            const canvas = await html2canvas(card, {
+              scale: window.devicePixelRatio > 1 ? window.devicePixelRatio : 2,
+              backgroundColor: '#f4f3ef',
+              useCORS: true,
+              logging: false,
+            });
+
+            const link = document.createElement('a');
+            link.download = 'marisol-birthday-itinerary.png';
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } catch (err) {
+            console.error('Image export failed', err);
+            alert('Sorry — image export failed. See the console for details.');
+          } finally {
+            button.disabled = false;
+            button.textContent = original;
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
