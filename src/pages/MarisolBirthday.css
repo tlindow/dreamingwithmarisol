@@ -105,14 +105,20 @@
     padding: var(--spacing-md) var(--spacing-xl);
     border-radius: var(--radius-full);
     font-family: var(--font-primary);
+    font-size: 1rem;
     font-weight: 500;
     letter-spacing: 0.05em;
     transition: background-color 0.2s ease;
 }
 
-.birthday-download:hover {
+.birthday-download:hover:not(:disabled) {
     background-color: var(--color-text-main);
     color: var(--color-primary-light);
+}
+
+.birthday-download:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 @media (max-width: 600px) {

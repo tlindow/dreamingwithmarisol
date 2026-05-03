@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import './MarisolBirthday.css';
 
 const ITINERARY = [
@@ -18,7 +19,63 @@ const ITINERARY = [
     },
 ];
 
+const SVG_WIDTH = 1080;
+const SVG_HEIGHT = 1350;
+const PNG_SCALE = 2;
+
+const downloadPng = async () => {
+    const res = await fetch('/marisol-birthday.svg');
+    const svgText = await res.text();
+    const svgBlob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+    const svgUrl = URL.createObjectURL(svgBlob);
+
+    try {
+        const img = new Image();
+        img.decoding = 'async';
+        await new Promise<void>((resolve, reject) => {
+            img.onload = () => resolve();
+            img.onerror = () => reject(new Error('Failed to load SVG'));
+            img.src = svgUrl;
+        });
+
+        const canvas = document.createElement('canvas');
+        canvas.width = SVG_WIDTH * PNG_SCALE;
+        canvas.height = SVG_HEIGHT * PNG_SCALE;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Canvas context unavailable');
+        ctx.scale(PNG_SCALE, PNG_SCALE);
+        ctx.drawImage(img, 0, 0, SVG_WIDTH, SVG_HEIGHT);
+
+        const pngBlob: Blob = await new Promise((resolve, reject) => {
+            canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob failed'))), 'image/png');
+        });
+
+        const pngUrl = URL.createObjectURL(pngBlob);
+        const a = document.createElement('a');
+        a.href = pngUrl;
+        a.download = 'marisol-birthday.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(pngUrl);
+    } finally {
+        URL.revokeObjectURL(svgUrl);
+    }
+};
+
 const MarisolBirthday = () => {
+    const [busy, setBusy] = useState(false);
+
+    const handleDownload = async () => {
+        if (busy) return;
+        setBusy(true);
+        try {
+            await downloadPng();
+        } finally {
+            setBusy(false);
+        }
+    };
+
     return (
         <div className="page-wrapper animate-fade-in">
             <section className="section bg-primary-light">
@@ -42,13 +99,14 @@ const MarisolBirthday = () => {
 
                         <p className="birthday-footer">happy birthday, Marisol</p>
 
-                        <a
-                            href="/marisol-birthday.svg"
-                            download="marisol-birthday.svg"
+                        <button
+                            type="button"
                             className="birthday-download"
+                            onClick={handleDownload}
+                            disabled={busy}
                         >
-                            Download image
-                        </a>
+                            {busy ? 'Preparing…' : 'Download image'}
+                        </button>
                     </div>
                 </div>
             </section>
