@@ -9,13 +9,13 @@ const ITINERARY = [
     },
     {
         time: 'Afternoon',
-        title: 'Bookstore browse',
-        detail: 'then Garden Coffee in Old Town',
+        title: 'Coffee & Tea Collective',
+        detail: '+ Catapult Books',
     },
     {
         time: 'Evening',
-        title: 'Dinner at Azuki',
-        detail: '',
+        title: 'Dinner at Mokkoji',
+        detail: '6:15 PM',
     },
 ];
 

@@ -39,8 +39,8 @@
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">2</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">AFTERNOON</text>
-    <text class="serif text-dark" x="90" y="62" font-size="42">Bookstore browse</text>
-    <text class="serif text-dark" x="90" y="112" font-size="42">+ Garden Coffee, Old Town</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42">Coffee &amp; Tea Collective</text>
+    <text class="serif text-dark" x="90" y="112" font-size="42">+ Catapult Books</text>
   </g>
   <line class="border" x1="140" y1="850" x2="940" y2="850"/>
 
@@ -48,7 +48,8 @@
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">3</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">EVENING</text>
-    <text class="serif text-dark" x="90" y="62" font-size="42">Dinner at Azuki</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42">Dinner at Mokkoji</text>
+    <text class="serif text-light" x="90" y="100" font-size="28" font-style="italic">6:15 PM</text>
   </g>
 
   <g aria-label="bee">
