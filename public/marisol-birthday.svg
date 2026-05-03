@@ -39,12 +39,11 @@
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">2</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">AFTERNOON</text>
-    <text class="serif text-dark" x="90" y="62" font-size="42">Coffee &amp; Tea Collective</text>
-    <text class="serif text-dark" x="90" y="112" font-size="42">+ Catapult Books</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42" font-style="italic">Free time</text>
   </g>
-  <line class="border" x1="140" y1="850" x2="940" y2="850"/>
+  <line class="border" x1="140" y1="800" x2="940" y2="800"/>
 
-  <g transform="translate(140, 910)">
+  <g transform="translate(140, 860)">
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">3</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">EVENING</text>

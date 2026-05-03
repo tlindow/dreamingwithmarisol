@@ -9,8 +9,8 @@ const ITINERARY = [
     },
     {
         time: 'Afternoon',
-        title: 'Coffee & Tea Collective',
-        detail: '+ Catapult Books',
+        title: 'Free time',
+        detail: '',
     },
     {
         time: 'Evening',
