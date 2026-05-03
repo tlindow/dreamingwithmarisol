@@ -12,6 +12,9 @@
       .serif { font-family: 'Playfair Display', 'Georgia', serif; }
       .sans { font-family: 'Outfit', 'Inter', 'Helvetica', sans-serif; }
     </style>
+    <clipPath id="bee-body-clip">
+      <ellipse cx="540" cy="1210" rx="28" ry="36"/>
+    </clipPath>
   </defs>
 
   <rect class="bg" width="1080" height="1350"/>
@@ -26,7 +29,7 @@
 
   <g transform="translate(140, 520)">
     <circle class="gold" cx="30" cy="30" r="30"/>
-    <text class="serif" x="30" y="44" font-size="32" text-anchor="middle" fill="#f4f3ef">1</text>
+    <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">1</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">MORNING</text>
     <text class="serif text-dark" x="90" y="62" font-size="42">Brunch at Madi&#8217;s</text>
   </g>
@@ -34,7 +37,7 @@
 
   <g transform="translate(140, 690)">
     <circle class="gold" cx="30" cy="30" r="30"/>
-    <text class="serif" x="30" y="44" font-size="32" text-anchor="middle" fill="#f4f3ef">2</text>
+    <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">2</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">AFTERNOON</text>
     <text class="serif text-dark" x="90" y="62" font-size="42">Bookstore browse</text>
     <text class="serif text-dark" x="90" y="112" font-size="42">+ Garden Coffee, Old Town</text>
@@ -43,11 +46,30 @@
 
   <g transform="translate(140, 910)">
     <circle class="gold" cx="30" cy="30" r="30"/>
-    <text class="serif" x="30" y="44" font-size="32" text-anchor="middle" fill="#f4f3ef">3</text>
+    <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">3</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">EVENING</text>
     <text class="serif text-dark" x="90" y="62" font-size="42">Dinner at Azuki</text>
   </g>
 
-  <line class="accent-line" x1="460" y1="1170" x2="620" y2="1170"/>
-  <text class="serif olive" x="540" y="1230" font-size="36" font-style="italic" text-anchor="middle">happy birthday, Marisol</text>
+  <g aria-label="bee">
+    <ellipse cx="515" cy="1180" rx="26" ry="16" fill="#f4f3ef" stroke="#4a5d23" stroke-width="2.5" opacity="0.85" transform="rotate(-28 515 1180)"/>
+    <ellipse cx="565" cy="1180" rx="26" ry="16" fill="#f4f3ef" stroke="#4a5d23" stroke-width="2.5" opacity="0.85" transform="rotate(28 565 1180)"/>
+
+    <path d="M 533 1170 Q 526 1158 522 1150" stroke="#2d2a26" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="522" cy="1150" r="3.5" fill="#2d2a26"/>
+    <path d="M 547 1170 Q 554 1158 558 1150" stroke="#2d2a26" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="558" cy="1150" r="3.5" fill="#2d2a26"/>
+
+    <circle cx="540" cy="1175" r="13" fill="#2d2a26"/>
+
+    <ellipse cx="540" cy="1210" rx="28" ry="36" fill="#f2aa4c" stroke="#2d2a26" stroke-width="3"/>
+
+    <g clip-path="url(#bee-body-clip)">
+      <rect x="510" y="1188" width="60" height="9" fill="#2d2a26"/>
+      <rect x="510" y="1208" width="60" height="9" fill="#2d2a26"/>
+      <rect x="510" y="1228" width="60" height="9" fill="#2d2a26"/>
+    </g>
+
+    <polygon points="540,1252 533,1244 547,1244" fill="#2d2a26"/>
+  </g>
 </svg>

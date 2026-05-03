@@ -97,7 +97,27 @@ const MarisolBirthday = () => {
                             ))}
                         </ol>
 
-                        <p className="birthday-footer">happy birthday, Marisol</p>
+                        <div className="birthday-bee" aria-hidden="true">
+                            <svg viewBox="0 0 100 130" width="80" height="104">
+                                <ellipse cx="35" cy="55" rx="26" ry="16" fill="#f4f3ef" stroke="#4a5d23" strokeWidth="2.5" opacity="0.85" transform="rotate(-28 35 55)"/>
+                                <ellipse cx="65" cy="55" rx="26" ry="16" fill="#f4f3ef" stroke="#4a5d23" strokeWidth="2.5" opacity="0.85" transform="rotate(28 65 55)"/>
+                                <path d="M 43 45 Q 36 33 32 25" stroke="#2d2a26" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                                <circle cx="32" cy="25" r="3.5" fill="#2d2a26"/>
+                                <path d="M 57 45 Q 64 33 68 25" stroke="#2d2a26" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
+                                <circle cx="68" cy="25" r="3.5" fill="#2d2a26"/>
+                                <circle cx="50" cy="50" r="13" fill="#2d2a26"/>
+                                <ellipse cx="50" cy="85" rx="28" ry="36" fill="#f2aa4c" stroke="#2d2a26" strokeWidth="3"/>
+                                <clipPath id="bee-body-clip-page">
+                                    <ellipse cx="50" cy="85" rx="28" ry="36"/>
+                                </clipPath>
+                                <g clipPath="url(#bee-body-clip-page)">
+                                    <rect x="20" y="63" width="60" height="9" fill="#2d2a26"/>
+                                    <rect x="20" y="83" width="60" height="9" fill="#2d2a26"/>
+                                    <rect x="20" y="103" width="60" height="9" fill="#2d2a26"/>
+                                </g>
+                                <polygon points="50,127 43,119 57,119" fill="#2d2a26"/>
+                            </svg>
+                        </div>
 
                         <button
                             type="button"

@@ -90,11 +90,9 @@
     margin-top: var(--spacing-xs);
 }
 
-.birthday-footer {
-    font-family: var(--font-secondary);
-    font-style: italic;
-    color: var(--color-secondary);
-    font-size: 1.4rem;
+.birthday-bee {
+    display: flex;
+    justify-content: center;
     margin-bottom: var(--spacing-xl);
 }
 
