@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <style>
+      .bg { fill: #e6e2d3; }
+      .card { fill: #f4f3ef; }
+      .olive { fill: #4a5d23; }
+      .gold { fill: #f2aa4c; }
+      .text-dark { fill: #2d2a26; }
+      .text-light { fill: #6a655c; }
+      .border { stroke: #dcd7c9; stroke-width: 1.5; fill: none; }
+      .accent-line { stroke: #f2aa4c; stroke-width: 4; }
+      .serif { font-family: 'Playfair Display', 'Georgia', serif; }
+      .sans { font-family: 'Outfit', 'Inter', 'Helvetica', sans-serif; }
+    </style>
+    <clipPath id="bee-body-clip">
+      <ellipse cx="540" cy="1210" rx="28" ry="36"/>
+    </clipPath>
+  </defs>
+
+  <rect class="bg" width="1080" height="1350"/>
+  <rect class="card" x="60" y="60" width="960" height="1230" rx="24" ry="24"/>
+  <rect class="border" x="60" y="60" width="960" height="1230" rx="24" ry="24"/>
+
+  <text class="sans text-light" x="540" y="170" font-size="28" letter-spacing="8" text-anchor="middle">MAY 5, 2026</text>
+  <line class="accent-line" x1="460" y1="200" x2="620" y2="200"/>
+
+  <text class="serif olive" x="540" y="310" font-size="84" font-style="italic" text-anchor="middle">Marisol&#8217;s</text>
+  <text class="serif olive" x="540" y="400" font-size="84" font-style="italic" text-anchor="middle">Birthday</text>
+
+  <g transform="translate(140, 520)">
+    <circle class="gold" cx="30" cy="30" r="30"/>
+    <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">1</text>
+    <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">MORNING</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42">Brunch at Madi&#8217;s</text>
+  </g>
+  <line class="border" x1="140" y1="630" x2="940" y2="630"/>
+
+  <g transform="translate(140, 690)">
+    <circle class="gold" cx="30" cy="30" r="30"/>
+    <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">2</text>
+    <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">AFTERNOON</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42" font-style="italic">Free time</text>
+  </g>
+  <line class="border" x1="140" y1="800" x2="940" y2="800"/>
+
+  <g transform="translate(140, 860)">
+    <circle class="gold" cx="30" cy="30" r="30"/>
+    <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">3</text>
+    <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">EVENING</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42">Dinner at Mokkoji</text>
+    <text class="serif text-light" x="90" y="100" font-size="28" font-style="italic">6:15 PM</text>
+  </g>
+
+  <g aria-label="bee">
+    <ellipse cx="515" cy="1180" rx="26" ry="16" fill="#f4f3ef" stroke="#4a5d23" stroke-width="2.5" opacity="0.85" transform="rotate(-28 515 1180)"/>
+    <ellipse cx="565" cy="1180" rx="26" ry="16" fill="#f4f3ef" stroke="#4a5d23" stroke-width="2.5" opacity="0.85" transform="rotate(28 565 1180)"/>
+
+    <path d="M 533 1170 Q 526 1158 522 1150" stroke="#2d2a26" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="522" cy="1150" r="3.5" fill="#2d2a26"/>
+    <path d="M 547 1170 Q 554 1158 558 1150" stroke="#2d2a26" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <circle cx="558" cy="1150" r="3.5" fill="#2d2a26"/>
+
+    <circle cx="540" cy="1175" r="13" fill="#2d2a26"/>
+
+    <ellipse cx="540" cy="1210" rx="28" ry="36" fill="#f2aa4c" stroke="#2d2a26" stroke-width="3"/>
+
+    <g clip-path="url(#bee-body-clip)">
+      <rect x="510" y="1188" width="60" height="9" fill="#2d2a26"/>
+      <rect x="510" y="1208" width="60" height="9" fill="#2d2a26"/>
+      <rect x="510" y="1228" width="60" height="9" fill="#2d2a26"/>
+    </g>
+
+    <polygon points="540,1252 533,1244 547,1244" fill="#2d2a26"/>
+  </g>
+</svg>
