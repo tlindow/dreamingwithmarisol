@@ -8,6 +8,11 @@ const ITINERARY = [
         detail: '',
     },
     {
+        time: 'Midday',
+        title: 'Thrifting in Northpark',
+        detail: '',
+    },
+    {
         time: 'Afternoon',
         title: 'Free time',
         detail: '',
