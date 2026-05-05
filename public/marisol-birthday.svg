@@ -39,19 +39,20 @@
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">2</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">MIDDAY</text>
-    <text class="serif text-dark" x="90" y="62" font-size="42">Thrifting in Northpark</text>
+    <text class="serif text-dark" x="90" y="62" font-size="42">Thrift stores &amp; boutiques</text>
+    <text class="serif text-light" x="90" y="100" font-size="28" font-style="italic">Northpark</text>
   </g>
-  <line class="border" x1="140" y1="770" x2="940" y2="770"/>
+  <line class="border" x1="140" y1="800" x2="940" y2="800"/>
 
-  <g transform="translate(140, 810)">
+  <g transform="translate(140, 840)">
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">3</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">AFTERNOON</text>
     <text class="serif text-dark" x="90" y="62" font-size="42" font-style="italic">Free time</text>
   </g>
-  <line class="border" x1="140" y1="920" x2="940" y2="920"/>
+  <line class="border" x1="140" y1="950" x2="940" y2="950"/>
 
-  <g transform="translate(140, 960)">
+  <g transform="translate(140, 990)">
     <circle class="gold" cx="30" cy="30" r="30"/>
     <text class="serif" x="30" y="30" font-size="32" text-anchor="middle" dominant-baseline="central" fill="#f4f3ef">4</text>
     <text class="sans text-light" x="90" y="22" font-size="22" letter-spacing="3">EVENING</text>

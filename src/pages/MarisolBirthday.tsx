@@ -9,8 +9,8 @@ const ITINERARY = [
     },
     {
         time: 'Midday',
-        title: 'Thrifting in Northpark',
-        detail: '',
+        title: 'Thrift stores & boutiques',
+        detail: 'Northpark',
     },
     {
         time: 'Afternoon',
