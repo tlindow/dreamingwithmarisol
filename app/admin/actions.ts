@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { put } from '@vercel/blob'
-import { adminPassword, endAdminSession, isAdmin, passwordsMatch, startAdminSession } from '@/lib/admin-auth'
+import { endAdminSession, isAdmin } from '@/lib/admin-auth'
 import { hasBlobToken } from '@/lib/blob-store'
 import {
   dollarsToCents,
@@ -22,15 +22,6 @@ export type FormState = { ok?: boolean; error?: string } | null
 async function requireAdmin(): Promise<FormState | null> {
   if (await isAdmin()) return null
   return { error: 'Log in again.' }
-}
-
-export async function loginAction(formData: FormData) {
-  const expected = adminPassword()
-  if (!expected) redirect('/admin')
-  const password = String(formData.get('password') || '')
-  if (!passwordsMatch(password, expected)) redirect('/admin?error=1')
-  await startAdminSession()
-  redirect('/admin')
 }
 
 export async function logoutAction() {

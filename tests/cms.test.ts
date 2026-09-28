@@ -3,7 +3,8 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import test from 'node:test'
-import { createSession, passwordsMatch, verifySession } from '../lib/admin-auth.ts'
+import { stytchConfigured } from '../lib/admin-auth.ts'
+import { authenticateOtp, baseUrlFor, toE164 } from '../lib/stytch.ts'
 import {
   defaultDocument,
   dollarsToCents,
@@ -15,14 +16,28 @@ import {
   toPageCopy,
 } from '../lib/content-store.ts'
 
-test('passwords and sessions', () => {
-  assert.equal(passwordsMatch('secret-password', 'secret-password'), true)
-  assert.equal(passwordsMatch('nope', 'secret-password'), false)
-  const token = createSession('secret-password', 1_000)
-  assert.equal(verifySession(token, 'secret-password', 1_000), true)
-  assert.equal(verifySession(token, 'other-password', 1_000), false)
-  assert.equal(verifySession(token, 'secret-password', 1_000 + 20 * 24 * 60 * 60 * 1000), false)
-  assert.equal(verifySession('not-a-token', 'secret-password'), false)
+test('phone sign-in checks the number and the code before calling Stytch', async () => {
+  assert.equal(toE164('(619) 555-0100'), '+16195550100')
+  assert.equal(toE164('16195550100'), '+16195550100')
+  assert.throws(() => toE164('555'), /10-digit US phone number/)
+  assert.equal(baseUrlFor('project-test-abc'), 'https://test.stytch.com')
+  assert.equal(baseUrlFor('project-live-abc'), 'https://api.stytch.com')
+  await assert.rejects(() => authenticateOtp('phone-test-id', '12345'), /6-digit code/)
+
+  const previousProject = process.env.STYTCH_PROJECT_ID
+  const previousSecret = process.env.STYTCH_SECRET
+  process.env.STYTCH_PROJECT_ID = 'project-test-abc'
+  process.env.STYTCH_SECRET = 'secret-test'
+  try {
+    assert.equal(stytchConfigured(), true)
+    delete process.env.STYTCH_SECRET
+    assert.equal(stytchConfigured(), false)
+  } finally {
+    if (previousProject === undefined) delete process.env.STYTCH_PROJECT_ID
+    else process.env.STYTCH_PROJECT_ID = previousProject
+    if (previousSecret === undefined) delete process.env.STYTCH_SECRET
+    else process.env.STYTCH_SECRET = previousSecret
+  }
 })
 
 test('saved copy overrides a page and keeps the other pages', () => {

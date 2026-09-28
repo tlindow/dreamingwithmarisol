@@ -11,7 +11,7 @@ npm run dev
 
 The site runs at [http://localhost:5173](http://localhost:5173). The editor is at [http://localhost:5173/admin](http://localhost:5173/admin).
 
-Copy `.env.example` to `.env.local`. Leave values empty until you have them. Do not commit real keys. Set `ADMIN_PASSWORD` before logging in.
+Copy `.env.example` to `.env.local`. Leave values empty until you have them. Do not commit real keys. `/admin` signs in with a texted 6-digit code.
 
 ## Environment variables
 
@@ -25,10 +25,15 @@ Copy `.env.example` to `.env.local`. Leave values empty until you have them. Do 
 | `BLOB_READ_WRITE_TOKEN` | Private Vercel Blob token for content saves, product files, and order records |
 | `RESEND_API_KEY` | Sends the download email |
 | `EMAIL_FROM` | Optional sender. Defaults to Resend’s onboarding address |
-| `ADMIN_PASSWORD` | Password for `/admin` |
+| `STYTCH_PROJECT_ID` | Stytch Consumer project id. `project-test-…` uses the test API |
+| `STYTCH_SECRET` | Stytch secret key |
 | `CALENDLY_API_TOKEN` | Optional. Lets the booking page detect empty calendars |
 
 Stripe email receipts are a dashboard setting. This app does not change that setting.
+
+## Editor login
+
+`/admin` asks for a US phone number. Stytch texts a 6-digit code that lasts 10 minutes. The code starts a session that lasts 30 days, stored in an httpOnly cookie and checked with Stytch on each visit. Log out revokes that session. There is no email list: anyone who finishes the code on this Stytch project can edit. Use a Consumer project with SMS one-time passcodes turned on.
 
 ## Catalog
 
@@ -65,8 +70,8 @@ Use the Pro team on the lindow-labs account. Hobby is not for a commercial site.
 2. Framework preset: Next.js. Root directory: repository root. Do not set the output directory to `dist`.
 3. Add the environment variables above. Preview can use Stripe test keys. Production keys wait for an explicit go-ahead.
 4. Create a private Blob store and set `BLOB_READ_WRITE_TOKEN`. Content edits and product files use it.
-5. Set `ADMIN_PASSWORD`.
-6. Deploy. The preview URL is the Vercel deployment URL. Open `/admin` on that URL to edit copy.
+5. Create a Stytch Consumer project, enable SMS one-time passcodes, and set `STYTCH_PROJECT_ID` and `STYTCH_SECRET`.
+6. Deploy. The preview URL is the Vercel deployment URL. Open `/admin` on that URL and sign in with the texted code.
 
 ### Domain cutover (do not run this from the site deploy)
 

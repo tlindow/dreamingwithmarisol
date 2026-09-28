@@ -1,33 +1,20 @@
 import Link from 'next/link'
-import { loginAction } from './actions'
-import { adminPassword, isAdmin } from '@/lib/admin-auth'
+import { LoginForm } from '@/components/admin/LoginForm'
+import { isAdmin, stytchConfigured } from '@/lib/admin-auth'
 import { loadDocument, PAGE_ORDER } from '@/lib/content-store'
 
-export default async function AdminHome({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string }>
-}) {
+export default async function AdminHome() {
   const authed = await isAdmin()
-  const query = await searchParams
   if (!authed) {
-    return (
-      <>
-        <h1>Content</h1>
-        {adminPassword() ? (
-          <form action={loginAction} className="admin-form">
-            <label>
-              Password
-              <input type="password" name="password" autoComplete="current-password" required />
-            </label>
-            {query.error === '1' ? <p className="error">That password is not right.</p> : null}
-            <button className="btn btn-primary" type="submit">Log in</button>
-          </form>
-        ) : (
-          <p>Set ADMIN_PASSWORD before using this page.</p>
-        )}
-      </>
-    )
+    if (!stytchConfigured()) {
+      return (
+        <>
+          <h1>Content</h1>
+          <p>Set STYTCH_PROJECT_ID and STYTCH_SECRET before using this page.</p>
+        </>
+      )
+    }
+    return <LoginForm />
   }
 
   const document = await loadDocument()
