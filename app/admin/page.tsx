@@ -6,16 +6,15 @@ import { loadDocument, PAGE_ORDER } from '@/lib/content-store'
 export default async function AdminHome() {
   const authed = await isAdmin()
   if (!authed) {
-    return (
-      <>
-        <h1>Content</h1>
-        {stytchConfigured() ? (
-          <LoginForm />
-        ) : (
+    if (!stytchConfigured()) {
+      return (
+        <>
+          <h1>Content</h1>
           <p>Set STYTCH_PROJECT_ID and STYTCH_SECRET before using this page.</p>
-        )}
-      </>
-    )
+        </>
+      )
+    }
+    return <LoginForm />
   }
 
   const document = await loadDocument()

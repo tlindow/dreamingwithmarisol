@@ -200,7 +200,9 @@ p { margin: 0 0 1rem; }
 .error { color: #7a2e12; }
 
 .calendly {
-  min-width: 320px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   height: 760px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -219,7 +221,9 @@ p { margin: 0 0 1rem; }
 
 .admin {
   width: min(720px, calc(100% - 2rem));
-  margin: 2rem auto 4rem;
+  margin: max(1.25rem, env(safe-area-inset-top)) auto max(2.5rem, env(safe-area-inset-bottom));
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 .admin h1 { margin-top: 0; }
 .admin-nav {
@@ -252,11 +256,12 @@ p { margin: 0 0 1rem; }
   width: 100%;
   margin-top: 0.3rem;
   font: inherit;
+  font-size: 16px;
   color: var(--green);
   background: white;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 0.55rem 0.7rem;
+  padding: 0.7rem 0.75rem;
 }
 .admin textarea { min-height: 8rem; }
 .admin fieldset {
@@ -271,10 +276,94 @@ p { margin: 0 0 1rem; }
 .admin .btn { margin-top: 1rem; }
 .admin .sections { margin-top: 1.5rem; }
 
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
+  padding-top: 6vh;
+}
+.login h1, .login-lede, .login-status { text-align: center; }
+.login-lede { color: var(--muted); margin: 0; }
+.login-status { min-height: 1.4em; margin: 0; color: #7a2e12; }
+.login-pill {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+}
+.login-pill:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(48, 69, 21, 0.16);
+}
+.login-cc {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--muted);
+  padding-left: 0.65rem;
+}
+.admin .login-pill input {
+  flex: 1 1 140px;
+  width: auto;
+  min-width: 0;
+  height: 48px;
+  margin: 0;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 16px;
+  outline: none;
+}
+.admin .login-pin input {
+  flex-basis: 100%;
+  text-align: center;
+  letter-spacing: 0.45em;
+  font-size: 22px;
+}
+.admin .login-pill .btn {
+  flex: 1 1 100%;
+  min-height: 48px;
+  margin: 0;
+  border-radius: 999px;
+}
+.login .text-button { min-height: 44px; align-self: center; }
+
+@media (min-width: 540px) {
+  .login { align-items: center; }
+  .login-pill {
+    flex-wrap: nowrap;
+    max-width: 520px;
+    padding: 0.3rem 0.3rem 0.3rem 1rem;
+    border-radius: 999px;
+  }
+  .admin .login-pill input { flex: 1 1 auto; height: 44px; }
+  .admin .login-pin { padding-left: 1.4rem; }
+  .admin .login-pin input { flex: 1 1 auto; height: 44px; font-size: 18px; }
+  .admin .login-pill .btn { flex: 0 0 auto; width: auto; min-height: 44px; }
+}
+
 @media (max-width: 800px) {
   .nav, .header-inner .socials { display: none; }
   .menu-button, .mobile-nav.open { display: block; }
+  .menu-button { min-width: 44px; min-height: 44px; }
   .hero, .split, .cards, .product { grid-template-columns: 1fr; }
   .grid { grid-template-columns: repeat(2, 1fr); }
   .hero { padding-top: 2rem; }
+  .admin-nav { flex-direction: column; align-items: stretch; gap: 0; }
+  .admin-nav form { width: 100%; }
+  .admin-nav a, .admin-nav button {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    width: 100%;
+  }
+  .admin-list a { display: flex; align-items: center; min-height: 44px; }
+  .admin .btn { width: 100%; }
 }
