@@ -1,8 +1,5 @@
 import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import { getSettings } from '@/lib/catalog'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -28,15 +25,11 @@ export const metadata: Metadata = {
 
 export const revalidate = 60
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const settings = await getSettings()
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={dmSans.variable} style={{ fontFamily: 'var(--font-dm), "DM Sans", sans-serif' }}>
-        <a className="skip" href="#content">Skip to content</a>
-        <Header instagramUrl={settings.instagramUrl} tiktokUrl={settings.tiktokUrl} />
-        <main id="content">{children}</main>
-        <Footer email={settings.contactEmail} />
+        {children}
       </body>
     </html>
   )

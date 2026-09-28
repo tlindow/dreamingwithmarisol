@@ -8,7 +8,7 @@ The first prompt of a session should always enter a **planning mode**, unless ot
 
 ## Cursor Cloud specific instructions
 
-This is a React + Vite frontend with a Sanity Studio CMS backend, all in one repo (not a monorepo workspace — two separate `npm install` runs are required).
+This is a Next.js site with a small in-house editor at `/admin`. One `npm install` at the repo root is enough.
 
 ### Cursor Cloud agent git workflow (cloud sessions — use this one)
 
@@ -67,11 +67,9 @@ Local agents must run UI validation and attach visual proof before PR creation.
 Required flow:
 1. Install dependencies if needed:
    - Root: `npm install`
-   - Studio: `cd studio && npm install`
 2. Start the frontend dev server from repo root:
    - `npm run dev` (expect `http://localhost:5173`)
-3. If task touches Studio/content editing, also start Studio:
-   - `cd studio && npm run dev` (expect `http://localhost:3333`)
+3. Content editing is `/admin` on that same server. Set `ADMIN_PASSWORD` in `.env.local`.
 4. Open the target user flows in a browser automation session.
 5. Capture evidence for each changed flow:
    - At least one screenshot per changed page/state.
@@ -89,10 +87,9 @@ PR evidence requirements:
 
 | Service | Port | Start command | Directory |
 |---|---|---|---|
-| Next.js Frontend | 5173 | `npm run dev` | `/workspace` (root) |
-| Sanity Studio | 3333 | `npm run dev` | `/workspace/studio` |
+| Next.js site and `/admin` | 5173 | `npm run dev` | `/workspace` (root) |
 
-Both services use `npm` (lockfile: `package-lock.json`).
+The site uses `npm` (lockfile: `package-lock.json`).
 
 ### Lint / Build / Test
 
@@ -100,22 +97,12 @@ Both services use `npm` (lockfile: `package-lock.json`).
 - **Build (frontend):** `npm run build` — runs `next build`.
 - **Tests (frontend):** `npm test` — Node test runner via `tsx` for download tokens and Stripe webhook handling.
 
-### Sanity API Tokens
+### Content editor
 
-Two tokens are available as environment variables:
-
-| Variable | Purpose | Permissions |
-|---|---|---|
-| `SANITY_API_TOKEN` | Content read/write | Read + write mutations against the dataset |
-| `SANITY_DEPLOY_TOKEN` | Studio deployment | Deploy the hosted Studio (`sanity deploy`). No content write access. |
-
-- **To sync/seed content:** Use `SANITY_API_TOKEN` with `@sanity/client` (`scripts/sync-catalog.ts` for the live catalog). `studio/sync-content.ts` still updates singleton page shells and deletes known placeholder ids.
-- **To deploy the Studio:** Use `SANITY_DEPLOY_TOKEN` via `SANITY_AUTH_TOKEN=$SANITY_DEPLOY_TOKEN npx sanity deploy` (run from `/workspace/studio`).
-- After schema changes, **always redeploy the Studio** so the hosted version at `https://dreaming-with-marisol.sanity.studio/` reflects the new schemas.
+`/admin` is the editor. It needs `ADMIN_PASSWORD`. Saves go to `data/content.json` locally. On Vercel, set `BLOB_READ_WRITE_TOKEN` so saves persist as a private blob. The public site falls back to `content/site.ts` until a save exists.
 
 ### Gotchas
 
-- The Sanity project ID (`t8kqnnav`) and dataset (`production`) are hardcoded in both `src/sanityClient.ts` and `studio/sanity.config.ts`. No `.env` files are needed for basic dev.
-- The Sanity Studio requires authentication (Google, GitHub, or email/password) to access the CMS admin panel. The frontend renders without Sanity auth but dynamic content depends on the Sanity Cloud API being accessible.
-- The frontend references the Sanity Studio at `http://localhost:3333` for visual editing (`stega` config in `src/sanityClient.ts`), so both services should run simultaneously during development.
-- Singleton documents (`siteSettings`, `homePage`, `aboutPage`, `valuesPage`, `pricingPage`) use their type name as the `_id`. The sync script (`studio/sync-content.ts`) uses `createOrReplace` for these.
+- Do not render the home street address.
+- `CALENDLY_API_TOKEN` in this environment can return 403. The booking page still shows the embeds when availability is unknown.
+- Product checkout uses a Stripe Price ID. The dollar field in Content is display-only.
