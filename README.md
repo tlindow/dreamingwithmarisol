@@ -11,7 +11,7 @@ npm run dev
 
 The site runs at [http://localhost:5173](http://localhost:5173). The editor is at [http://localhost:5173/admin](http://localhost:5173/admin).
 
-Copy `.env.example` to `.env.local`. Leave values empty until you have them. Do not commit real keys. `/admin` logs in through Stytch email magic links.
+Copy `.env.example` to `.env.local`. Leave values empty until you have them. Do not commit real keys. `/admin` signs in with a texted 6-digit code.
 
 ## Environment variables
 
@@ -25,17 +25,15 @@ Copy `.env.example` to `.env.local`. Leave values empty until you have them. Do 
 | `BLOB_READ_WRITE_TOKEN` | Private Vercel Blob token for content saves, product files, and order records |
 | `RESEND_API_KEY` | Sends the download email |
 | `EMAIL_FROM` | Optional sender. Defaults to Resend’s onboarding address |
-| `STYTCH_PROJECT_ENV` | `test` or `live` |
-| `STYTCH_PROJECT_ID` | Stytch Consumer project id |
+| `STYTCH_PROJECT_ID` | Stytch Consumer project id. `project-test-…` uses the test API |
 | `STYTCH_SECRET` | Stytch secret key |
-| `ADMIN_EMAILS` | Comma-separated emails allowed to edit `/admin` |
 | `CALENDLY_API_TOKEN` | Optional. Lets the booking page detect empty calendars |
 
 Stripe email receipts are a dashboard setting. This app does not change that setting.
 
 ## Editor login
 
-`/admin` asks for an email. Stytch sends a magic link to `{NEXT_PUBLIC_SITE_URL}/admin/authenticate`. That address must be saved in the Stytch dashboard as both a login redirect and a signup redirect. Use a Consumer project. The link is only accepted when the address is listed in `ADMIN_EMAILS`. A successful link stores the Stytch session in an httpOnly cookie for 7 days. Log out revokes that session.
+`/admin` asks for a US phone number. Stytch texts a 6-digit code that lasts 10 minutes. The code starts a session that lasts 30 days, stored in an httpOnly cookie and checked with Stytch on each visit. Log out revokes that session. There is no email list: anyone who finishes the code on this Stytch project can edit. Use a Consumer project with SMS one-time passcodes turned on.
 
 ## Catalog
 
@@ -72,8 +70,8 @@ Use the Pro team on the lindow-labs account. Hobby is not for a commercial site.
 2. Framework preset: Next.js. Root directory: repository root. Do not set the output directory to `dist`.
 3. Add the environment variables above. Preview can use Stripe test keys. Production keys wait for an explicit go-ahead.
 4. Create a private Blob store and set `BLOB_READ_WRITE_TOKEN`. Content edits and product files use it.
-5. Create a Stytch Consumer project, enable Email Magic Links, and add `{NEXT_PUBLIC_SITE_URL}/admin/authenticate` as both a login and signup redirect URL. Set `STYTCH_PROJECT_ID`, `STYTCH_SECRET`, `STYTCH_PROJECT_ENV`, and `ADMIN_EMAILS`.
-6. Deploy. The preview URL is the Vercel deployment URL. Open `/admin` on that URL, enter an allowed email, and open the Stytch link.
+5. Create a Stytch Consumer project, enable SMS one-time passcodes, and set `STYTCH_PROJECT_ID` and `STYTCH_SECRET`.
+6. Deploy. The preview URL is the Vercel deployment URL. Open `/admin` on that URL and sign in with the texted code.
 
 ### Domain cutover (do not run this from the site deploy)
 

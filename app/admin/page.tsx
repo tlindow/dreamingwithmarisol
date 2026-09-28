@@ -1,42 +1,18 @@
 import Link from 'next/link'
-import { sendLoginLink } from './actions'
+import { LoginForm } from '@/components/admin/LoginForm'
 import { isAdmin, stytchConfigured } from '@/lib/admin-auth'
 import { loadDocument, PAGE_ORDER } from '@/lib/content-store'
 
-function loginNotice(query: { error?: string; sent?: string }) {
-  if (query.sent === '1') return 'Check your email for a login link.'
-  if (query.error === 'denied') return 'That email is not allowed to edit this site.'
-  if (query.error === 'email') return 'Enter an email address.'
-  if (query.error === 'link') return 'That login link is not valid. Ask for a new one.'
-  if (query.error === 'stytch') return 'The login link could not be sent. Check the Stytch project and redirect URL.'
-  if (query.error === 'config') return 'Set STYTCH_PROJECT_ID, STYTCH_SECRET, and ADMIN_EMAILS before using this page.'
-  return ''
-}
-
-export default async function AdminHome({
-  searchParams,
-}: {
-  searchParams: Promise<{ error?: string; sent?: string }>
-}) {
+export default async function AdminHome() {
   const authed = await isAdmin()
-  const query = await searchParams
   if (!authed) {
-    const notice = loginNotice(query)
     return (
       <>
         <h1>Content</h1>
         {stytchConfigured() ? (
-          <form action={sendLoginLink} className="admin-form">
-            <label>
-              Email
-              <input type="email" name="email" autoComplete="email" required />
-            </label>
-            {notice ? <p className={query.sent === '1' ? 'saved' : 'error'}>{notice}</p> : null}
-            <button className="btn btn-primary" type="submit">Email me a login link</button>
-            <p className="hint">Stytch sends the link. Open it on this site to start a session.</p>
-          </form>
+          <LoginForm />
         ) : (
-          <p>Set STYTCH_PROJECT_ID, STYTCH_SECRET, and ADMIN_EMAILS before using this page.</p>
+          <p>Set STYTCH_PROJECT_ID and STYTCH_SECRET before using this page.</p>
         )}
       </>
     )

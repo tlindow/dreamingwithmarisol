@@ -231,7 +231,7 @@ p { margin: 0 0 1rem; }
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--line);
 }
-.admin-nav a, .admin-nav button {
+.admin-nav a, .admin-nav button, .admin button.text-button {
   color: var(--green);
   background: none;
   border: 0;

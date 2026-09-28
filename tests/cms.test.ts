@@ -3,7 +3,8 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import test from 'node:test'
-import { isAllowedEmail, loginDecision, userMayEdit } from '../lib/admin-auth.ts'
+import { stytchConfigured } from '../lib/admin-auth.ts'
+import { authenticateOtp, baseUrlFor, toE164 } from '../lib/stytch.ts'
 import {
   defaultDocument,
   dollarsToCents,
@@ -15,34 +16,29 @@ import {
   toPageCopy,
 } from '../lib/content-store.ts'
 
-test('only listed emails can ask Stytch for a login link', () => {
-  const previousEmails = process.env.ADMIN_EMAILS
+test('phone sign-in checks the number and the code before calling Stytch', async () => {
+  assert.equal(toE164('(619) 555-0100'), '+16195550100')
+  assert.equal(toE164('16195550100'), '+16195550100')
+  assert.throws(() => toE164('555'), /10-digit US phone number/)
+  assert.equal(baseUrlFor('project-test-abc'), 'https://test.stytch.com')
+  assert.equal(baseUrlFor('project-live-abc'), 'https://api.stytch.com')
+  await assert.rejects(() => authenticateOtp('phone-test-id', '12345'), /6-digit code/)
+
   const previousProject = process.env.STYTCH_PROJECT_ID
   const previousSecret = process.env.STYTCH_SECRET
-  process.env.ADMIN_EMAILS = 'Owner@Example.com, second@example.com'
-  process.env.STYTCH_PROJECT_ID = 'project-test'
+  process.env.STYTCH_PROJECT_ID = 'project-test-abc'
   process.env.STYTCH_SECRET = 'secret-test'
   try {
-    assert.equal(isAllowedEmail('owner@example.com'), true)
-    assert.equal(isAllowedEmail('second@example.com'), true)
-    assert.equal(isAllowedEmail('other@example.com'), false)
-    assert.equal(loginDecision('other@example.com'), 'denied')
-    assert.equal(loginDecision('not-an-email'), 'email')
-    assert.equal(loginDecision('owner@example.com'), 'send')
-    assert.equal(userMayEdit([{ email: 'owner@example.com', verified: true }]), true)
-    assert.equal(userMayEdit([{ email: 'owner@example.com', verified: false }]), false)
-    assert.equal(userMayEdit([{ email: 'other@example.com', verified: true }]), false)
+    assert.equal(stytchConfigured(), true)
+    delete process.env.STYTCH_SECRET
+    assert.equal(stytchConfigured(), false)
   } finally {
-    restore('ADMIN_EMAILS', previousEmails)
-    restore('STYTCH_PROJECT_ID', previousProject)
-    restore('STYTCH_SECRET', previousSecret)
+    if (previousProject === undefined) delete process.env.STYTCH_PROJECT_ID
+    else process.env.STYTCH_PROJECT_ID = previousProject
+    if (previousSecret === undefined) delete process.env.STYTCH_SECRET
+    else process.env.STYTCH_SECRET = previousSecret
   }
 })
-
-function restore(name: 'ADMIN_EMAILS' | 'STYTCH_PROJECT_ID' | 'STYTCH_SECRET', value: string | undefined) {
-  if (value === undefined) delete process.env[name]
-  else process.env[name] = value
-}
 
 test('saved copy overrides a page and keeps the other pages', () => {
   const base = defaultDocument()
