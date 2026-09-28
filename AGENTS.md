@@ -69,7 +69,7 @@ Required flow:
    - Root: `npm install`
 2. Start the frontend dev server from repo root:
    - `npm run dev` (expect `http://localhost:5173`)
-3. Content editing is `/admin` on that same server. Set `ADMIN_PASSWORD` in `.env.local`.
+3. Content editing is `/admin` on that same server. Login is a Stytch email magic link. Set `STYTCH_PROJECT_ID`, `STYTCH_SECRET`, and `ADMIN_EMAILS` in `.env.local`.
 4. Open the target user flows in a browser automation session.
 5. Capture evidence for each changed flow:
    - At least one screenshot per changed page/state.
@@ -99,7 +99,7 @@ The site uses `npm` (lockfile: `package-lock.json`).
 
 ### Content editor
 
-`/admin` is the editor. It needs `ADMIN_PASSWORD`. Saves go to `data/content.json` locally. On Vercel, set `BLOB_READ_WRITE_TOKEN` so saves persist as a private blob. The public site falls back to `content/site.ts` until a save exists.
+`/admin` is the editor. Login is a Stytch email magic link, and only addresses in `ADMIN_EMAILS` are accepted. Saves go to `data/content.json` locally. On Vercel, set `BLOB_READ_WRITE_TOKEN` so saves persist as a private blob. The public site falls back to `content/site.ts` until a save exists.
 
 ### Gotchas
 

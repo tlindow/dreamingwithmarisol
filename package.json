@@ -16,7 +16,8 @@
     "next": "^15.5.26",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "stripe": "^22.6.2"
+    "stripe": "^22.6.2",
+    "stytch": "^14.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

@@ -5,7 +5,8 @@ import { redirect } from 'next/navigation'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import { put } from '@vercel/blob'
-import { adminPassword, endAdminSession, isAdmin, passwordsMatch, startAdminSession } from '@/lib/admin-auth'
+import { endAdminSession, isAdmin, loginDecision, magicLinkUrl } from '@/lib/admin-auth'
+import { getStytch } from '@/lib/stytch'
 import { hasBlobToken } from '@/lib/blob-store'
 import {
   dollarsToCents,
@@ -24,13 +25,23 @@ async function requireAdmin(): Promise<FormState | null> {
   return { error: 'Log in again.' }
 }
 
-export async function loginAction(formData: FormData) {
-  const expected = adminPassword()
-  if (!expected) redirect('/admin')
-  const password = String(formData.get('password') || '')
-  if (!passwordsMatch(password, expected)) redirect('/admin?error=1')
-  await startAdminSession()
-  redirect('/admin')
+export async function sendLoginLink(formData: FormData) {
+  const email = String(formData.get('email') || '')
+  const decision = loginDecision(email)
+  if (decision !== 'send') redirect(`/admin?error=${decision}`)
+  const link = await magicLinkUrl()
+  try {
+    await getStytch().magicLinks.email.loginOrCreate({
+      email: email.trim().toLowerCase(),
+      login_magic_link_url: link,
+      signup_magic_link_url: link,
+      login_expiration_minutes: 30,
+      signup_expiration_minutes: 30,
+    })
+  } catch {
+    redirect('/admin?error=stytch')
+  }
+  redirect('/admin?sent=1')
 }
 
 export async function logoutAction() {
