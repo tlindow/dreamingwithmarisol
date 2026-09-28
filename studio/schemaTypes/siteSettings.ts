@@ -81,6 +81,45 @@ export default defineType({
             validation: (Rule) =>
                 Rule.uri({scheme: ['https']}).error('Must be a valid https:// URL'),
         }),
+        defineField({
+            name: 'tiktokUrl',
+            title: 'TikTok URL',
+            type: 'url',
+            group: 'social',
+            initialValue: 'https://tiktok.com/@dreamingwithmarisol',
+        }),
+        defineField({
+            name: 'showBookingBanner',
+            title: 'Show “no availability” banner',
+            type: 'boolean',
+            group: 'booking',
+            description: 'When on, the booking page hides the Calendly embeds and points people to the newsletter.',
+            initialValue: false,
+        }),
+        defineField({
+            name: 'bookingBannerText',
+            title: 'No-availability message',
+            type: 'text',
+            group: 'booking',
+            rows: 3,
+        }),
+        defineField({
+            name: 'calendlyEvents',
+            title: 'Calendly event types',
+            type: 'array',
+            group: 'booking',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        defineField({name: 'name', title: 'Name', type: 'string'}),
+                        defineField({name: 'url', title: 'Calendly URL', type: 'url'}),
+                        defineField({name: 'priceLabel', title: 'Price label', type: 'string'}),
+                        defineField({name: 'durationLabel', title: 'Duration label', type: 'string'}),
+                    ],
+                },
+            ],
+        }),
     ],
     preview: {
         prepare() {

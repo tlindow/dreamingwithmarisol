@@ -89,16 +89,16 @@ PR evidence requirements:
 
 | Service | Port | Start command | Directory |
 |---|---|---|---|
-| Vite Frontend | 5173 | `npm run dev` | `/workspace` (root) |
+| Next.js Frontend | 5173 | `npm run dev` | `/workspace` (root) |
 | Sanity Studio | 3333 | `npm run dev` | `/workspace/studio` |
 
 Both services use `npm` (lockfile: `package-lock.json`).
 
 ### Lint / Build / Test
 
-- **Lint (frontend):** `npm run lint` — runs ESLint. Note: the codebase has 5 pre-existing lint errors (`@typescript-eslint/no-explicit-any` and `@typescript-eslint/ban-ts-comment`).
-- **Build (frontend):** `npm run build` — runs `tsc -b && vite build`.
-- **No automated test suite** is configured in either project.
+- **Lint (frontend):** `npm run lint` — runs ESLint.
+- **Build (frontend):** `npm run build` — runs `next build`.
+- **Tests (frontend):** `npm test` — Node test runner via `tsx` for download tokens and Stripe webhook handling.
 
 ### Sanity API Tokens
 
@@ -109,7 +109,7 @@ Two tokens are available as environment variables:
 | `SANITY_API_TOKEN` | Content read/write | Read + write mutations against the dataset |
 | `SANITY_DEPLOY_TOKEN` | Studio deployment | Deploy the hosted Studio (`sanity deploy`). No content write access. |
 
-- **To sync/seed content:** Use `SANITY_API_TOKEN` with `@sanity/client` (e.g. `studio/sync-content.ts`).
+- **To sync/seed content:** Use `SANITY_API_TOKEN` with `@sanity/client` (`scripts/sync-catalog.ts` for the live catalog). `studio/sync-content.ts` still updates singleton page shells and deletes known placeholder ids.
 - **To deploy the Studio:** Use `SANITY_DEPLOY_TOKEN` via `SANITY_AUTH_TOKEN=$SANITY_DEPLOY_TOKEN npx sanity deploy` (run from `/workspace/studio`).
 - After schema changes, **always redeploy the Studio** so the hosted version at `https://dreaming-with-marisol.sanity.studio/` reflects the new schemas.
 

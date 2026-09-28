@@ -1,81 +1,86 @@
-import { defineField, defineType } from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 export default defineType({
     name: 'product',
-    title: 'eCommerce Product',
+    title: 'Digital product',
     type: 'document',
     fields: [
         defineField({
             name: 'title',
-            title: 'Product Title',
+            title: 'Title',
             type: 'string',
             validation: (Rule) => Rule.required(),
         }),
         defineField({
-            name: 'category',
-            title: 'Category',
-            type: 'string',
-            options: {
-                list: [
-                    { title: 'Digital Download', value: 'digital' },
-                    { title: 'Handcrafted / Physical', value: 'physical' },
-                    { title: 'Bundle', value: 'bundle' },
-                ],
-                layout: 'radio',
-            },
-        }),
-        defineField({
-            name: 'price',
-            title: 'Price ($)',
-            type: 'number',
+            name: 'slug',
+            title: 'Slug',
+            type: 'slug',
+            options: {source: 'title'},
+            validation: (Rule) => Rule.required(),
         }),
         defineField({
             name: 'description',
-            title: 'Short Description',
-            description: 'Used on the store listing card (2–3 sentences).',
+            title: 'Description',
             type: 'text',
-            rows: 3,
+            rows: 5,
         }),
         defineField({
-            name: 'body',
-            title: 'Full Description',
-            description: 'Detailed product description shown on the product detail page.',
-            type: 'array',
-            of: [{ type: 'block' }],
+            name: 'amountCents',
+            title: 'Listed price (cents)',
+            description:
+                'Shown on the site until a Stripe Price is attached. Checkout charges the Stripe Price, never this number.',
+            type: 'number',
+            validation: (Rule) => Rule.required().integer().positive(),
         }),
         defineField({
-            name: 'features',
-            title: 'Key Features / What You Get',
-            description: 'Bullet-point list of features or included items.',
-            type: 'array',
-            of: [{ type: 'string' }],
+            name: 'stripePriceId',
+            title: 'Stripe Price ID',
+            description: 'price_… from Stripe. Required before the buy button appears.',
+            type: 'string',
+        }),
+        defineField({
+            name: 'status',
+            title: 'Status',
+            type: 'string',
+            options: {
+                list: [
+                    {title: 'Available', value: 'available'},
+                    {title: 'Coming soon', value: 'coming-soon'},
+                ],
+                layout: 'radio',
+            },
+            initialValue: 'coming-soon',
+        }),
+        defineField({
+            name: 'file',
+            title: 'Download file',
+            description: 'Use this for smaller PDFs. Files over about 20 MB should use a private Vercel Blob path.',
+            type: 'file',
+        }),
+        defineField({
+            name: 'blobPath',
+            title: 'Private Vercel Blob pathname',
+            description: 'Example: products/enter-the-cosmic-ocean.pdf',
+            type: 'string',
         }),
         defineField({
             name: 'image',
-            title: 'Product Image',
+            title: 'Image',
             type: 'image',
-            options: {
-                hotspot: true,
-            },
-            validation: (Rule) => Rule.required(),
+            options: {hotspot: true},
         }),
         defineField({
-            name: 'gallery',
-            title: 'Additional Images',
-            type: 'array',
-            of: [{ type: 'image', options: { hotspot: true } }],
+            name: 'beaconsProductId',
+            title: 'Old Beacons product id',
+            type: 'string',
         }),
         defineField({
-            name: 'stripePaymentLink',
-            title: 'Stripe / Direct Payment Link',
-            description: 'Paste a Stripe payment link or Gumroad URL here for a one-click purchase button.',
-            type: 'url',
-        }),
-        defineField({
-            name: 'storeUrl',
-            title: 'External Store Link (fallback)',
-            description: 'Shopify, Etsy, or other external store link. Used only when no Stripe link is set.',
-            type: 'url',
+            name: 'postPurchaseMessage',
+            title: 'Post-purchase message',
+            type: 'text',
         }),
     ],
+    preview: {
+        select: {title: 'title', subtitle: 'status', media: 'image'},
+    },
 })

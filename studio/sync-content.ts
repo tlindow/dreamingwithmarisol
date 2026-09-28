@@ -172,27 +172,27 @@ async function sync() {
     tx.createOrReplace({
         _id: 'pricingPage',
         _type: 'pricingPage',
-        pageTitle: 'Pricing & Policies',
+        pageTitle: 'Fair Trade Policy',
         servicesList: [
             {
                 _key: 'svc-1',
                 _type: 'object',
-                name: 'In-Person Limpia',
+                name: '1 hour private limpia ceremony with a full plática',
                 duration: '60 Min',
                 price: 100,
             },
             {
                 _key: 'svc-2',
                 _type: 'object',
-                name: 'Distance Limpia & Plática',
-                duration: '60 Min',
-                price: 100,
+                name: '30 minute private limpia session',
+                duration: '30 Min',
+                price: 45,
             },
         ],
         cancellationPolicy:
-            'Your time is valuable, and so is mine. Please provide at least 24 hours notice for cancellations or rescheduling. Cancellations made within 24 hours of the appointment time will incur a 50% fee. No-calls/no-shows are charged the full session amount.',
+            'Please note that there is a $10.00 fee for cancelling an appointment after scheduling. There is no refund that can be provided after beginning, receiving, and/or completing the session service.',
         refundsPolicy:
-            'All healing sessions are final sale. No refunds are provided after the service has been rendered. If you are unsatisfied, please bring it up during our plática.',
+            'There is no refund that can be provided after beginning, receiving, and/or completing the session service.',
     })
 
     // ── service: In-Person ──
@@ -243,165 +243,23 @@ async function sync() {
             'Find a quiet, private space. Have a candle or glass of water nearby. Avoid alcohol and recreational substances 24 hours before your session.',
     })
 
-    // ── eventsPage ──
-    console.log('Creating eventsPage singleton')
-    tx.createOrReplace({
-        _id: 'eventsPage',
-        _type: 'eventsPage',
-        pageTitle: 'Upcoming Events',
-        pageSubtitle:
-            'Join us for ceremonies, workshops, and community gatherings.',
-    })
-
-    // ── sample events ──
-    console.log('Creating sample events')
-    tx.createOrReplace({
-        _id: 'event-full-moon-ceremony',
-        _type: 'event',
-        title: 'Full Moon Ceremony',
-        date: '2026-04-12T19:00:00-07:00',
-        endDate: '2026-04-12T21:00:00-07:00',
-        location: 'San Diego, CA',
-        eventType: 'ceremony',
-        description:
-            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us and set intentions for the cycle ahead.',
-        detailedDescription:
-            'Join us under the full moon for a sacred cleansing ceremony rooted in Mesoamerican tradition. We will gather to release what no longer serves us, set intentions, and honor the lunar cycle with copal, prayer, and community.\n\nThis ceremony includes a guided group limpia, intention-setting with copal smoke, drumming, and communal prayer. All are welcome regardless of experience level. Please wear comfortable, light-colored clothing and bring an open heart.\n\nLight refreshments will be provided after the ceremony.',
-        price: 35,
-        stripePaymentLink: 'https://buy.stripe.com/test_aFaaEQ2KCaVP67R4tV1Jm05',
-    })
-    tx.createOrReplace({
-        _id: 'event-curanderismo-workshop',
-        _type: 'event',
-        title: 'Introduction to Curanderismo',
-        date: '2026-04-26T10:00:00-07:00',
-        endDate: '2026-04-26T16:00:00-07:00',
-        location: 'San Diego, CA',
-        eventType: 'workshop',
-        description:
-            'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.',
-        detailedDescription:
-            'A day-long immersive workshop exploring the foundations of traditional Mesoamerican healing. Learn about limpias, the use of herbs, the role of prayer, and how to integrate ancestral wellness practices into your daily life.\n\nTopics covered:\n• History and philosophy of Curanderismo\n• Introduction to the four elements in healing\n• Hands-on herb preparation and identification\n• Guided practice: performing a basic limpia\n• Q&A and integration circle\n\nLunch and all materials are included. Space is limited to 15 participants to ensure personalized instruction.',
-        price: 120,
-        stripePaymentLink: 'https://buy.stripe.com/test_eVqdR2fxo6FzgMvf8z1Jm06',
-    })
-    tx.createOrReplace({
-        _id: 'event-online-meditation',
-        _type: 'event',
-        title: 'Community Meditation & Plática',
-        date: '2026-05-03T18:00:00-07:00',
-        endDate: '2026-05-03T19:30:00-07:00',
-        location: 'Online via Zoom',
-        eventType: 'online',
-        description:
-            'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.',
-        detailedDescription:
-            'A virtual gathering open to all. We will share a guided meditation followed by a heart-to-heart plática on navigating life transitions with spiritual awareness.\n\nThis is a free community event — no prior experience needed. Zoom link will be sent after registration. Please find a quiet, private space and have a candle or glass of water nearby.',
-    })
-
-    // ── sample products ──
-    console.log('Creating sample products')
-
-    // Digital: Guided Meditation Audio
-    tx.createIfNotExists({
-        _id: 'product-guided-meditation',
-        _type: 'product',
-        title: 'Ancestral Healing Meditation — Audio Bundle',
-        category: 'digital',
-        price: 22,
-        description:
-            'Three guided meditation recordings rooted in Mesoamerican tradition. Perfect for daily practice, these audios guide you through energetic cleansing, ancestral connection, and grounding.',
-        stripePaymentLink: 'https://buy.stripe.com/test_28E00c990e81dAj1hJ1Jm00',
-        features: [
-            '3 MP3 audio files (approx. 20 min each)',
-            'Guided limpia visualization with copal & herbs',
-            'Ancestral connection & gratitude meditation',
-            'Grounding & protection practice',
-            'PDF companion guide with affirmations',
-            'Instant download — yours forever',
-        ],
-    })
-
-    // Digital: Curanderismo E-Book
-    tx.createIfNotExists({
-        _id: 'product-curanderismo-ebook',
-        _type: 'product',
-        title: 'Introduction to Curanderismo — Digital Guide',
-        category: 'digital',
-        price: 18,
-        description:
-            'A 40-page illustrated guide to the foundations of Mesoamerican healing. Learn the history, philosophy, herbs, and rituals of Curanderismo from the comfort of home.',
-        stripePaymentLink: 'https://buy.stripe.com/test_14A28kad48NH1RBgcD1Jm01',
-        features: [
-            '40-page illustrated PDF e-book',
-            'History & philosophy of Curanderismo',
-            'Herb profiles: copal, rue, sage, palo santo',
-            'Step-by-step limpia instructions',
-            'Glossary of key terms in Spanish & English',
-            'Instant download — print or read digitally',
-        ],
-    })
-
-    // Digital: Ritual Journal
-    tx.createIfNotExists({
-        _id: 'product-ritual-journal',
-        _type: 'product',
-        title: 'Spiritual Practice Journal — Printable',
-        category: 'digital',
-        price: 12,
-        description:
-            'A beautifully designed 30-page printable journal for tracking your spiritual practice, moon cycles, dreams, and healing intentions. Print at home on any standard paper.',
-        stripePaymentLink: 'https://buy.stripe.com/test_aFa4gs2KC7JDgMv3pR1Jm02',
-        features: [
-            '30 printable pages (US Letter & A4)',
-            'Moon cycle tracker',
-            'Dream & vision journal pages',
-            'Weekly intention-setting spreads',
-            'Gratitude & release practice prompts',
-            'Instant download PDF',
-        ],
-    })
-
-    // Physical: Limpia Starter Kit
-    tx.createIfNotExists({
-        _id: 'product-limpia-kit',
-        _type: 'product',
-        title: 'Limpia Starter Kit',
-        category: 'physical',
-        price: 45,
-        description:
-            'Everything you need to perform a basic spiritual cleansing at home. Curated by Marisól, this kit includes ethically sourced herbs, copal resin, and a beginner\'s instruction card.',
-        stripePaymentLink: 'https://buy.stripe.com/test_8x24gs1Gy0hb8fZe4v1Jm03',
-        features: [
-            'Dried rue bundle (ruda)',
-            'White sage bundle',
-            'Copal resin (approx. 1 oz)',
-            'Palo santo stick',
-            'Small charcoal disk for resin burning',
-            'Hand-written instruction card by Marisól',
-        ],
-    })
-
-    // Physical: Crystal Set
-    tx.createIfNotExists({
-        _id: 'product-crystal-set',
-        _type: 'product',
-        title: 'Curandera Crystal Collection',
-        category: 'physical',
-        price: 38,
-        description:
-            'A hand-selected set of five crystals commonly used in Mesoamerican healing practice. Each stone is cleansed and charged before shipping.',
-        stripePaymentLink: 'https://buy.stripe.com/test_5kQ8wIgBse81ao7f8z1Jm04',
-        features: [
-            'Black tourmaline (protection)',
-            'Clear quartz (amplification)',
-            'Rose quartz (heart healing)',
-            'Obsidian (grounding)',
-            'Amethyst (intuition)',
-            'Drawstring pouch included',
-            'Crystal meaning card',
-        ],
-    })
+    const removeIds = [
+        'eventsPage',
+        'event-full-moon-ceremony',
+        'event-curanderismo-workshop',
+        'event-online-meditation',
+        'product-guided-meditation',
+        'product-curanderismo-ebook',
+        'product-ritual-journal',
+        'product-limpia-kit',
+        'product-crystal-set',
+        'service-in-person',
+        'service-online',
+    ]
+    for (const id of removeIds) {
+        console.log('Removing placeholder', id)
+        tx.delete(id)
+    }
 
     // ── Commit ──
     console.log('\nCommitting transaction...')

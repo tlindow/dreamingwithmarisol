@@ -63,9 +63,25 @@ export const resolve: PresentationPluginOptions['resolve'] = {
         }),
 
         product: defineLocations({
-            select: {title: 'title'},
+            select: {title: 'title', slug: 'slug.current'},
             resolve: (doc) => ({
-                locations: [{title: doc?.title || 'Product', href: '/store'}],
+                locations: [
+                    {
+                        title: doc?.title || 'Product',
+                        href: doc?.slug ? `/shop/${doc.slug}` : '/shop',
+                    },
+                ],
+            }),
+        }),
+        sitePage: defineLocations({
+            select: {title: 'title', slug: 'slug.current'},
+            resolve: (doc) => ({
+                locations: [
+                    {
+                        title: doc?.title || 'Page',
+                        href: doc?.slug ? `/${doc.slug}` : '/',
+                    },
+                ],
             }),
         }),
 

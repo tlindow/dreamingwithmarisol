@@ -30,22 +30,8 @@ export default defineConfig({
                     .items([
                         singletonItem(S, 'siteSettings', 'Site Settings'),
                         S.divider(),
-                        S.listItem()
-                            .title('Pages')
-                            .child(
-                                S.list()
-                                    .title('Pages')
-                                    .items([
-                                        singletonItem(S, 'homePage', 'Home'),
-                                        singletonItem(S, 'aboutPage', 'About'),
-                                        singletonItem(S, 'valuesPage', 'Values'),
-                                        singletonItem(S, 'pricingPage', 'Pricing & Policies'),
-                                    ]),
-                            ),
-                        S.divider(),
-                        S.documentTypeListItem('service').title('Services'),
-                        S.documentTypeListItem('videoModule').title('Learning Modules'),
-                        S.documentTypeListItem('product').title('Products'),
+                        S.documentTypeListItem('sitePage').title('Page copy'),
+                        S.documentTypeListItem('product').title('Digital products'),
                     ]),
         }),
         visionTool(),
