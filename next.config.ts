@@ -31,8 +31,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value:
-              "frame-ancestors 'self' https://sanity.io https://*.sanity.io https://*.sanity.studio",
+            value: "frame-ancestors 'self'",
           },
         ],
       },

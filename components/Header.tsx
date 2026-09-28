@@ -14,15 +14,24 @@ function TikTokIcon() {
   )
 }
 
-export function Header({ instagramUrl, tiktokUrl }: { instagramUrl: string; tiktokUrl: string }) {
+export function Header({
+  instagramUrl,
+  tiktokUrl,
+  newsletterUrl,
+}: {
+  instagramUrl: string
+  tiktokUrl: string
+  newsletterUrl: string
+}) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const links = NAV_LINKS.map((link) => (link.name === 'Newsletter' ? { ...link, href: newsletterUrl } : link))
   return (
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="logo">Dreaming with Marisól</Link>
         <nav className="nav" aria-label="Primary">
-          {NAV_LINKS.map((link) =>
+          {links.map((link) =>
             link.external ? (
               <a key={link.name} href={link.href} target="_blank" rel="noreferrer">{link.name}</a>
             ) : (
@@ -41,7 +50,7 @@ export function Header({ instagramUrl, tiktokUrl }: { instagramUrl: string; tikt
         </button>
       </div>
       <div className={open ? 'mobile-nav open' : 'mobile-nav'}>
-        {NAV_LINKS.map((link) =>
+        {links.map((link) =>
           link.external ? (
             <a key={link.name} href={link.href} target="_blank" rel="noreferrer">{link.name}</a>
           ) : (

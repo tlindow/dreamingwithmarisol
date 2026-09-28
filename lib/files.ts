@@ -18,7 +18,7 @@ export async function privateDownloadRedirect(blobPath: string) {
   return presignedUrl
 }
 
-export async function streamSanityFile(fileUrl: string) {
+export async function streamRemoteFile(fileUrl: string) {
   const head = await fetch(fileUrl, { method: 'HEAD' })
   const length = Number(head.headers.get('content-length') || 0)
   if (length > STREAM_LIMIT) {

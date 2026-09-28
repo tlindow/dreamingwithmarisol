@@ -1,6 +1,6 @@
 import { SITE } from '@/content/site'
 
-export function Footer({ email }: { email: string }) {
+export function Footer({ email, newsletterUrl }: { email: string; newsletterUrl: string }) {
   return (
     <footer className="site-footer">
       <div className="footer-inner">
@@ -11,7 +11,7 @@ export function Footer({ email }: { email: string }) {
         <div>
           <a href={`mailto:${email}`}>{email}</a>
           <div>
-            <a href={SITE.substackUrl}>Newsletter</a>
+            <a href={newsletterUrl}>Newsletter</a>
             {' · '}
             <a href="/shop">Shop</a>
           </div>
